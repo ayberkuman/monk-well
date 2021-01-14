@@ -1,0 +1,86 @@
+@mixin priLinearBg($start, $end, $alpha: 1) {
+  background: #{$start};
+  background: -moz-linear-gradient(
+    163deg,
+    rgba($start, $alpha) 0%,
+    rgba($end, $alpha) 100%
+  );
+  background: -webkit-linear-gradient(
+    163deg,
+    rgba($start, $alpha) 0%,
+    rgba($end, $alpha) 100%
+  );
+  background: linear-gradient(
+    163deg,
+    rgba($start, $alpha) 0%,
+    rgba($end, $alpha) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#{$start}",endColorstr="#{$end}",GradientType="#{$alpha}");
+}
+
+@mixin activeTabsBorders($count, $width) {
+  @for $i from 0 through $count - 1 {
+    &[data-active-tab="#{$i}"]:after {
+      left: calc(#{$width} * #{$i});
+    }
+  }
+}
+
+@mixin activeTabPage($count, $width, $margin: 0) {
+  @for $i from 0 through $count - 1 {
+    &[data-active-tab="#{$i}"] {
+      transform: translateX(
+        calc((-#{$width} * #{$i}) - #{$margin} - (#{$margin} * #{$i}))
+      );
+
+      .page-holder,
+      .package-options-tab-content {
+        &:nth-child(#{$i + 1}) {
+          position: relative;
+        }
+      }
+    }
+  }
+}
+
+@mixin media-xs() {
+  // Extra small devices (portrait phones, less than 576px)
+  @media (max-width: 575px) {
+    @content;
+  }
+}
+
+@mixin media-sm() {
+  // Small devices (landscape phones, less than 768px)
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin media-sm-min() {
+  // Small devices (landscape phones, less than 768px)
+  @media (min-width: 767px) {
+    @content;
+  }
+}
+
+@mixin media-md() {
+  // Medium devices (tablets, less than 992px)
+  @media (max-width: 991px) {
+    @content;
+  }
+}
+
+@mixin media-md-min() {
+  // Medium devices (tablets, less than 992px)
+  @media (min-width: 992px) {
+    @content;
+  }
+}
+
+@mixin media-lg() {
+  // Large devices (desktops, less than 1200px)
+  @media (max-width: 1199px) {
+    @content;
+  }
+}

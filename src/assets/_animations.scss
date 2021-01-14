@@ -1,0 +1,87 @@
+@keyframes sliderProcess {
+  0% {
+    transform: scaleX(0);
+  }
+
+  100% {
+    transform: scaleX(100%);
+  }
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(10deg);
+  }
+
+  25% {
+    transform: rotate(-10deg);
+  }
+
+  50% {
+    transform: rotate(10deg);
+  }
+
+  75% {
+    transform: rotate(-10deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes loadingColorChanges {
+  0% {
+    fill: inherit;
+    color: inherit;
+  }
+
+  50% {
+    fill: $pri;
+    color: $pri;
+  }
+
+  100% {
+    fill: inherit;
+    color: inherit;
+  }
+}
+
+@keyframes loadingDots {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+@keyframes copied {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 10px));
+  }
+
+  80% {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 10px));
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 20px));
+  }
+}

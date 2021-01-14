@@ -1,0 +1,68 @@
+.SelectWLabel {
+  border-bottom: 3px solid #7b788d;
+  margin-bottom: 44px;
+
+  &:before {
+    content: attr(data-label);
+    position: absolute;
+    font-size: 16px;
+    color: #7b788d;
+    left: 0;
+    top: 18px;
+    padding: 0 5px;
+    transition: all 200ms;
+    pointer-events: none;
+  }
+
+  &:after {
+    content: "";
+    width: 18px;
+    height: 18px;
+    right: 0;
+    bottom: 12px;
+    background: url("../../../assets/images/arrow_down_gray.svg") transparent
+      no-repeat center;
+    background-size: cover;
+    position: absolute;
+  }
+
+  select {
+    background: transparent;
+    border: none;
+    height: 52px;
+    color: #f3f3f3;
+    width: 100%;
+    padding-right: 20px;
+  }
+
+  &.focused {
+    border-color: #f3f3f3;
+
+    &:before {
+      top: -10px;
+      font-size: 10px;
+      color: #f3f3f3;
+    }
+
+    &:after {
+      background-image: url("../../../assets/images/arrow_down.svg");
+    }
+
+    .icon {
+      svg {
+        path {
+          fill: #f3f3f3;
+        }
+      }
+    }
+  }
+
+  &[data-w-icon="true"] {
+    input {
+      width: calc(100% - 24px - 5px);
+    }
+    label {
+      left: calc(24px + 5px);
+    }
+  }
+}

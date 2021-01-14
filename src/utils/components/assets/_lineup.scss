@@ -1,0 +1,87 @@
+.Lineup {
+  margin: 0px -15px;
+  width: calc(100% + 30px);
+
+  .titles {
+    .title {
+      font-size: 16px;
+      font-weight: $font-weight-medium;
+      color: #7b788d;
+    }
+  }
+
+  .lineup-item {
+    width: 100%;
+    padding: 15px 0;
+
+    &:nth-child(2n + 1) {
+      background: rgba($color: #f3f3f3, $alpha: 0.1);
+
+      &:before {
+        content: "";
+        width: 30%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: rgb(15, 33, 62);
+        background: linear-gradient(
+          90deg,
+          rgba(15, 33, 62, 1) 0.1%,
+          rgba(15, 33, 62, 0.007423037574404767) 100%
+        );
+      }
+      &:after {
+        content: "";
+        width: 30%;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: rgb(15, 33, 62);
+        background: linear-gradient(
+          270deg,
+          rgba(15, 33, 62, 1) 0.1%,
+          rgba(15, 33, 62, 0.007423037574404767) 100%
+        );
+      }
+    }
+
+    .inner {
+      .players-area {
+        width: 65%;
+        height: 42px;
+
+        .player-area {
+          .pic {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            margin-right: 8px;
+          }
+
+          .name {
+            font-size: 16px;
+            font-weight: $font-weight-medium;
+            color: #f3f3f3;
+          }
+        }
+      }
+
+      .statistics-area {
+        width: 35%;
+
+        .statistics-holder {
+          height: 42px;
+          width: min-content;
+          min-width: 100%;
+
+          .statistics-content {
+            width: 20px;
+            margin-left: 20px;
+          }
+        }
+      }
+    }
+  }
+}

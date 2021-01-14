@@ -1,0 +1,8 @@
+{
+  "global": { 
+    "test": ["Test", "Deneme"], 
+    "or": ["or", "veya"],
+    "add": ["Add", "Ekle"],
+    "remove": ["Remove", "Çıkart"]
+  }
+}

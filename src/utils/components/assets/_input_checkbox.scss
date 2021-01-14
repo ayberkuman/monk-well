@@ -1,0 +1,25 @@
+.custom-control {
+  padding-left: 34px;
+  &.custom-checkbox{
+    .custom-control-label{
+      margin-top: -3px;
+      font-size: 15px;
+      color: $pri;
+      font-weight: 600;
+      &:before{
+        width: 24px;
+        height: 24px;
+        border-radius: 12px;
+        border: 2px solid #CFCFE9;
+        left: -34px;
+        top: -2px;
+      }
+      &:after{
+        width: 24px;
+        height: 24px;
+        left: -34px;
+        top: -2px;
+      }
+    }
+  }
+}
