@@ -76,7 +76,6 @@ class Router extends Component {
 
   render() {
     const { lang } = this.props;
-
     const mutualProps = {
       user: this.props.user,
       lang,

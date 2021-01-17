@@ -3,7 +3,8 @@ html,body, #root, .App {
 }
 
 .Auth {
-
+  margin-left: -15px;
+  margin-right: -15px;
   &.register {
     padding-bottom: 10px;
   }

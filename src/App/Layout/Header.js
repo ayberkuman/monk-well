@@ -1,7 +1,7 @@
 import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
-import { Link, NavLink, withRouter } from "react-router-dom";
-
+import { withRouter } from "react-router-dom";
+import avatar from '../../assets/images/avatar.svg'
 // import Logo from "../../assets/images/logo.png";
 import { logout, update } from "../../Auth/authActions";
 import {
@@ -46,35 +46,37 @@ class Header extends Component {
   };
 
   render() {
-    return (
-      this.props.user.isLoggedIn ? (
-      <header
+    return this.props.user.isLoggedIn ? (
+      <div
+        className="header"
         data-alt={
           this.props.location.pathname !==
           guestRoutes.login.links[this.props.lang]
         }
       >
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col col-md-4 col-xl-5 d-flex justify-content-end align-items-center">
-                <span className="d-none d-md-flex">
-                {console.log(this.props.user)}
-                  <UserArea
-                    user={this.props.user}
-                    isProfilePopupOn={this.state.isProfilePopupOn}
-                    showProfilePopup={this.showProfilePopup}
-                    logout={this.props.logout}
-                    profilePopupRef={this.profilePopupRef}
-                    lang={this.props.lang}
-                    update={this.props.update}
-                  />
-                </span>
-              </div>
+        <div className="row">
+          <div className="col-6 d-flex align-items-center">
+            <p className='m-0'>{this.props.headerTitle}</p>
+          </div>
+          <div className="col-6 d-flex justify-content-end align-items-center">
+            <span className="d-none d-md-flex">
+              <UserArea
+                user={this.props.user}
+                isProfilePopupOn={this.state.isProfilePopupOn}
+                showProfilePopup={this.showProfilePopup}
+                logout={this.props.logout}
+                profilePopupRef={this.profilePopupRef}
+                lang={this.props.lang}
+                update={this.props.update}
+                avatar={avatar}
+              />
+            </span>
           </div>
         </div>
-      </header>
-    ):(<div></div>)
-      );
+      </div>
+    ) : (
+      <div></div>
+    );
   }
 }
 

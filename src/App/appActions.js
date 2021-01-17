@@ -20,3 +20,10 @@ export const pageLoading = (pageLoading) => {
     pageLoading,
   };
 }
+export const headerTitleSet = (text) => {
+  console.log(text);
+  return {
+    type: "HEADER_TITLE",
+    headerTitle: text
+  };
+}

@@ -266,14 +266,14 @@ button {
 }
 
 .primary-button {
-  height: 57px;
+  height: 50px;
   padding: 0 18px;
   background: $sec;
   border: none;
   border-radius: 8px;
   font-size: 18px;
   font-weight: $font-weight-regular;
-  color: #f3f3f3;
+  color: #f3f3f3 !important;
   box-shadow: none;
   display: flex;
   justify-content: center;
@@ -638,7 +638,7 @@ button {
 }
 
 .vjs-full-window {
-  header {
+  .header {
     z-index: 1 !important;
   }
 

@@ -78,12 +78,13 @@ const Layout = (props) => {
         
       </div>
       }
-        <div  className='container-fluid p-0'>
+        <div  className='container-fluid'>
           <Header
             lang={props.lang}
             user={props.user}
             location={props.location}
             translate={props.translate}
+            headerTitle={props.headerTitle}
           />
           <div id="main">{props.children}</div>
         </div>

@@ -122,6 +122,7 @@ class App extends Component {
           lang={lang}
           user={this.props.user}
           translate={this.props.translate}
+          headerTitle={this.props.headerTitle}
         >
           <Router
             lang={lang}
@@ -155,6 +156,7 @@ const mapStateToProps = (state) => {
     user: state.auth.user,
     alert: state.app.alert,
     pageLoading: state.app.pageLoading,
+    headerTitle: state.app.headerTitle,
   };
 };
 

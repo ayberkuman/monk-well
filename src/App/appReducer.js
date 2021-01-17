@@ -1,3 +1,4 @@
+import { alert } from "./appActions";
 
 const initState = {
   alert: {
@@ -8,6 +9,7 @@ const initState = {
   },
   connection: "",
   pageLoading: false,
+  headerTitle: ''
 };
 
 const appReducer = (state = initState, action) => {
@@ -41,7 +43,11 @@ const appReducer = (state = initState, action) => {
     }
 
     case 'PAGE_LOADING': {
-      return { ...state, pageLoading: state.pageLoading } 
+      return { ...state, pageLoading: action.pageLoading } 
+    }
+
+    case 'HEADER_TITLE': {
+      return { ...state, headerTitle: action.headerTitle } 
     }
 
     default:
