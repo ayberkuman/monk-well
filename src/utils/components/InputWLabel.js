@@ -81,6 +81,7 @@ export default class InputWLabel extends Component {
           tabIndex={this.props.tabIndex}
           readOnly={this.props.readOnly || this.props.editable ? true : false}
           autoComplete="off"
+          placeholder={this.props.placeholder}
           inputMode={
             this.props.type === "tel"
               ? "tel"
@@ -117,4 +118,5 @@ InputWLabel.propTypes = {
   classes: PropTypes.string,
   icon: PropTypes.object,
   validate: PropTypes.bool,
+  placeholder: PropTypes.string,
 };
