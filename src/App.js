@@ -19,14 +19,13 @@ import is from "is_js";
 import { withRouter } from "react-router";
 import { handleErrors } from "./utils/helper";
 import { login, logout } from "./Auth/authActions";
-import { alert, resetAlert } from "./App/appActions";
+import { alert, resetAlert, headerTitleSet } from "./App/appActions";
 import Alert from "./App/components/Alert";
 import API, { headers } from "./utils/API";
 
 
 class App extends Component {
   state = {
-    altFooter: false,
     isLoading: true,
     isAlertActive: false,
   };
@@ -51,12 +50,12 @@ class App extends Component {
 
   url = process.env.REACT_APP_URL;
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     window.cookies = new Cookies();
-
+    setTimeout(() => this.setState({ isLoading: true }), 20);
     this.props.setActiveLanguage("tr");
 
-    const localUser = window.cookies.get('user');
+    const localUser = await window.cookies.get('user');
     if (localUser && localUser.isLoggedIn) {
       API.get("Account/WhoAmI", {
         headers: { ...headers, Authorization: `Bearer ${localUser.token}` },
@@ -124,28 +123,34 @@ class App extends Component {
           translate={this.props.translate}
           headerTitle={this.props.headerTitle}
         >
-          <Router
-            lang={lang}
-            url={this.url}
-            user={this.props.user}
-            translate={this.props.translate}
-            activeLanguage={this.props.activeLanguage}
-            defaultLanguage={this.props.defaultLanguage}
-            alert={this.props.alert}
-            showAlert={this.props.showAlert}
-            resetAlert={this.props.resetAlert}
-          />
+          {!this.state.isLoading && (
+            <Router
+              lang={lang}
+              url={this.url}
+              user={this.props.user}
+              translate={this.props.translate}
+              activeLanguage={this.props.activeLanguage}
+              defaultLanguage={this.props.defaultLanguage}
+              alert={this.props.alert}
+              showAlert={this.props.showAlert}
+              resetAlert={this.props.resetAlert}
+              headerTitleSet={this.props.headerTitleSet}
+            />
+          )}
         </Layout>
-        {this.state.isAlertActive && (<Alert
-          type={this.props.alert.type}
-          title={this.props.alert.title}
-          content={this.props.alert.content}
-          resetAlert={this.handleResetAlert}
-        />)}
-        {this.props.pageLoading &&(
-        <div className='pageLoading'>
-          <Spinner animation="border" variant="light" />
-        </div>)}
+        {this.state.isAlertActive && (
+          <Alert
+            type={this.props.alert.type}
+            title={this.props.alert.title}
+            content={this.props.alert.content}
+            resetAlert={this.handleResetAlert}
+          />
+        )}
+        {this.props.pageLoading && (
+          <div className="pageLoading">
+            <Spinner animation="border" variant="light" />
+          </div>
+        )}
       </div>
     );
   }
@@ -167,6 +172,7 @@ const mapDispatchToProps = (dispatch) => {
     showAlert: (alertType, title, content, timeout) =>
       dispatch(alert(alertType, title, content, timeout)),
     resetAlert: () => dispatch(resetAlert()),
+    headerTitleSet: (title) => dispatch(headerTitleSet(title))
   };
 };
 

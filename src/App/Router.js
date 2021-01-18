@@ -89,6 +89,7 @@ class Router extends Component {
       alert: this.props.alert,
       showAlert: this.props.showAlert,
       resetAlert: this.props.resetAlert,
+      headerTitleSet: this.props.headerTitleSet,
     };
     const globalRoutesComponents = Object.keys(globalRoutes).map((key) => {
       return (

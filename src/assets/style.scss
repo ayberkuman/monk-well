@@ -87,4 +87,207 @@ body{
     height: 50px;}
   }
 }
+.react-infinite-table {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+
+  .react-infinite-table-wrapper {
+    max-height: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    z-index: 1;
+    -webkit-overflow-scrolling: touch;
+    overflow: auto;
+  }
+
+  .react-infinite-table-scroll-smoother {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+    border: 1px solid #CFCFE9;
+    border-radius: 4px;
+    overflow: hidden;
+    // will-change: transform;
+  }
+
+  .react-infinite-prevent-table-fill {
+    flex-grow: 1;
+  }
+
+  table {
+    border-spacing: 0;
+    border-collapse: separate;
+    table-layout: fixed;
+    box-sizing: border-box;
+    min-height: 100%;
+    margin: 0px;
+    max-width: 100%;
+    width: auto;
+  }
+
+  &.react-infinite-table-fill {
+    table {
+      width: 100%;
+    }
+    .react-infinite-table-wrapper {
+      width: 100%;
+    }
+    .react-infinite-prevent-table-fill {
+      flex-grow: 0;
+    }
+  }
+
+  td, th {
+    box-sizing: border-box;
+    background: white;
+
+    &.is-fixed-left {
+      position: sticky;
+      position: -webkit-sticky;
+      position: -moz-sticky;
+      position: -o-sticky;
+      left: 0;
+    }
+  }
+
+  th {
+    z-index: 2;
+  }
+
+  td.is-fixed-left {
+    z-index: 3;
+  }
+
+  th.is-fixed-left {
+    z-index: 4;
+  }
+
+  th.is-sortable {
+    cursor: pointer;
+  }
+
+  thead {
+    box-sizing: border-box;
+
+    th, td {
+      position: sticky;
+      position: -webkit-sticky;
+      position: -moz-sticky;
+      position: -o-sticky;
+
+      top: 0;
+      z-index: 2;
+    }
+  }
+
+  tbody {
+    box-sizing: border-box;
+  }
+
+  tfoot {
+    box-sizing: border-box;
+    position: sticky;
+    position: -webkit-sticky;
+    position: -moz-sticky;
+    position: -o-sticky;
+    bottom: 0;
+    z-index: 3;
+
+    th, td {
+      position: sticky;
+      position: -webkit-sticky;
+      position: -moz-sticky;
+      position: -o-sticky;
+      bottom: 0;
+      z-index: 3;
+
+      &.is-fixed-left {
+        z-index: 4;
+      }
+    }
+  }
+  
+  th, td {
+    &.react-infinite-column-dragging {
+      z-index: 6;
+    }
+
+    &.react-infinite-column-resize::after {
+      content: '';
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      bottom: 0px;
+      margin-right: -2px;
+      width: 4px;
+      cursor: col-resize;
+    }
+  }
+
+  tr.react-infinite-table-loading-no-rows {
+    height: fit-content;
+
+    td {
+      vertical-align: unset;
+      
+      > div {
+        position: sticky;
+        left: 1px;
+        width: fit-content;
+      }  
+    }
+  }
+
+  tr.react-infinite-table-spacer {
+    td {
+      border: none;
+      padding: 0px;
+      margin: 0px;
+    }
+  }
+
+  &.react-infinite-table-fix-borders {
+    table {
+      thead, tbody, tfoot {
+        td, th {
+          border-left: none;
+
+          &:last-child {
+            border-right: none;
+          }
+        }
+      }
+
+      thead, tbody {
+        td, th {
+          border-top: none;
+        }
+      }
+      tfoot td {
+        border-bottom: none;
+      }
+    }
+  }
+}
+.table-bordered {
+  td{
+    border: none;
+    border-bottom: 1px solid #CFCFE9;
+    vertical-align: middle;
+    color: #474555;
+    font-size: 14px;
+  }
+  th{
+    border: 0;
+    background-color: #F1F1FA;
+    color: 474555;
+    font-size: 16px;
+    font-weight: 400;
+  }
+}
 }

@@ -1,6 +1,7 @@
 import Login from "../Auth/pages/Login";
 import Home from "../Home/Home";
 import Payments from "../Payments/Payments";
+import { UserPayments } from "../UserPayments/UserPayments";
 import NotFound from "../NotFound/NotFound";
 import ForgotPassword from "../Auth/pages/ForgotPassword";
 
@@ -12,6 +13,15 @@ export const globalRoutes = {
     name: "not_found",
     exact: true,
     onNav: false,
+  },
+  userPayments: {
+    id: "auth-02",
+    property: UserPayments,
+    links: { en: `/payments/:id`, tr: "/odemeler/:id" },
+    name: "user_payments",
+    exact: true,
+    onNav: false,
+    navExact: false,
   },
 };
 
@@ -29,7 +39,7 @@ export const authRoutes = {
     id: "auth-01",
     property: Payments,
     links: { en: "/payments", tr: "/odemeler" },
-    name: "home",
+    name: "payments",
     exact: true,
     onNav: false,
     navExact: false,

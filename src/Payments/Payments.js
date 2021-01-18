@@ -1,16 +1,155 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import {Table} from 'react-infinite-table';
 import { headerTitleSet } from "../App/appActions";
 import { scrollToTop } from "../utils/helper";
 import InputWLabel from "../utils/components/InputWLabel";
+import { authRoutes, globalRoutes } from "../App/routes"
+
+
+const N_ROWS = 20
+const INFINITE_SCROLLING_N_ROWS = 10
+const N_COLS = 5
+const headers = ['Hasta Adı', 'Fatura Tutarı', 'Tahsil Edilmiş', 'Açık Bakiye', '']
+
+
+
 export class Payments extends Component {
+  constructor(props){
+    super(props)
+    this.state={
+      noRows: false,
+      numberOfColumns: N_COLS,
+      columns: this.createColumns(N_COLS),
+      fixedColumnsCount: 0,
+      fillTableWidth: true,
+      displayBottomUpwards: false,
+      infiniteScrolling: true,
+      rows: this.createAllRows(),
+      isInfiniteLoading: false,
+      selectedRows: {},
+      canSelectMultipleRows: false,
+    }
+  }
+
+
+  cellRenderer = ({
+    columnIndex,
+    column,
+    rowData,
+    rowIndex,
+    className
+  }) => {
+    if(N_COLS-1 === column.i){
+      return (
+        <td className={className} style={{textAlign: 'right'}}>
+          <Link
+           className="primary-button md d-inline-flex"
+           to={globalRoutes.userPayments.links[this.props.lang].replace(":id", rowIndex)}
+           >Ödeme Al</Link>
+        </td>
+      );
+    }
+    else{
+      return (
+        <td className={className}>
+          R:{rowIndex} C:{rowIndex}
+        </td>
+      );
+    }
+  }
+  
+  headerRenderer = ({
+    columnIndex,
+    column,
+    className
+  }) => {
+      return <th className={className}>{column.headers[column.i]}</th>;
+  }
+  
+  createColumns = (numberOfColumns) => {
+    const _columns = []
+  
+    for (let index = 0; index < numberOfColumns; index++) {
+      _columns.push({
+        i: _columns.length,
+        cellRenderer: this.cellRenderer,
+        headerRenderer: this.headerRenderer,
+        width: 150,
+        headers,
+      });
+    }
+    return _columns
+  }
+  
+  createAllRows = () => {
+    const rows = []
+    for (let index = 0; index < N_ROWS; index++) {
+      rows.push({ id: rows.length })
+    }
+    return rows
+  }
+
   componentDidMount = () => {
     scrollToTop();
     this.props.headerTitleSet(this.props.translate('payments'));
   };
+  componentWillUnmount () {
+    clearTimeout(this._loadRowsTimeout)
+  }
 
+
+  onNumberOfColumnsChange = numberOfColumns => {
+    this.setState({
+      numberOfColumns: numberOfColumns,
+      columns: this.createColumns(numberOfColumns)
+    })
+  }
+
+  onInfiniteLoad = () => {
+    console.log('Loading new rows!')
+    this.setState({
+      isInfiniteLoading: true
+    })
+    this._loadRowsTimeout = setTimeout(() => {
+      const displayBottomUpwards = this.state.displayBottomUpwards
+      const rows = [...this.state.rows]
+      if (displayBottomUpwards) {
+        rows.reverse()
+      }
+
+      for (let index = 0; index < INFINITE_SCROLLING_N_ROWS; index++) {
+        rows.push({ i: rows.length })
+      }
+
+      if (displayBottomUpwards) {
+        rows.reverse()
+      }
+
+      this.setState({
+        rows: rows,
+        isInfiniteLoading: false
+      })
+    }, 2000)
+  }
+
+  onSelectionChange = selectedRows => {
+    this.setState({
+      selectedRows: selectedRows
+    })
+  }
   render() {
+    const {
+      fixedColumnsCount,
+      fillTableWidth,
+      infiniteScrolling,
+      displayBottomUpwards,
+      rows,
+      columns,
+      selectedRows,
+      canSelectMultipleRows
+    } = this.state
     return (
       <div className="Payments">
         <div className="align-items-center justify-content-between mt-4 mb-4">
@@ -30,6 +169,7 @@ export class Payments extends Component {
                 setValue={this.handleChange}
                 validate={true}
                 tabIndex={1}
+                label=''
                 placeholder="Hasta Adı"
                 icon={
                   <svg
@@ -49,15 +189,34 @@ export class Payments extends Component {
             </div>
           </div>
         </div>
+        <div>
+        <Table
+        className='example-table'
+        tableClassName='table table-bordered table-striped'
+        height={600}
+        rowHeight={50}
+        rows={rows}
+        columns={columns}
+        fixedColumnsCount={fixedColumnsCount}
+        headerCount={1}
+        footerCount={0}
+        fillTableWidth={fillTableWidth}
+        noRowsRenderer={() => 'No rows'}
+        rowIdKey='i'
+        selectedRows={selectedRows}
+        canSelectMultipleRows={canSelectMultipleRows}
+        onSelectionChange={this.onSelectionChange}
+        infiniteLoadBeginEdgeOffset={infiniteScrolling ? 150 : undefined}
+        isInfiniteLoading={infiniteScrolling ? this.state.isInfiniteLoading : undefined}
+        onInfiniteLoad={infiniteScrolling ? this.onInfiniteLoad : undefined}
+        getLoadingSpinner={() => <div>Yükleniyor...</div>}
+        displayBottomUpwards={displayBottomUpwards}
+        onColumnOrderChange={false}
+      />
+        </div>
       </div>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    headerTitleSet: (text) => dispatch(headerTitleSet(text)),
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Payments);
+export default Payments

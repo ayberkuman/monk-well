@@ -35,15 +35,15 @@ const Layout = (props) => {
           className={location.pathname === '/' ? 'active' : ''}
             to={authRoutes.home.links[props.lang]}
           >
-            <img src={location.pathname === authRoutes.home.links[props.lang] ? homeMenuActive : homeMenu} alt={props.translate('home')}/>
+            <img src={location.pathname.includes(authRoutes.home.links[props.lang]) ? homeMenuActive : homeMenu} alt={props.translate('home')}/>
             {props.translate('home')}
           </Link>
           
           <Link
-            className={location.pathname === authRoutes.payments.links[props.lang] ? 'active' : ''}
+            className={location.pathname.includes(authRoutes.payments.links[props.lang]) ? 'active' : ''}
             to={authRoutes.payments.links[props.lang]}
           >
-            <img src={location.pathname === authRoutes.payments.links[props.lang] ? paymentsMenuActive : paymentsMenu} alt={props.translate('payments')}/>
+            <img src={location.pathname.includes(authRoutes.payments.links[props.lang]) ? paymentsMenuActive : paymentsMenu} alt={props.translate('payments')}/>
             {props.translate('payments')}
           </Link>
           <Link
