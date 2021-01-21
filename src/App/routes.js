@@ -1,9 +1,12 @@
 import Login from "../Auth/pages/Login";
 import Home from "../Home/Home";
 import Payments from "../Payments/Payments";
+import PatientRegistry from "../PatientRegistry/PatientRegistry";
 import { UserPayments } from "../UserPayments/UserPayments";
 import NotFound from "../NotFound/NotFound";
 import ForgotPassword from "../Auth/pages/ForgotPassword";
+import GetPaid from "../GetPaid/GetPaid";
+
 
 export const globalRoutes = {
   notFound: {
@@ -40,6 +43,24 @@ export const authRoutes = {
     property: Payments,
     links: { en: "/payments", tr: "/odemeler" },
     name: "payments",
+    exact: true,
+    onNav: false,
+    navExact: false,
+  },
+  patientRegistry: {
+    id: "auth-02",
+    property: PatientRegistry,
+    links: { en: "/patient-registry", tr: "/hasta-kaydi" },
+    name: "patientRegistry",
+    exact: true,
+    onNav: false,
+    navExact: false,
+  },
+  getPaid: {
+    id: "auth-03",
+    property: GetPaid,
+    links: { en: "/get-paid", tr: "/odeme-al" },
+    name: "getPaid",
     exact: true,
     onNav: false,
     navExact: false,

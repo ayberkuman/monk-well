@@ -1,12 +1,9 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import {Table} from 'react-infinite-table';
-import { headerTitleSet } from "../App/appActions";
 import { scrollToTop } from "../utils/helper";
 import InputWLabel from "../utils/components/InputWLabel";
-import { authRoutes, globalRoutes } from "../App/routes"
-
+import { globalRoutes, authRoutes } from "../App/routes"
 
 const N_ROWS = 20
 const INFINITE_SCROLLING_N_ROWS = 10
@@ -155,7 +152,8 @@ export class Payments extends Component {
         <div className="align-items-center justify-content-between mt-4 mb-4">
           <div className="row">
             <div className="col-md-6">
-              <Link className="primary-button d-inline-flex">
+              <Link className="primary-button d-inline-flex"
+              to={authRoutes.patientRegistry.links[this.props.lang]}>
                 Hasta Kaydı Oluştur
               </Link>
             </div>

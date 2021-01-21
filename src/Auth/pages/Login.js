@@ -8,7 +8,6 @@ import CutomCheckbox from "../../utils/components/CutomCheckbox";
 import { guestRoutes } from "../../App/routes";
 import API, { headers } from "../../utils/API";
 import { login } from "../authActions";
-import { pageLoading } from "../../App/appActions";
 import { connect } from "react-redux";
 import {
   scrollToTop,
@@ -174,7 +173,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (user) => dispatch(login(user)),
-    pageLoading: (loading) => dispatch(pageLoading(loading))
   };
 };
 

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import crypto from "crypto";
+import { Typeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { validateInput } from "../helper";
 
 export default class SelectWLabel extends Component {
@@ -52,48 +54,15 @@ export default class SelectWLabel extends Component {
         ) : (
           ""
         )}
-        <select
-          type={this.props.type}
-          name={this.props.name}
+        <Typeahead
           id={this.props.id}
-          value={
-            this.props.value ? this.props.value : "empty-placeholder-value"
-          }
-          ref={this.props.ref}
-          className="position-relative"
-          onChange={this.props.setValue}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
-        >
-          <option value="empty-placeholder-value" hidden></option>
-          {this.props.options
-            ? this.props.options.map(({ value, name }, index) => (
-                <option key={index} value={value}>
-                  {name}
-                </option>
-              ))
-            : ``}
-        </select>
+          // onChange={this.props.setValue}
+          options={this.props.options}
+          placeholder={this.props.placeholder}
+          selected={this.props.value}
+        />
+        <label className='position-absolute'>{this.props.label}</label>
       </div>
     );
   }
 }
-
-SelectWLabel.propTypes = {
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  setValue: PropTypes.func.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-        .isRequired,
-      name: PropTypes.string.isRequired,
-    }).isRequired
-  ).isRequired,
-  ref: PropTypes.object,
-  classes: PropTypes.string,
-  icon: PropTypes.object,
-  validate: PropTypes.bool,
-};

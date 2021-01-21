@@ -90,6 +90,7 @@ class Router extends Component {
       showAlert: this.props.showAlert,
       resetAlert: this.props.resetAlert,
       headerTitleSet: this.props.headerTitleSet,
+      pageLoadingSet: this.props.pageLoadingSet,
     };
     const globalRoutesComponents = Object.keys(globalRoutes).map((key) => {
       return (

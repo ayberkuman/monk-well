@@ -23,7 +23,7 @@ export default class InputWLabel extends Component {
   };
 
   handleFocus = () => {
-    document.getElementById(`input-${this.id}`).classList.add("focused");
+    // document.getElementById(`input-${this.id}`).classList.add("focused");
     this.setState({ isActive: true, isFilled: true });
   };
 
@@ -37,7 +37,7 @@ export default class InputWLabel extends Component {
       }
 
     if (e.target.value === "") {
-      document.getElementById(`input-${this.id}`).classList.remove("focused");
+      // document.getElementById(`input-${this.id}`).classList.remove("focused");
       this.setState({ isFilled: false });
     }
   };
@@ -45,7 +45,7 @@ export default class InputWLabel extends Component {
   render() {
     return (
       <div
-        className={`InputWLabel position-relative d-flex justify-content-start align-items-center ${
+        className={`InputWLabel position-relative d-flex justify-content-start align-items-center focused mt-3 ${
           this.props.classes ? this.props.classes : ``
         }`}
         id={`input-${this.id}`}

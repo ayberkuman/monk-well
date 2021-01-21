@@ -305,7 +305,6 @@ export const getRefreshToken = (localUser = null) => {
 export const handleErrors = (err, user = null) => {
   if (err.response) {
     if (err.response.status === 401) {
-      console.log(user)
       getRefreshToken(user);
     }
   } else console.log(err);

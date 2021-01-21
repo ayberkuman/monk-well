@@ -1,6 +1,6 @@
 .InputWLabel {
   margin-bottom: 34px;
-  border: 1px solid $inputBorderColor;
+  border: 1px solid #CFCFE9;
   border-radius: 8px;
   padding-left: 20px;
   padding-right: 20px;
@@ -31,16 +31,17 @@
     }
   }
   input{
+    color: #474555;
     display: flex;
     flex:1;
     padding: 13px 0;
+    font-size: 16px;
   }
 
   label {
     cursor: text;
     font-size: 16px;
-    font-weight: $font-weight-medium;
-    color: #7b788d;
+    color: #474555;
     left: calc(20px);;
     top: 50%;
     transform: translateY(-50%);
@@ -51,7 +52,7 @@
   }
 
   &.focused {
-    border-color: #f3f3f3;
+    border-color: #CFCFE9;
 
     textarea {
       resize: vertical;
@@ -62,9 +63,7 @@
 
     label {
       top: -19px;
-      color: #000;
       left: 0 !important;
-      font-weight: 700;
     }
   }
   &[data-w-icon="true"] {

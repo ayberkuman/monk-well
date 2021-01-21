@@ -35,10 +35,9 @@ const Layout = (props) => {
           className={location.pathname === '/' ? 'active' : ''}
             to={authRoutes.home.links[props.lang]}
           >
-            <img src={location.pathname.includes(authRoutes.home.links[props.lang]) ? homeMenuActive : homeMenu} alt={props.translate('home')}/>
+            <img src={location.pathname === '/' ? homeMenuActive : homeMenu} alt={props.translate('home')}/>
             {props.translate('home')}
           </Link>
-          
           <Link
             className={location.pathname.includes(authRoutes.payments.links[props.lang]) ? 'active' : ''}
             to={authRoutes.payments.links[props.lang]}

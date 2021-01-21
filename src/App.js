@@ -19,7 +19,7 @@ import is from "is_js";
 import { withRouter } from "react-router";
 import { handleErrors } from "./utils/helper";
 import { login, logout } from "./Auth/authActions";
-import { alert, resetAlert, headerTitleSet } from "./App/appActions";
+import { alert, resetAlert, headerTitleSet, pageLoadingSet } from "./App/appActions";
 import Alert from "./App/components/Alert";
 import API, { headers } from "./utils/API";
 
@@ -135,6 +135,7 @@ class App extends Component {
               showAlert={this.props.showAlert}
               resetAlert={this.props.resetAlert}
               headerTitleSet={this.props.headerTitleSet}
+              pageLoadingSet={this.props.pageLoadingSet}
             />
           )}
         </Layout>
@@ -172,7 +173,8 @@ const mapDispatchToProps = (dispatch) => {
     showAlert: (alertType, title, content, timeout) =>
       dispatch(alert(alertType, title, content, timeout)),
     resetAlert: () => dispatch(resetAlert()),
-    headerTitleSet: (title) => dispatch(headerTitleSet(title))
+    headerTitleSet: (title) => dispatch(headerTitleSet(title)),
+    pageLoadingSet: (type) => dispatch(pageLoadingSet(type))
   };
 };
 

@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { scrollToTop } from "../utils/helper";
 import API, { headers } from "../utils/API";
-import { alert, headerTitleSet } from "../App/appActions";
+import { headerTitleSet } from "../App/appActions";
 
 
 export class Home extends Component {
@@ -55,8 +55,6 @@ export class Home extends Component {
             lineData.push(e.amount)
             barData.push(e.amount)
           });
-          console.log(labels, lineData, barData)
-          console.log(22);
           this.setState({
             balanceList, 
             creditTotal, 
@@ -82,8 +80,10 @@ export class Home extends Component {
               }],
             }
           });
+          this.props.pageLoadingSet(false);
         })
         .catch((err) => {
+          this.props.pageLoadingSet(false);
         });
     scrollToTop();
   };

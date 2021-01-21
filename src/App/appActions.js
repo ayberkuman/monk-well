@@ -14,7 +14,7 @@ export const resetAlert = () => {
   };
 };
 
-export const pageLoading = (pageLoading) => {
+export const pageLoadingSet = (pageLoading) => {
   return {
     type: "PAGE_LOADING",
     pageLoading,
