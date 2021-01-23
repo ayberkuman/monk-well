@@ -17,7 +17,6 @@ import Router from "./App/Router";
 import LanguageFiles from "./utils/LanguageFiles";
 import is from "is_js";
 import { withRouter } from "react-router";
-import { handleErrors } from "./utils/helper";
 import { login, logout } from "./Auth/authActions";
 import { alert, resetAlert, headerTitleSet, pageLoadingSet } from "./App/appActions";
 import Alert from "./App/components/Alert";
@@ -53,6 +52,7 @@ class App extends Component {
   componentDidMount = async () => {
     window.cookies = new Cookies();
     setTimeout(() => this.setState({ isLoading: true }), 20);
+    pageLoadingSet(true)
     this.props.setActiveLanguage("tr");
 
     const localUser = await window.cookies.get('user');
@@ -61,6 +61,8 @@ class App extends Component {
         headers: { ...headers, Authorization: `Bearer ${localUser.token}` },
       })
         .then((res) => {
+          console.log(res);
+          pageLoadingSet(false)
           const { data } = res;
           const user = {
             deviceId: localUser.deviceId,
@@ -71,9 +73,14 @@ class App extends Component {
 
           this.props.login(user);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          alert(err.response.data.value)
+          pageLoadingSet(false)
+        });
     }
-
+    else{
+      pageLoadingSet(false)
+    }
     setTimeout(() => this.setState({ isLoading: false }), 20);
   };
 

@@ -94,6 +94,7 @@ export class Home extends Component {
           this.props.pageLoadingSet(false);
         })
         .catch((err) => {
+          alert(err.response.data.value)
           this.props.pageLoadingSet(false);
         });
   }

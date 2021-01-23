@@ -53,12 +53,12 @@ class Login extends Component {
         username: this.state.username,
         password: this.state.password,
       };
-
       API.post("Auth", data, { headers: { ...headers } })
         .then((res) => {
           const { email, fullName, id, token } = res.data;
           this.setState({ isSending: false });
           this.props.pageLoadingSet(false);
+
           if (!_.isUndefined(token)) {
               const user = {
                 email,
@@ -70,6 +70,7 @@ class Login extends Component {
           }
         })
         .catch((err) => {
+          alert(err.response.data.value)
           this.props.pageLoadingSet(false);
           this.setState({ isSending: false });
         });

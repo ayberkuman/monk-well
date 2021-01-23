@@ -24,6 +24,12 @@ body{
     font-weight: 700;
     font-size: 16px;
   }
+  .fs-12{
+    font-size: 12px;
+  }
+  .fs-16{
+    font-size: 16px;
+  }
   .fs-24{
     font-size: 24px;
   }
@@ -90,6 +96,68 @@ body{
       }
   }
   }
+}
+.border{
+  border-color: #CFCFE9 !important;
+}
+.dropdown-min{
+  button{
+    padding: 0;
+    line-height: 13px;
+    background-color: transparent !important;
+    border: 0 !important;
+    width: 11px;
+    height: 11px;
+    display: flex;
+    margin-top: 6px;
+    margin-left: 8px;
+    background-size: 11px 11px;
+    background-image: url(../assets/images/down.svg);
+    &::after{
+      content: '';
+      border: 0;
+    }
+  }
+  .dropdown-menu{
+    padding: 0;
+  }
+  .dropdown-item{
+    padding: 0.75rem 1rem;
+    display: flex;
+    &:first-child{
+      border-bottom: 1px solid #CFCFE9;
+    }
+  }
+}
+.discount{
+  background: #F1F1FA;
+  padding: 17px 50px 18px 23px;
+  color: #7273CD;
+  font-size: 16px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  margin-right: -20px;
+}
+@media only screen and (max-width: 960px){
+  .discount{
+    display: none;
+  }
+}
+.card-title{
+  background: #F1F1FA;
+  padding:13px 1.25rem;
+  margin: 0;
+  font-size: 16px;
+}
+.card-balance{
+  display: flex;
+  flex-direction: column;
+  background: #DD8AB8;
+  width: 100%;
+  height: 61px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
 }
 .infinite-scroll-component {
   border: 1px solid #CFCFE9;

@@ -27,6 +27,7 @@ export class Payments extends Component {
   };
 
   getData = ()=>{
+    this.props.pageLoadingSet(true);
     if(!_.isUndefined(this.state.totalPages)){
       if (this.state.totalPages > this.state.currentpage) {
         this.setState({
@@ -39,6 +40,7 @@ export class Payments extends Component {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
     })
       .then((res) => {
+        this.props.pageLoadingSet(false);
         const { data } = res;
         const rows = this.state.rows;
         
@@ -61,7 +63,10 @@ export class Payments extends Component {
         })
 
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert(err.response.data.value)
+        this.props.pageLoadingSet(false);
+      });
   }
   handleChange = (e) => {
     const { name, value } = e.target;
@@ -93,13 +98,16 @@ export class Payments extends Component {
                 tabIndex={1}
                 label=""
                 placeholder="Hasta Adı"
-                searchHandle={()=>{
-                  this.setState({
-                    rows: [],
-                    currentpage: 1,
-                  },()=>{
-                    this.getData();
-                  })
+                searchHandle={() => {
+                  this.setState(
+                    {
+                      rows: [],
+                      currentpage: 1,
+                    },
+                    () => {
+                      this.getData();
+                    }
+                  );
                 }}
                 icon={
                   <svg
@@ -124,7 +132,11 @@ export class Payments extends Component {
             dataLength={this.state.rows.length}
             next={this.getData}
             hasMore={this.state.hasMore}
-            loader={<tr><td>Loading...</td></tr>}
+            loader={
+              <tr>
+                <td>Loading...</td>
+              </tr>
+            }
             height={600}
             endMessage={
               <p style={{ textAlign: "center" }}>
@@ -136,29 +148,45 @@ export class Payments extends Component {
               <table className="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th class="react-infinite-table-col-0">Hasta Adı</th>
-                    <th class="react-infinite-table-col-1">Fatura Tutarı</th>
-                    <th class="react-infinite-table-col-2">Tahsil Edilmiş</th>
-                    <th class="react-infinite-table-col-3">Açık Bakiye</th>
-                    <th class="react-infinite-table-col-4"></th>
+                    <th className="react-infinite-table-col-0">Hasta Adı</th>
+                    <th className="react-infinite-table-col-1">Fatura Tutarı</th>
+                    <th className="react-infinite-table-col-2">Tahsil Edilmiş</th>
+                    <th className="react-infinite-table-col-4"></th>
                   </tr>
                 </thead>
                 <tbody>
                   {this.state.rows.map((i, index) => (
-                    <tr
-                      key={index + "a"}
-                    >
-                      <td class="react-infinite-table-col-0">{i.fullName}</td>
-                      <td class="react-infinite-table-col-1">{i.price + i.currency}</td>
-                      <td class="react-infinite-table-col-2">{i.balance}</td>
-                      <td class="react-infinite-table-col-3">{i.charged}</td>
-                      <td
-                        class="react-infinite-table-col-4"
-                      >
-                      <Link
-                      className="primary-button md d-inline-flex"
-                      to={authRoutes.userPayments.links[this.props.lang].replace(":id", i.id)}
-                      >Ödeme Al</Link>
+                    <tr key={index + "a"}>
+                      <td className="react-infinite-table-col-0">
+                        <Link
+                          to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
+                        >
+                          {i.fullName}
+                        </Link>
+                      </td>
+                      <td className="react-infinite-table-col-1">
+                        <Link
+                          to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
+                        >
+                          {i.paymentType === 0 ? i.price + i.currency : ""}
+                        </Link>
+                      </td>
+                      <td className="react-infinite-table-col-2">
+                        <Link
+                          to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
+                        >
+                          {i.paymentType === 10 ? i.amount + i.currency : ""}
+                        </Link>
+                      </td>
+                      <td className="react-infinite-table-col-4 text-right">
+                        <Link
+                          className="primary-button md d-inline-flex"
+                          to={authRoutes.getPaid.links[
+                            this.props.lang
+                          ].replace(":id", i.id)}
+                        >
+                          Ödeme Al
+                        </Link>
                       </td>
                     </tr>
                   ))}

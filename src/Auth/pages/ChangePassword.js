@@ -158,6 +158,7 @@ class ChangePassword extends Component {
           }
         })
         .catch((err) => {
+          alert(err.response.data.value)
           this.setState({ isSending: false });
         });
     });

@@ -56,10 +56,11 @@ export default class SelectWLabel extends Component {
         )}
         <Typeahead
           id={this.props.id}
-          // onChange={this.props.setValue}
+          onChange={this.props.setValue}
           options={this.props.options}
           placeholder={this.props.placeholder}
           selected={this.props.value}
+          value={this.props.value}
         />
         <label className='position-absolute'>{this.props.label}</label>
       </div>

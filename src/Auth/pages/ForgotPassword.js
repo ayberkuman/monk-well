@@ -63,7 +63,9 @@ export default class ForgotPassword extends Component {
             5500
           );
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          alert(err.response.data.value)
+        });
     });
   };
 

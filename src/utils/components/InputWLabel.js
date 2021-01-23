@@ -61,13 +61,13 @@ export default class InputWLabel extends Component {
             : () => {}
         }
       >
-      {this.props.icon ? (
-        <div className="icon d-flex justify-content-center align-items-center">
-          {this.props.icon}
-        </div>
-      ) : (
-        ""
-      )}
+        {this.props.icon ? (
+          <div className="icon d-flex justify-content-center align-items-center">
+            {this.props.icon}
+          </div>
+        ) : (
+          ""
+        )}
         <input
           type={this.state.type}
           name={this.props.name}
@@ -91,22 +91,31 @@ export default class InputWLabel extends Component {
               : "text"
           }
         />
-        {this.props.type === 'password' && this.props.value !== "" && (
-            <button className='btn link' onClick={()=>{
+        {this.props.type === "password" && this.props.value !== "" && (
+          <button
+            className="btn link"
+            onClick={() => {
               this.setState({
-                type: this.state.type === 'password' ? 'text' : this.props.type,
-              })
-            }}>
-              {this.state.type === 'password' ? 'Göster' : 'Gizle'}
-            </button>
+                type: this.state.type === "password" ? "text" : this.props.type,
+              });
+            }}
+          >
+            {this.state.type === "password" ? "Göster" : "Gizle"}
+          </button>
         )}
-        {this.props.type === 'searchT' && (
-          <button className='btn link' onClick={()=>{
-            this.props.searchHandle()
-          }}>
+        {this.props.type === "searchT" && (
+          <button
+            className="btn link"
+            onClick={() => {
+              this.props.searchHandle();
+            }}
+          >
             Ara
           </button>
-      )}
+        )}
+        {this.props.type === "discount" && (<div className='discount'>%</div>)
+
+        }
         <label htmlFor={this.props.id} className="position-absolute">
           {this.props.label}
         </label>

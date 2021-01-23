@@ -74,17 +74,15 @@ export class PatientRegistry extends Component {
         })
           .then((res) => {
             this.props.pageLoadingSet(false);
-            console.log(redirect);
             if (redirect === "pay") {
-              this.props.history.push(authRoutes.getPaid.links[this.props.lang]);
+              this.props.history.push(authRoutes.getPaid.links[this.props.lang].replace(":id", res.data.id));
             }
             else{
               this.props.history.push(authRoutes.payments.links[this.props.lang]);
             }
           })
           .catch((err) => {
-            console.log(2);
-            console.log(err);
+            alert(err.response.data.value)
             this.props.pageLoadingSet(false);
           });
       }
