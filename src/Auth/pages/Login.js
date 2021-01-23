@@ -47,9 +47,9 @@ class Login extends Component {
       (this.state.password === "")
     )
       return false;
-    this.props.pageLoading(true);
+    this.props.pageLoadingSet(true);
     this.setState({ isSending: true }, async () => {
-      let data = {
+      const data = {
         username: this.state.username,
         password: this.state.password,
       };
@@ -58,7 +58,7 @@ class Login extends Component {
         .then((res) => {
           const { email, fullName, id, token } = res.data;
           this.setState({ isSending: false });
-          this.props.pageLoading(false);
+          this.props.pageLoadingSet(false);
           if (!_.isUndefined(token)) {
               const user = {
                 email,
@@ -70,7 +70,7 @@ class Login extends Component {
           }
         })
         .catch((err) => {
-          this.props.pageLoading(false);
+          this.props.pageLoadingSet(false);
           this.setState({ isSending: false });
         });
     });

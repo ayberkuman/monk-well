@@ -82,6 +82,7 @@ export default class InputWLabel extends Component {
           readOnly={this.props.readOnly || this.props.editable ? true : false}
           autoComplete="off"
           placeholder={this.props.placeholder}
+          maxLength={this.props.maxLength}
           inputMode={
             this.props.type === "tel"
               ? "tel"
@@ -99,6 +100,13 @@ export default class InputWLabel extends Component {
               {this.state.type === 'password' ? 'Göster' : 'Gizle'}
             </button>
         )}
+        {this.props.type === 'searchT' && (
+          <button className='btn link' onClick={()=>{
+            this.props.searchHandle()
+          }}>
+            Ara
+          </button>
+      )}
         <label htmlFor={this.props.id} className="position-absolute">
           {this.props.label}
         </label>

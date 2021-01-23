@@ -1,174 +1,106 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import {Table} from 'react-infinite-table';
-import { scrollToTop } from "../utils/helper";
+import _ from 'lodash'
+import API, { headers } from "../utils/API";
+import { scrollToTop, currency } from "../utils/helper";
 import InputWLabel from "../utils/components/InputWLabel";
-import { globalRoutes, authRoutes } from "../App/routes"
-
-const N_ROWS = 20
-const INFINITE_SCROLLING_N_ROWS = 10
-const N_COLS = 5
-const headers = ['Hasta Adı', 'Fatura Tutarı', 'Tahsil Edilmiş', 'Açık Bakiye', '']
-
-
+import { authRoutes } from "../App/routes"
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export class Payments extends Component {
   constructor(props){
     super(props)
     this.state={
-      noRows: false,
-      numberOfColumns: N_COLS,
-      columns: this.createColumns(N_COLS),
-      fixedColumnsCount: 0,
-      fillTableWidth: true,
-      displayBottomUpwards: false,
-      infiniteScrolling: true,
-      rows: this.createAllRows(),
-      isInfiniteLoading: false,
-      selectedRows: {},
-      canSelectMultipleRows: false,
+      rows: [],
+      hasMore: false, 
+      length: 10,
+      currentpage: 1,
+      search: ''
     }
   }
 
-
-  cellRenderer = ({
-    columnIndex,
-    column,
-    rowData,
-    rowIndex,
-    className
-  }) => {
-    if(N_COLS-1 === column.i){
-      return (
-        <td className={className} style={{textAlign: 'right'}}>
-          <Link
-           className="primary-button md d-inline-flex"
-           to={globalRoutes.userPayments.links[this.props.lang].replace(":id", rowIndex)}
-           >Ödeme Al</Link>
-        </td>
-      );
-    }
-    else{
-      return (
-        <td className={className}>
-          R:{rowIndex} C:{rowIndex}
-        </td>
-      );
-    }
-  }
   
-  headerRenderer = ({
-    columnIndex,
-    column,
-    className
-  }) => {
-      return <th className={className}>{column.headers[column.i]}</th>;
-  }
-  
-  createColumns = (numberOfColumns) => {
-    const _columns = []
-  
-    for (let index = 0; index < numberOfColumns; index++) {
-      _columns.push({
-        i: _columns.length,
-        cellRenderer: this.cellRenderer,
-        headerRenderer: this.headerRenderer,
-        width: 150,
-        headers,
-      });
-    }
-    return _columns
-  }
-  
-  createAllRows = () => {
-    const rows = []
-    for (let index = 0; index < N_ROWS; index++) {
-      rows.push({ id: rows.length })
-    }
-    return rows
-  }
-
   componentDidMount = () => {
     scrollToTop();
     this.props.headerTitleSet(this.props.translate('payments'));
+    this.getData()
   };
-  componentWillUnmount () {
-    clearTimeout(this._loadRowsTimeout)
-  }
 
-
-  onNumberOfColumnsChange = numberOfColumns => {
-    this.setState({
-      numberOfColumns: numberOfColumns,
-      columns: this.createColumns(numberOfColumns)
+  getData = ()=>{
+    if(!_.isUndefined(this.state.totalPages)){
+      if (this.state.totalPages > this.state.currentpage) {
+        this.setState({
+          hasMore: true
+        })
+        return false
+      }
+    }
+    API.get(`Payment/List?searchBy=${this.state.search}`, {
+      headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
     })
-  }
+      .then((res) => {
+        const { data } = res;
+        const rows = this.state.rows;
+        
+        data.data.map(e => {
+          rows.push({
+            id: e.user.id,
+            fullName: e.user.fullName,
+            price: e.price,
+            amount: e.amount,
+            currency: currency(e.currency),
+            balance: '',
+            charged: '',
+            paymentType: e.paymentType,
+          });
+        });
+        this.setState({
+          currentpage: this.state.currentpage+1,
+          rows: rows,
+          totalPages: data.totalPages,
+        })
 
-  onInfiniteLoad = () => {
-    console.log('Loading new rows!')
-    this.setState({
-      isInfiniteLoading: true
-    })
-    this._loadRowsTimeout = setTimeout(() => {
-      const displayBottomUpwards = this.state.displayBottomUpwards
-      const rows = [...this.state.rows]
-      if (displayBottomUpwards) {
-        rows.reverse()
-      }
-
-      for (let index = 0; index < INFINITE_SCROLLING_N_ROWS; index++) {
-        rows.push({ i: rows.length })
-      }
-
-      if (displayBottomUpwards) {
-        rows.reverse()
-      }
-
-      this.setState({
-        rows: rows,
-        isInfiniteLoading: false
       })
-    }, 2000)
+      .catch((err) => console.log(err));
   }
-
-  onSelectionChange = selectedRows => {
-    this.setState({
-      selectedRows: selectedRows
-    })
-  }
+  handleChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({search: value }, () => {
+      setTimeout(this.handleCheck, 20);
+    });
+  };
   render() {
-    const {
-      fixedColumnsCount,
-      fillTableWidth,
-      infiniteScrolling,
-      displayBottomUpwards,
-      rows,
-      columns,
-      selectedRows,
-      canSelectMultipleRows
-    } = this.state
     return (
       <div className="Payments">
         <div className="align-items-center justify-content-between mt-4 mb-4">
           <div className="row">
             <div className="col-md-6">
-              <Link className="primary-button d-inline-flex"
-              to={authRoutes.patientRegistry.links[this.props.lang]}>
+              <Link
+                className="primary-button d-inline-flex"
+                to={authRoutes.patientRegistry.links[this.props.lang]}
+              >
                 Hasta Kaydı Oluştur
               </Link>
             </div>
             <div className="col-md-6 d-flex justify-content-end">
               <InputWLabel
-                name="email"
-                type="email"
+                name="search"
+                type="searchT"
                 classes="mb-0 mw-300 w-100"
-                id="email"
-                value={""}
+                id="search"
+                value={this.state.search}
                 setValue={this.handleChange}
-                validate={true}
                 tabIndex={1}
-                label=''
+                label=""
                 placeholder="Hasta Adı"
+                searchHandle={()=>{
+                  this.setState({
+                    rows: [],
+                    currentpage: 1,
+                  },()=>{
+                    this.getData();
+                  })
+                }}
                 icon={
                   <svg
                     width="20"
@@ -188,29 +120,52 @@ export class Payments extends Component {
           </div>
         </div>
         <div>
-        <Table
-        className='example-table'
-        tableClassName='table table-bordered table-striped'
-        height={600}
-        rowHeight={50}
-        rows={rows}
-        columns={columns}
-        fixedColumnsCount={fixedColumnsCount}
-        headerCount={1}
-        footerCount={0}
-        fillTableWidth={fillTableWidth}
-        noRowsRenderer={() => 'No rows'}
-        rowIdKey='i'
-        selectedRows={selectedRows}
-        canSelectMultipleRows={canSelectMultipleRows}
-        onSelectionChange={this.onSelectionChange}
-        infiniteLoadBeginEdgeOffset={infiniteScrolling ? 150 : undefined}
-        isInfiniteLoading={infiniteScrolling ? this.state.isInfiniteLoading : undefined}
-        onInfiniteLoad={infiniteScrolling ? this.onInfiniteLoad : undefined}
-        getLoadingSpinner={() => <div>Yükleniyor...</div>}
-        displayBottomUpwards={displayBottomUpwards}
-        onColumnOrderChange={false}
-      />
+          <InfiniteScroll
+            dataLength={this.state.rows.length}
+            next={this.getData}
+            hasMore={this.state.hasMore}
+            loader={<tr><td>Loading...</td></tr>}
+            height={600}
+            endMessage={
+              <p style={{ textAlign: "center" }}>
+                {/*<b>Yay! You have seen it all</b>*/}
+              </p>
+            }
+          >
+            <div className="react-infinite-table react-infinite-table-fill example-table">
+              <table className="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th class="react-infinite-table-col-0">Hasta Adı</th>
+                    <th class="react-infinite-table-col-1">Fatura Tutarı</th>
+                    <th class="react-infinite-table-col-2">Tahsil Edilmiş</th>
+                    <th class="react-infinite-table-col-3">Açık Bakiye</th>
+                    <th class="react-infinite-table-col-4"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.rows.map((i, index) => (
+                    <tr
+                      key={index + "a"}
+                    >
+                      <td class="react-infinite-table-col-0">{i.fullName}</td>
+                      <td class="react-infinite-table-col-1">{i.price + i.currency}</td>
+                      <td class="react-infinite-table-col-2">{i.balance}</td>
+                      <td class="react-infinite-table-col-3">{i.charged}</td>
+                      <td
+                        class="react-infinite-table-col-4"
+                      >
+                      <Link
+                      className="primary-button md d-inline-flex"
+                      to={authRoutes.userPayments.links[this.props.lang].replace(":id", i.id)}
+                      >Ödeme Al</Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </InfiniteScroll>
         </div>
       </div>
     );

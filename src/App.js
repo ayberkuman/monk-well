@@ -71,7 +71,7 @@ class App extends Component {
 
           this.props.login(user);
         })
-        .catch((err) => handleErrors(err, localUser));
+        .catch((err) => console.log(err));
     }
 
     setTimeout(() => this.setState({ isLoading: false }), 20);

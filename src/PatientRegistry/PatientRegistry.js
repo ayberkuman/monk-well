@@ -3,6 +3,7 @@ import InputWLabel from "../utils/components/InputWLabel";
 import { scrollToTop } from "../utils/helper";
 import API, { headers } from "../utils/API";
 import { authRoutes } from "../App/routes";
+import { validateInput } from "../../src/utils/helper";
 export class PatientRegistry extends Component {
   constructor(props){
     super(props)
@@ -12,6 +13,11 @@ export class PatientRegistry extends Component {
       eMail: '',
       phoneNumber: '',
       address: '',
+      tcknError: '',
+      nameSurnameError: '',
+      eMailError: '',
+      phoneNumberError: '',
+      addressError: '',
     }
   }
 
@@ -32,36 +38,58 @@ export class PatientRegistry extends Component {
   handleCheck = () => {
   };
   postData = (redirect) =>{
-    this.props.pageLoadingSet(true);
-    const { tckn, nameSurname, eMail, phoneNumber, address } = this.state;
-    const data = {
-      createdUser: {
-        id: tckn,
-        normalizedUserName: "string",
-        email: eMail,
-        phoneNumber,
-        fullName: nameSurname,
-        address,
-      },
-    };
-    
-    API.post("Payment", data, {
-      headers: { ...headers, Authorization: `Bearer ${this.props.user.token}` },
+    const { tckn, nameSurname, eMail, phoneNumber, address} = this.state;
+    this.setState({
+      tcknError: !validateInput('tckn', tckn) ? 'Geçerli bir TCKN numarası giriniz' : '',
+      nameSurnameError: nameSurname === '' ? 'Lütfen adınızı soyadınızı giriniz' : '',
+      eMailError: !validateInput('email', eMail) ? 'Geçerli bir e-posta adresi giriniz' : '',
+      phoneNumberError: !validateInput('tel', phoneNumber) ? 'Geçerli bir telefon numarası giriniz' : '',
+      addressError: address === '' ? 'Lütfen adresinizi giriniz' : '',
+    },() => {
+      const { tcknError, nameSurnameError, eMailError, phoneNumberError, addressError } = this.state;
+      console.log(tcknError, nameSurnameError, eMailError, phoneNumberError, addressError)
+      if (
+        tcknError === "" &&
+        nameSurnameError === "" &&
+        eMailError === "" &&
+        phoneNumberError === "" &&
+        addressError === ""
+      ) {
+        this.props.pageLoadingSet(true);
+        const data = {
+          user: {
+            identityNumber: tckn,
+            email: eMail,
+            phoneNumber: phoneNumber,
+            fullName: nameSurname,
+            address: address,
+          },
+        };
+  
+        API.post("/Account/Addpassion", data, {
+          headers: {
+            ...headers,
+            Authorization: `Bearer ${this.props.user.token}`,
+          },
+        })
+          .then((res) => {
+            this.props.pageLoadingSet(false);
+            console.log(redirect);
+            if (redirect === "pay") {
+              this.props.history.push(authRoutes.getPaid.links[this.props.lang]);
+            }
+            else{
+              this.props.history.push(authRoutes.payments.links[this.props.lang]);
+            }
+          })
+          .catch((err) => {
+            console.log(2);
+            console.log(err);
+            this.props.pageLoadingSet(false);
+          });
+      }
     })
-      .then((res) => {
-        this.props.pageLoadingSet(false);
-        console.log(redirect);
-        if(redirect === 'pay'){
-          this.props.history.push(
-            authRoutes.getPaid.links[this.props.lang]
-          );
-        }
-      })
-      .catch((err) => {
-        console.log(2);
-        console.log(err);
-        this.props.pageLoadingSet(false);
-      });
+   
   }
   save = ()=>{
     this.postData();
@@ -91,7 +119,8 @@ export class PatientRegistry extends Component {
               setValue={this.handleChange}
               inputRef={this.tcknRef}
               tabIndex={1}
-              errorMessage={this.state.errorMessage}
+              errorMessage={this.state.tcknError}
+              maxLength={11}
             />
           </div>
           <div className="col-md-4 mt-2">
@@ -105,7 +134,7 @@ export class PatientRegistry extends Component {
               setValue={this.handleChange}
               inputRef={this.nameSurnameRef}
               tabIndex={1}
-              errorMessage={this.state.errorMessage}
+              errorMessage={this.state.nameSurnameError}
             />
           </div>
           <div className="col-md-4 mt-2">
@@ -119,7 +148,7 @@ export class PatientRegistry extends Component {
               setValue={this.handleChange}
               inputRef={this.eMailRef}
               tabIndex={1}
-              errorMessage={this.state.errorMessage}
+              errorMessage={this.state.eMailError}
             />
           </div>
           <div className="col-md-4 mt-2">
@@ -133,7 +162,7 @@ export class PatientRegistry extends Component {
               setValue={this.handleChange}
               inputRef={this.phoneNumberRef}
               tabIndex={1}
-              errorMessage={this.state.errorMessage}
+              errorMessage={this.state.phoneNumberError}
             />
           </div>
           <div className="col-md-8 mt-2">
@@ -147,7 +176,7 @@ export class PatientRegistry extends Component {
               setValue={this.handleChange}
               inputRef={this.addressRef}
               tabIndex={1}
-              errorMessage={this.state.errorMessage}
+              errorMessage={this.state.addressError}
             />
           </div>
         </div>

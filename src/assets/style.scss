@@ -84,8 +84,15 @@ body{
     border-radius: 8px;
     padding-left: 20px;
     padding-right: 20px;
-    height: 50px;}
+    height: 50px;
+      &.min{
+        height: 40px;
+      }
   }
+  }
+}
+.infinite-scroll-component {
+  border: 1px solid #CFCFE9;
 }
 .react-infinite-table {
   position: relative;
@@ -94,7 +101,6 @@ body{
 
   .react-infinite-table-wrapper {
     max-height: 100%;
-    max-width: 100%;
     box-sizing: border-box;
     z-index: 1;
     -webkit-overflow-scrolling: touch;
@@ -135,7 +141,6 @@ body{
       width: 100%;
     }
     .react-infinite-table-wrapper {
-      width: 100%;
     }
     .react-infinite-prevent-table-fill {
       flex-grow: 0;
