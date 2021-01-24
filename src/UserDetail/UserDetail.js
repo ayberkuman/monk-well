@@ -5,7 +5,7 @@ import _ from "lodash";
 import InfiniteScroll from "react-infinite-scroll-component";
 import API, { headers } from "../utils/API";
 import { headerTitleSet } from "../App/appActions";
-import { scrollToTop } from "../utils/helper";
+import { formatMoney, scrollToTop } from "../utils/helper";
 import editIcon from '../assets/images/edit-icon.svg';
 import deleteIcon from '../assets/images/delete-icon.svg';
 import { authRoutes } from "../App/routes";
@@ -21,6 +21,7 @@ export class UserDetail extends Component {
       email: '',
       balance: '',
       yapilanIslemler: [],
+      yapilanIslemlerToplam: 0,
       islemGecmisi:[],
       islemGecmisiToplam: 0,
       hasMore1: false,
@@ -73,7 +74,7 @@ export class UserDetail extends Component {
       })
         .then((res) => {
           const { creditTotal, debtTotal, list } = res.data;
-          const yapilanIslemlerD = [];
+          const yapilanIslemler = [];
           let yapilanIslemlerToplam = 0;
           const islemGecmisi = [];
           let islemGecmisiToplam = 0;
@@ -87,12 +88,23 @@ export class UserDetail extends Component {
                 id: e.id,
               });
               islemGecmisiToplam = islemGecmisiToplam + e.price;
+            } else{
+              yapilanIslemler.push({
+                description: e.description,
+                price: e.price,
+                doctorId: e.doctorId,
+                userId: e.userId,
+                id: e.id,
+              });
+              yapilanIslemlerToplam = yapilanIslemlerToplam + e.price;
             }
           });
           this.setState({
-            balance: debtTotal - creditTotal + " TL",
+            balance: debtTotal - creditTotal,
             islemGecmisi,
             islemGecmisiToplam,
+            yapilanIslemler,
+            yapilanIslemlerToplam,
           });
           this.props.pageLoadingSet(false);
         })
@@ -101,6 +113,23 @@ export class UserDetail extends Component {
           this.props.pageLoadingSet(false);
         });
     }
+  }
+
+  payDelete = (id) => {
+    this.props.pageLoadingSet(true);
+    API.delete(`Payment?paymentId=${id}`, {
+      headers: {
+        ...headers,
+        Authorization: `Bearer ${this.props.user.token}`,
+      },
+    })
+      .then((res) => {
+        this.getData()
+        this.props.pageLoadingSet(false);
+      })
+      .catch((err) => {
+        this.props.pageLoadingSet(false);
+      });
   }
     
   render() {
@@ -131,7 +160,9 @@ export class UserDetail extends Component {
                   {this.state.email}
                 </p>
                 <div className="card-balance">
-                  <p className="text-white p-0 m-0 font-weight-bold fs-16">{this.state.balance}</p>
+                  <p className="text-white p-0 m-0 font-weight-bold fs-16">
+                    {formatMoney(this.state.balance) + ' TL'}
+                  </p>
                   <span className="text-white fs-12">Bakiye</span>
                 </div>
               </div>
@@ -161,22 +192,66 @@ export class UserDetail extends Component {
                       <th className="react-infinite-table-col-0">
                         Yapılan İşlemler
                       </th>
-                      <th className="react-infinite-table-col-1">
-                        Toplam : {this.state.yapilanIslemler} TL
+                      <th className="react-infinite-table-col-1 text-right">
+                        Toplam : {formatMoney(this.state.yapilanIslemlerToplam)} TL
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {this.state.yapilanIslemler.map((i, index) => (
                       <tr key={index + "a"}>
-                        <td className="react-infinite-table-col-0">4</td>
-                        <td className="react-infinite-table-col-1">3</td>
+                        <td className="react-infinite-table-col-0">
+                          {i.description}
+                        </td>
+                        <td
+                          className="react-infinite-table-col-1"
+                          align="right"
+                        >
+                          {formatMoney(i.price)} TL
+                          <Dropdown className="float-right dropdown-min">
+                            <Dropdown.Toggle></Dropdown.Toggle>
+                            <Dropdown.Menu>
+                              <Dropdown.Item
+                                onClick={() =>
+                                  this.props.history.push(
+                                    authRoutes.editPaid.links[this.props.lang]
+                                      .replace(
+                                        ":id",
+                                        this.props.match.params.id
+                                      )
+                                      .replace(":paid", i.id)
+                                  )
+                                }
+                              >
+                                <img src={editIcon} alt="" className="mr-2" />{" "}
+                                Düzenle
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  this.payDelete(i.id);
+                                }}
+                              >
+                                <img src={deleteIcon} alt="" className="mr-2" />{" "}
+                                Sil
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
             </InfiniteScroll>
+            <Link
+              className="primary-button d-inline-flex mt-3"
+              to={authRoutes.getPaid.links[this.props.lang].replace(
+                ":id",
+                this.props.match.params.id
+              )}
+            >
+              Tedavi Ekle
+            </Link>
           </div>
           <div className="col-md-4 mb-4">
             <InfiniteScroll
@@ -200,10 +275,10 @@ export class UserDetail extends Component {
                   <thead>
                     <tr>
                       <th className="react-infinite-table-col-0">
-                        Yapılan İşlemler
+                        İşlem Geçmisi
                       </th>
                       <th className="react-infinite-table-col-1 text-right">
-                        Toplam : {this.state.islemGecmisiToplam} TL
+                        Toplam : {formatMoney(this.state.islemGecmisiToplam)} TL
                       </th>
                     </tr>
                   </thead>
@@ -213,17 +288,36 @@ export class UserDetail extends Component {
                         <td className="react-infinite-table-col-0">
                           {i.description}
                         </td>
-                        <td className="react-infinite-table-col-1" align="right">
-                          {i.price} TL
-                          <Dropdown className='float-right dropdown-min'>
-                            <Dropdown.Toggle>
-                            </Dropdown.Toggle>
+                        <td
+                          className="react-infinite-table-col-1"
+                          align="right"
+                        >
+                          {formatMoney(i.price)} TL
+                          <Dropdown className="float-right dropdown-min">
+                            <Dropdown.Toggle></Dropdown.Toggle>
                             <Dropdown.Menu>
-                              <Dropdown.Item onClick={()=>this.props.history.push(authRoutes.editPaid.links[this.props.lang].replace(":id", this.props.match.params.id).replace(":paid", i.id))}>
-                              <img src={editIcon} alt='' className='mr-2'/> Düzenle
+                              <Dropdown.Item
+                                onClick={() =>
+                                  this.props.history.push(
+                                    authRoutes.editPaid.links[this.props.lang]
+                                      .replace(
+                                        ":id",
+                                        this.props.match.params.id
+                                      )
+                                      .replace(":paid", i.id)
+                                  )
+                                }
+                              >
+                                <img src={editIcon} alt="" className="mr-2" />{" "}
+                                Düzenle
                               </Dropdown.Item>
-                              <Dropdown.Item href="#/action-2">
-                              <img src={deleteIcon} alt='' className='mr-2'/> Sil
+                              <Dropdown.Item
+                                onClick={() => {
+                                  this.payDelete(i.id);
+                                }}
+                              >
+                                <img src={deleteIcon} alt="" className="mr-2" />{" "}
+                                Sil
                               </Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
@@ -234,6 +328,15 @@ export class UserDetail extends Component {
                 </table>
               </div>
             </InfiniteScroll>
+            <Link
+              className="primary-button d-inline-flex mt-3"
+              to={authRoutes.getPaid.links[this.props.lang].replace(
+                ":id",
+                this.props.match.params.id
+              )}
+            >
+              Ödeme Al
+            </Link>
           </div>
         </div>
       </div>

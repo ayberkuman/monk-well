@@ -3,8 +3,8 @@ import InputWLabel from "../utils/components/InputWLabel";
 import { scrollToTop } from "../utils/helper";
 import API, { headers } from "../utils/API";
 import { authRoutes } from "../App/routes";
-import { validateInput } from "../../src/utils/helper";
-export class PatientRegistry extends Component {
+import { validateInput } from "../utils/helper";
+export class CreatePatient extends Component {
   constructor(props){
     super(props)
     this.state={
@@ -82,7 +82,6 @@ export class PatientRegistry extends Component {
             }
           })
           .catch((err) => {
-            alert(err.response.data.value)
             this.props.pageLoadingSet(false);
           });
       }
@@ -195,4 +194,4 @@ export class PatientRegistry extends Component {
   }
 }
 
-export default PatientRegistry
+export default CreatePatient

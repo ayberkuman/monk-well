@@ -10,21 +10,23 @@ import API, { headers } from "../../utils/API";
 import { login } from "../authActions";
 import { connect } from "react-redux";
 import {
-  scrollToTop,
+  scrollToTop, validateInput,
 } from "../../utils/helper";
 import { LeftSide } from "./components/LeftSide";
 
 
 
 class Login extends Component {
+  //finance@monk.com Secret1+
   state = {
-    username: "finance@monk.com",
-    password: "Secret1+",
-    errorMessage: "",
+    email: "",
+    emailError:'',
+    password: "",
+    passwordError:'',
     isSending: false,
   };
 
-  usernameRef = createRef(null);
+  emailRef = createRef(null);
 
   componentDidMount = () => {
     scrollToTop();
@@ -40,41 +42,48 @@ class Login extends Component {
 
 
   handleLogin = (e) => {
-    e.preventDefault();
+    const {email, password} = this.state;
 
-    if (
-      this.state.username === "" ||
-      (this.state.password === "")
-    )
-      return false;
-    this.props.pageLoadingSet(true);
-    this.setState({ isSending: true }, async () => {
-      const data = {
-        username: this.state.username,
-        password: this.state.password,
-      };
-      API.post("Auth", data, { headers: { ...headers } })
-        .then((res) => {
-          const { email, fullName, id, token } = res.data;
-          this.setState({ isSending: false });
-          this.props.pageLoadingSet(false);
+    this.setState(
+      {
+        passwordError: password === "" ? "Şifrenizi giriniz" : "",
+        emailError: !validateInput("email", email)
+          ? "Geçerli bir e-posta adresi giriniz"
+          : "",
+      },
+      () => {
+        const { emailError, passwordError } = this.state;
+        if (emailError === "" || passwordError === "") {
+          this.props.pageLoadingSet(true);
+          const data = {
+            email: email,
+            password: password,
+          };
+          API.post("Auth", data, { headers: { ...headers } })
+            .then((res) => {
+              const { email, fullName, id, token } = res.data;
+              this.setState({ isSending: false });
+              this.props.pageLoadingSet(false);
 
-          if (!_.isUndefined(token)) {
-              const user = {
-                email,
-                fullName,
-                id,
-                token,
+              if (!_.isUndefined(token)) {
+                const user = {
+                  email,
+                  fullName,
+                  id,
+                  token,
+                };
+                this.props.login(user);
               }
-              this.props.login(user);
-          }
-        })
-        .catch((err) => {
-          alert(err.response.data.value)
-          this.props.pageLoadingSet(false);
-          this.setState({ isSending: false });
-        });
-    });
+            })
+            .catch((err) => {
+              alert(err.response.data.title);
+              this.props.pageLoadingSet(false);
+              this.setState({ isSending: false });
+            });
+        }
+      }
+    );
+
   };
 
   render() {
@@ -87,7 +96,7 @@ class Login extends Component {
                 <LeftSide />
               </div>
               <div className='col-lg-9 d-flex align-items-center'>
-                <form action="#!" onSubmit={this.handleLogin} className='flex-1'>
+                <div className='flex-1'>
                 <div className="container">
                   <div className="row mb-5">
                     <div className="col-md-8 offset-md-2 col-xl-6 offset-xl-3 text-center">
@@ -100,16 +109,16 @@ class Login extends Component {
                   <div className="row">
                     <div className="col-md-8 offset-md-2 col-xl-6 offset-xl-3">
                       <InputWLabel
-                        name="username"
+                        name="email"
                         type={"email"}
-                        id="username"
+                        id="email"
                         label="E-Posta Adresi"
-                        value={this.state.username}
+                        value={this.state.email}
                         setValue={this.handleChange}
                         validate={true}
-                        inputRef={this.usernameRef}
+                        inputRef={this.emailRef}
                         tabIndex={1}
-                        errorMessage={this.state.errorMessage}
+                        errorMessage={this.state.emailError}
                       />
                     </div>
                   </div>
@@ -123,6 +132,7 @@ class Login extends Component {
                           value={this.state.password}
                           setValue={this.handleChange}
                           tabIndex={2}
+                          errorMessage={this.state.passwordError}
                         />
                       </div>
                     </div>
@@ -131,6 +141,7 @@ class Login extends Component {
                       <button
                         className="primary-button"
                         data-is-sending={this.state.isSending}
+                        onClick={()=>this.handleLogin()}
                       >
                         {this.state.isSending
                           ? "Giriş yapılıyor..."
@@ -156,7 +167,7 @@ class Login extends Component {
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
               </div>
             </div>
           </div>

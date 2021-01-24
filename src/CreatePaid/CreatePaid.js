@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import _ from 'lodash';
+import moment from "moment";
 import InputWLabel from "../utils/components/InputWLabel";
 import SelectWLabel from "../utils/components/SelectWLabel";
-import { scrollToTop } from "../utils/helper";
+import { formatMoney, scrollToTop } from "../utils/helper";
 import API, { headers } from "../utils/API";
-export class GetPaid extends Component {
+import { authRoutes } from "../App/routes";
+export class CreatePaid extends Component {
   constructor(props){
     super(props)
     this.state={
@@ -13,6 +15,9 @@ export class GetPaid extends Component {
       selectedProcess:[],
       selectedDoctor:[],
       total: '',
+      totalError: '',
+      selectedProcessError: '',
+      selectedDoctorError: '',
       discountNumber:'',
       discountResult: '',
       alinanMiktar:'',
@@ -24,7 +29,7 @@ export class GetPaid extends Component {
   componentDidMount = () => {
     scrollToTop();
     this.props.headerTitleSet(this.props.translate('payments'));
-    this.getData()
+    this.getData();
   }
 
   componentWillUnmount () {
@@ -32,26 +37,48 @@ export class GetPaid extends Component {
   }
   handleChange = (e) => {
     const { name, value } = e.target;
+    
     this.setState({ [name]: value }, () => {
-      setTimeout(this.handleCheck, 20);
+      if (name === 'discountNumber' || name === 'total') {
+        if (this.state.total !== "" || this.state.discountNumber !== "") {
+          this.setState({
+            discountResult:
+              Number(this.state.total) -
+              Number(this.state.total) *
+                Number(this.state.discountNumber / 100),
+          });
+        } else {
+          this.setState({
+            discountResult: "",
+          });
+        }
+      }
     });
   };
-  handleCheck = () => {
-  };
   getData = ()=>{
-    API.get(`Process/List`, {
+    API.get(`Process/List?length=1000`, {
       headers: {
         ...headers,
         Authorization: `Bearer ${this.props.user.token}`,
       },
     }).then((res) => {
+      const processList = [];
+      res.data.data.map((e)=>{
+        processList.push({
+          id: e.id,
+          label: e.description,
+        })
+      })
+      this.setState({
+        processList
+      })
       this.props.pageLoadingSet(false);
     })
     .catch((err) => {
       alert(err.response.data.value)
       this.props.pageLoadingSet(false);
     });
-    API.get(`Account/ListAllDoctors`, {
+    API.get(`Account/ListAllDoctors?length=1000`, {
       headers: {
         ...headers,
         Authorization: `Bearer ${this.props.user.token}`,
@@ -109,12 +136,11 @@ export class GetPaid extends Component {
         .then((res) => {
           const { creditTotal, debtTotal } = res.data;
           this.setState({
-            balance: debtTotal - creditTotal + " TL",
+            balance: debtTotal - creditTotal,
           });
           this.props.pageLoadingSet(false);
         })
         .catch((err) => {
-          alert(err.response.data.value);
           this.props.pageLoadingSet(false);
         });
     }
@@ -132,36 +158,78 @@ export class GetPaid extends Component {
         },
       })
         .then((res) => {
-          console.log(res.data);
           this.setState({
             total: res.data.price,
             discountNumber:res.data.discountRate,
             discountResult: Number(res.data.price) - (Number(res.data.price) * Number(res.data.discountRate/100)).toFixed(2),
             alinanMiktar:res.data.amount,
             alinanMiktarView:  false,
-            selectedProcess:[{id:'1', label:'a1'}],
+            selectedProcess:[{id:1, label:'a1'}],
             selectedDoctor:[{id:res.data.doctor.id, label:res.data.doctor.fullName}],
           })
           this.props.pageLoadingSet(false);
         })
         .catch((err) => {
-          alert(err.response.data.value);
           this.props.pageLoadingSet(false);
         });
     }
   }
-  postData = (q) =>{
-    if (q==='miktar') {
-      this.setState({
-        alinanMiktarView:true
-      })
-    }
+  postData = (q, r) =>{
+    const {total, discountNumber, selectedProcess, selectedDoctor, alinanMiktar} = this.state;
+    console.log(selectedProcess)
+    this.setState(
+      {
+        totalError: total === ''
+          ? "Toplam fatura tutarını giriniz"
+          : "",
+        selectedProcessError: selectedProcess.length === 0 ? "Lütfen tedavi adını giriniz" : '',
+        selectedDoctorError: selectedDoctor.length === 0 ? "Lütfen doktor adını giriniz" : '',
+      },
+      () => {
+        if (total === "" || selectedProcess === [] || selectedDoctor === []) {
+          console.log(total, discountNumber, selectedProcess, selectedDoctor);
+        } else {
+          const data = {
+            userId: this.props.match.params.id,
+            price: q === "miktar" ? parseFloat(alinanMiktar) : parseFloat(total),
+            discountRate: discountNumber === '' ? 0 : parseFloat(discountNumber),
+            createDate: moment().format("YYYY-MM-DD"),
+            processId: parseInt(selectedProcess[0].id),
+            paymentType: q === "miktar" ? 10 : 0,
+            doctorId: selectedDoctor[0].id,
+          };
+
+          API.post("Payment", data, {
+            headers: {
+              ...headers,
+              Authorization: `Bearer ${this.props.user.token}`,
+            },
+          })
+            .then((res) => {
+              if(r === 'next'){
+                this.setState({
+                  alinanMiktarView: true,
+                })
+              }
+              else{
+                this.props.history.push(
+                  authRoutes.payments.links[this.props.lang]
+                );
+              }
+            })
+            .catch((err) => {
+              this.props.pageLoadingSet(false);
+              this.setState({ isSending: false });
+            });
+        }
+      }
+    );
   }
-  save = ()=>{
-    this.postData();
+  save = (redirect)=>{
+    this.postData('save', redirect);
   }
   saveAndFatura = ()=>{
-    this.postData('miktar');
+    this.postData('miktar', '');
   }
   render() {
     return (
@@ -192,7 +260,7 @@ export class GetPaid extends Component {
                 </p>
                 <div className="card-balance mt-5">
                   <p className="text-white p-0 m-0 font-weight-bold fs-16">
-                    {this.state.balance}
+                    {formatMoney(this.state.balance) + " TL"}
                   </p>
                   <span className="text-white fs-12">Bakiye</span>
                 </div>
@@ -215,24 +283,8 @@ export class GetPaid extends Component {
                             this.setState({ selectedProcess: selected })
                           }
                           placeholder="Tedavi Adı"
-                          options={[
-                            {
-                              id: '1',
-                              label: 'a1',
-                            },
-                            {
-                              id: '2',
-                              label: 'a2',
-                            },
-                            {
-                              id: '3',
-                              label: 'a3',
-                            },
-                            {
-                              id: '3',
-                              label: 'a3',
-                            },
-                          ]}
+                          options={this.state.processList}
+                          errorMessage={this.state.selectedProcessError}
                         />
                       </div>
                     </div>
@@ -243,7 +295,6 @@ export class GetPaid extends Component {
                           id="selectedDoctor"
                           label="Doktor"
                           setValue={(selected) => {
-                            console.log(selected);
                             this.setState({
                               selectedDoctor: selected,
                             });
@@ -251,6 +302,7 @@ export class GetPaid extends Component {
                           placeholder="Doktor"
                           options={this.state.doctorList}
                           value={this.state.selectedDoctor}
+                          errorMessage={this.state.selectedDoctorError}
                         />
                       </div>
                     </div>
@@ -267,7 +319,7 @@ export class GetPaid extends Component {
                         setValue={this.handleChange}
                         inputRef={this.totalRef}
                         tabIndex={1}
-                        errorMessage={this.state.errorMessage}
+                        errorMessage={this.state.totalError}
                       />
                     </div>
                   </div>
@@ -283,7 +335,6 @@ export class GetPaid extends Component {
                         setValue={this.handleChange}
                         inputRef={this.discountNumberRef}
                         tabIndex={1}
-                        errorMessage={this.state.errorMessage}
                       />
                     </div>
                   </div>
@@ -299,7 +350,7 @@ export class GetPaid extends Component {
                         setValue={this.handleChange}
                         inputRef={this.discountResultRef}
                         tabIndex={1}
-                        errorMessage={this.state.errorMessage}
+                        disabled
                       />
                     </div>
                   </div>
@@ -313,7 +364,7 @@ export class GetPaid extends Component {
                       </button>
                       <button
                         className="primary-white-button d-inline-flex ml-4"
-                        onClick={() => this.saveAndFatura()}
+                        onClick={() => this.save("next")}
                       >
                         Onayla ve Miktar Ekle
                       </button>
@@ -341,7 +392,7 @@ export class GetPaid extends Component {
                 <div className="col-md-12">
                   <button
                     className="primary-button d-inline-flex"
-                    onClick={() => this.save()}
+                    onClick={() => this.saveAndFatura()}
                   >
                     Onayla
                   </button>
@@ -355,4 +406,4 @@ export class GetPaid extends Component {
   }
 }
 
-export default GetPaid
+export default CreatePaid

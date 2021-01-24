@@ -23,61 +23,91 @@ const Layout = (props) => {
   const {location} = props;
   return (
     <>
-      <div className='d-flex'>
-      {
-        props.user.isLoggedIn && <div className="left-side-menu min-vh-100" id="sidebar-wrapper">
-          <Link
-            to={authRoutes.home.links[props.lang]}
-          >
-            <img src={logo} alt={props.translate('payments')}/>
-          </Link>
-          <Link
-          className={location.pathname === '/' ? 'active' : ''}
-            to={authRoutes.home.links[props.lang]}
-          >
-            <img src={location.pathname === '/' ? homeMenuActive : homeMenu} alt={props.translate('home')}/>
-            {props.translate('home')}
-          </Link>
-          <Link
-            className={location.pathname.includes(authRoutes.payments.links[props.lang]) ? 'active' : ''}
-            to={authRoutes.payments.links[props.lang]}
-          >
-            <img src={location.pathname.includes(authRoutes.payments.links[props.lang]) ? paymentsMenuActive : paymentsMenu} alt={props.translate('payments')}/>
-            {props.translate('payments')}
-          </Link>
-          <Link
-          >
-            <img src={analysesMenu} alt={props.translate('analyses')}/>
-            {props.translate('analyses')}
-          </Link>
-          <Link
-          >
-            <img src={expensesMenu} alt={props.translate('expenses')}/>
-            {props.translate('expenses')}
-          </Link>
-          <Link
-          className='border-top'
-          >
-            <img src={doctor_settingsMenu} alt={props.translate('doctor_settings')}/>
-            {props.translate('doctor_settings')}
-          </Link>
-          
-          <Link
-          className='border-top'
-          >
-            <img src={system_settingsMenu} alt={props.translate('system_settings')}/>
-            {props.translate('system_settings')}
-          </Link>
-          <hr/>
-          <Link
-          >
-            <img src={clinicMenu} alt={props.translate('clinic')}/>
-            {props.translate('clinic')}
-          </Link>
-        
-      </div>
-      }
-        <div  className='container-fluid'>
+      <div className="d-flex">
+        {props.user.isLoggedIn && (
+          <div className="left-side-menu min-vh-100" id="sidebar-wrapper">
+            <Link to={authRoutes.home.links[props.lang]}>
+              <img src={logo} alt={props.translate("payments")} />
+            </Link>
+            <Link
+              className={location.pathname === "/" ? "active" : ""}
+              to={authRoutes.home.links[props.lang]}
+            >
+              <img
+                src={location.pathname === "/" ? homeMenuActive : homeMenu}
+                alt={props.translate("home")}
+              />
+              {props.translate("home")}
+            </Link>
+            <Link
+              className={
+                location.pathname.includes(
+                  authRoutes.payments.links[props.lang]
+                )
+                  ? "active"
+                  : ""
+              }
+              to={authRoutes.payments.links[props.lang]}
+            >
+              <img
+                src={
+                  location.pathname.includes(
+                    authRoutes.payments.links[props.lang]
+                  )
+                    ? paymentsMenuActive
+                    : paymentsMenu
+                }
+                alt={props.translate("payments")}
+              />
+              {props.translate("payments")}
+            </Link>
+            <Link>
+              <img src={analysesMenu} alt={props.translate("analyses")} />
+              {props.translate("analyses")}
+            </Link>
+            <Link 
+              className={
+                location.pathname.includes(
+                  authRoutes.expense.links[props.lang]
+                )
+                  ? "active"
+                  : ""
+              }
+              to={authRoutes.expense.links[props.lang]}>
+              <img 
+                src={
+                  location.pathname.includes(
+                    authRoutes.expense.links[props.lang]
+                  )
+                    ? expensesMenuActive
+                    : expensesMenu
+                }
+                alt={props.translate("expenses")} />
+              {props.translate("expenses")}
+            </Link>
+            <Link className="border-top">
+              <img
+                src={doctor_settingsMenu}
+                alt={props.translate("doctor_settings")}
+              />
+              {props.translate("doctor_settings")}
+            </Link>
+
+            <Link className="border-top">
+              <img
+                src={system_settingsMenu}
+                alt={props.translate("system_settings")}
+              />
+              {props.translate("system_settings")}
+            </Link>
+            <hr />
+            <Link>
+              <img src={clinicMenu} alt={props.translate("clinic")} />
+              {props.translate("clinic")}
+            </Link>
+          </div>
+        )}
+        <div className="container-fluid">
           <Header
             lang={props.lang}
             user={props.user}

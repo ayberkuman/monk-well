@@ -83,6 +83,7 @@ export default class InputWLabel extends Component {
           autoComplete="off"
           placeholder={this.props.placeholder}
           maxLength={this.props.maxLength}
+          disabled={this.props.disabled}
           inputMode={
             this.props.type === "tel"
               ? "tel"

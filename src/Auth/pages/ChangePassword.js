@@ -183,7 +183,7 @@ class ChangePassword extends Component {
               ) : (
                 ""
               )}
-              <form action="#!" onSubmit={this.handleSubmit}>
+              <div className='flex-1'>
                 <div className="row">
                   <div className="col-12 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
                     <div
@@ -258,13 +258,13 @@ class ChangePassword extends Component {
                       disabled={
                         !this.state.isButtonActive || this.state.isSending
                       }
-                      type="submit"
+                      onClick={()=>this.handleSubmit()}
                     >
                       {this.state.isSending ? "Güncelleniyor..." : "Güncelle"}
                     </button>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
       </>

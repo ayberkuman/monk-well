@@ -53,6 +53,12 @@ body{
   .fs-20{
     font-size: 20px;
   }
+  .text-blue{
+    color: #7273CD !important;
+  }
+  .text-pink{
+    color: #DD8AB8 !important;
+  }
   .pageLoading{
     position: fixed;
     left: 0;
@@ -131,7 +137,7 @@ body{
 }
 .discount{
   background: #F1F1FA;
-  padding: 17px 50px 18px 23px;
+  padding: 13px 50px 13px 23px;
   color: #7273CD;
   font-size: 16px;
   border-top-right-radius: 8px;
@@ -161,6 +167,7 @@ body{
 }
 .infinite-scroll-component {
   border: 1px solid #CFCFE9;
+  border-radius: 4px;
 }
 .react-infinite-table {
   position: relative;

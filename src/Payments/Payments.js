@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import _ from 'lodash'
 import API, { headers } from "../utils/API";
-import { scrollToTop, currency } from "../utils/helper";
+import { scrollToTop, currency, formatMoney } from "../utils/helper";
 import InputWLabel from "../utils/components/InputWLabel";
 import { authRoutes } from "../App/routes"
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -27,23 +27,13 @@ export class Payments extends Component {
   };
 
   getData = ()=>{
-    this.props.pageLoadingSet(true);
-    if(!_.isUndefined(this.state.totalPages)){
-      if (this.state.totalPages > this.state.currentpage) {
-        this.setState({
-          hasMore: true
-        })
-        return false
-      }
-    }
-    API.get(`Payment/List?searchBy=${this.state.search}`, {
+    API.get(`Payment/List?searchBy=${this.state.search}&page=${this.state.currentpage}`, {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
     })
       .then((res) => {
         this.props.pageLoadingSet(false);
         const { data } = res;
         const rows = this.state.rows;
-        
         data.data.map(e => {
           rows.push({
             id: e.user.id,
@@ -59,7 +49,7 @@ export class Payments extends Component {
         this.setState({
           currentpage: this.state.currentpage+1,
           rows: rows,
-          totalPages: data.totalPages,
+          hasMore: data.totalPages >= this.state.currentpage+1
         })
 
       })
@@ -82,7 +72,7 @@ export class Payments extends Component {
             <div className="col-md-6">
               <Link
                 className="primary-button d-inline-flex"
-                to={authRoutes.patientRegistry.links[this.props.lang]}
+                to={authRoutes.createPatient.links[this.props.lang]}
               >
                 Hasta Kaydı Oluştur
               </Link>
@@ -168,14 +158,14 @@ export class Payments extends Component {
                         <Link
                           to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
                         >
-                          {i.paymentType === 0 ? i.price + i.currency : ""}
+                          {i.paymentType === 0 ? formatMoney(i.price) + ' ' + i.currency : ""}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-2">
                         <Link
                           to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
                         >
-                          {i.paymentType === 10 ? i.amount + i.currency : ""}
+                          {i.paymentType === 10 ? formatMoney(i.amount) + ' ' + i.currency : ""}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-4 text-right">

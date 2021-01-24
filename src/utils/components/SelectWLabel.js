@@ -41,11 +41,13 @@ export default class SelectWLabel extends Component {
       <div
         className={`SelectWLabel position-relative d-flex justify-content-start align-items-center ${
           this.props.classes ? this.props.classes : ``
-        }`}
+        } ${this.props.errorMessage !=='' ? 'error':''}`}
         id={`input-${this.id}`}
         data-move-label={this.state.isFilled || this.state.isActive}
         data-w-icon={"icon" in this.props}
         data-label={this.props.label}
+        data-error={Boolean(this.props.errorMessage)}
+        data-error-message={`* ${this.props.errorMessage}`}
       >
         {this.props.icon ? (
           <div className="icon d-flex justify-content-center align-items-center">

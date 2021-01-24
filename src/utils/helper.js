@@ -39,3 +39,16 @@ export const currency = (type) => {
 };
 
 export const scrollToTop = () => setTimeout(() => window.scrollTo(0, 0), 10);
+
+export function formatMoney(price) {
+  
+  var currency_symbol = "₺"
+
+  var formattedOutput = new Intl.NumberFormat('tr-TR', {
+      style: 'currency',
+      currency: 'TRY',
+      minimumFractionDigits: 2,
+    });
+
+  return formattedOutput.format(price).replace(currency_symbol, '')
+}

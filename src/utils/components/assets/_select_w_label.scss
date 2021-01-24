@@ -30,7 +30,11 @@
     background-size: cover;
     position: absolute;
   }
-
+  &.error{
+    input{
+    border-color: red !important;
+  }
+  }
   select {
     background: transparent;
     border: none;
@@ -87,4 +91,15 @@
       left: calc(24px + 5px);
     }
   }
+}
+.SelectWLabel[data-error="true"]:after{
+  content: attr(data-error-message);
+  font-size: 12px;
+  font-weight: 700;
+  color: #e4221c;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform: translateY(calc(100% + 2px));
+  width: 100%;
 }

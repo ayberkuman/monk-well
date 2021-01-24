@@ -65,7 +65,7 @@ class App extends Component {
           pageLoadingSet(false)
           const { data } = res;
           const user = {
-            deviceId: localUser.deviceId,
+            deviceId: 'localUser.deviceId',
             fullName: data.user.fullName,
             email: data.user.email,
             token: localUser.token,

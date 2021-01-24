@@ -1,11 +1,12 @@
 import Login from "../Auth/pages/Login";
 import Home from "../Home/Home";
 import Payments from "../Payments/Payments";
-import PatientRegistry from "../PatientRegistry/PatientRegistry";
+import CreatePatient from "../CreatePatient/CreatePatient";
 import NotFound from "../NotFound/NotFound";
 import ForgotPassword from "../Auth/pages/ForgotPassword";
-import GetPaid from "../GetPaid/GetPaid";
+import CreatePaid from "../CreatePaid/CreatePaid";
 import UserDetail from "../UserDetail/UserDetail";
+import Expense from "../Expense/Expense";
 
 export const globalRoutes = {
   notFound: {
@@ -49,11 +50,11 @@ export const authRoutes = {
     navExact: false,
   },
   //Hasta kaydi
-  patientRegistry: {
+  createPatient: {
     id: "auth-04",
-    property: PatientRegistry,
-    links: { en: "/payments/patient-registry", tr: "/odemeler/hasta-kaydi/" },
-    name: "patientRegistry",
+    property: CreatePatient,
+    links: { en: "/payments/create-patient", tr: "/odemeler/hasta-kaydi/" },
+    name: "createPatient",
     exact: true,
     onNav: false,
     navExact: false,
@@ -62,7 +63,7 @@ export const authRoutes = {
   //Kullanicidan odeme al
   getPaid: {
     id: "auth-05",
-    property: GetPaid,
+    property: CreatePaid,
     links: { en: "/payments/get-paid/user:id", tr: "/odemeler/odeme-al/user::id" },
     name: "getPaid",
     exact: true,
@@ -72,9 +73,19 @@ export const authRoutes = {
   //Kullanicidan odeme düzenle
   editPaid: {
     id: "auth-06",
-    property: GetPaid,
+    property: CreatePaid,
     links: { en: "/payments/edit-paid/user:id", tr: "/odemeler/odeme-duzenle/user::id/paid::paid" },
     name: "getPaid",
+    exact: true,
+    onNav: false,
+    navExact: false,
+  },
+  //Giderler
+  expense: {
+    id: "auth-07",
+    property: Expense,
+    links: { en: "/expense", tr: "/giderler" },
+    name: "expense",
     exact: true,
     onNav: false,
     navExact: false,

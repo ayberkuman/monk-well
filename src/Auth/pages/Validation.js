@@ -193,115 +193,114 @@ class Validation extends Component {
   render() {
     return (
       <>
-          <Helmet title="E-posta Onayı" />
-          <div className="Auth validation">
-            <div className="container">
-              {this.state.countdown > 0 ? (
-                <div className="row">
-                  <div className="col-12 col-md-6 offset-md-3 col-xl-4 offset-xl-4">
-                    <p className="validation-desc text-center w-100">
-                      Lütfen üyelik onayı için mail adresinize gelen doğrulama
-                      kodunu aşağıya giriniz.
-                    </p>
-                    <p className="validation-desc text-center w-100">
-                      Doğrulama kodunu girmek için{" "}
-                      <span>{this.state.countdown} saniye</span> saniye kaldı.
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
-              <form action="#!" onSubmit={this.handleSubmit}>
-                <div className="row">
-                  <div className="col-12 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
-                    <div
-                      className="verification-code-area d-flex justify-content-center align-items-center position-relative"
-                      onClick={() => this.verificationInput.current.focus()}
-                    >
-                      <div className="verification-code d-flex justify-content-center align-items-center">
-                        {this.state.verificationCode[0]}
-                      </div>
-                      <div className="verification-code d-flex justify-content-center align-items-center">
-                        {this.state.verificationCode[1]}
-                      </div>
-                      <div className="verification-code d-flex justify-content-center align-items-center">
-                        {this.state.verificationCode[2]}
-                      </div>
-                      <div className="verification-code d-flex justify-content-center align-items-center">
-                        {this.state.verificationCode[3]}
-                      </div>
-                      <div className="verification-code d-flex justify-content-center align-items-center">
-                        {this.state.verificationCode[4]}
-                      </div>
-                      <div className="verification-code d-flex justify-content-center align-items-center">
-                        {this.state.verificationCode[5]}
-                      </div>
-                      <input
-                        inputmode="numeric"
-                        pattern="[0-9]*"
-                        type="tel"
-                        name="verificationCode"
-                        id="verificationCode"
-                        ref={this.verificationInput}
-                        value={this.state.verificationCode}
-                        onChange={this.handleChange}
-                        className="position-absolute"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-12 col-md-6 offset-md-3 col-xl-4 offset-xl-4">
-                    <button
-                      className="primary-button"
-                      disabled={
-                        !this.state.isButtonActive || this.state.isSending
-                      }
-                      type="submit"
-                    >
-                      {this.state.isSending ? "Onaylanıyor..." : "Onayla"}
-                    </button>
-                  </div>
-                </div>
-              </form>
-              {this.state.canReceiveAgain ? (
-                <>
-                  <div className="row">
-                    <div className="col-12 col-md-6 offset-md-3 col-xl-4 offset-xl-4">
-                      <p className="code-not-recieved-text text-center">
-                        Mesaj gelmediyse
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-12 col-md-6 offset-md-3 text-center">
-                      <Link
-                        to={"#!"}
-                        className="code-not-recieved-link"
-                        onClick={this.handleReceiveCode}
-                      >
-                        Tekrar kod al
-                      </Link>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                ""
-              )}
+        <Helmet title="E-posta Onayı" />
+        <div className="Auth validation">
+          <div className="container">
+            {this.state.countdown > 0 ? (
               <div className="row">
-                <div className="col-12 text-center">
-                  <p className="disclaimer">
-                    Hesap oluşturarak,{" "}
-                    <Link to="#!">Kullanım Koşullarımızı</Link> ve{" "}
-                    <Link to="#!">Gizlilik Sözleşmemizi</Link> okuyup, kabul
-                    ettiğiniz onaylamış olursunuz.
+                <div className="col-12 col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+                  <p className="validation-desc text-center w-100">
+                    Lütfen üyelik onayı için mail adresinize gelen doğrulama
+                    kodunu aşağıya giriniz.
+                  </p>
+                  <p className="validation-desc text-center w-100">
+                    Doğrulama kodunu girmek için{" "}
+                    <span>{this.state.countdown} saniye</span> saniye kaldı.
                   </p>
                 </div>
               </div>
+            ) : (
+              ""
+            )}
+            <div className="flex-1">
+              <div className="row">
+                <div className="col-12 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
+                  <div
+                    className="verification-code-area d-flex justify-content-center align-items-center position-relative"
+                    onClick={() => this.verificationInput.current.focus()}
+                  >
+                    <div className="verification-code d-flex justify-content-center align-items-center">
+                      {this.state.verificationCode[0]}
+                    </div>
+                    <div className="verification-code d-flex justify-content-center align-items-center">
+                      {this.state.verificationCode[1]}
+                    </div>
+                    <div className="verification-code d-flex justify-content-center align-items-center">
+                      {this.state.verificationCode[2]}
+                    </div>
+                    <div className="verification-code d-flex justify-content-center align-items-center">
+                      {this.state.verificationCode[3]}
+                    </div>
+                    <div className="verification-code d-flex justify-content-center align-items-center">
+                      {this.state.verificationCode[4]}
+                    </div>
+                    <div className="verification-code d-flex justify-content-center align-items-center">
+                      {this.state.verificationCode[5]}
+                    </div>
+                    <input
+                      inputmode="numeric"
+                      pattern="[0-9]*"
+                      type="tel"
+                      name="verificationCode"
+                      id="verificationCode"
+                      ref={this.verificationInput}
+                      value={this.state.verificationCode}
+                      onChange={this.handleChange}
+                      className="position-absolute"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-12 col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+                  <button
+                    className="primary-button"
+                    disabled={
+                      !this.state.isButtonActive || this.state.isSending
+                    }
+                    onClick={() => this.handleSubmit()}
+                  >
+                    {this.state.isSending ? "Onaylanıyor..." : "Onayla"}
+                  </button>
+                </div>
+              </div>
+            </div>
+            {this.state.canReceiveAgain ? (
+              <>
+                <div className="row">
+                  <div className="col-12 col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+                    <p className="code-not-recieved-text text-center">
+                      Mesaj gelmediyse
+                    </p>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-12 col-md-6 offset-md-3 text-center">
+                    <Link
+                      to={"#!"}
+                      className="code-not-recieved-link"
+                      onClick={this.handleReceiveCode}
+                    >
+                      Tekrar kod al
+                    </Link>
+                  </div>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+            <div className="row">
+              <div className="col-12 text-center">
+                <p className="disclaimer">
+                  Hesap oluşturarak, <Link to="#!">Kullanım Koşullarımızı</Link>{" "}
+                  ve <Link to="#!">Gizlilik Sözleşmemizi</Link> okuyup, kabul
+                  ettiğiniz onaylamış olursunuz.
+                </p>
+              </div>
             </div>
           </div>
+        </div>
       </>
     );
   }

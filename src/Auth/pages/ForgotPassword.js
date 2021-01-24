@@ -80,7 +80,7 @@ export default class ForgotPassword extends Component {
                 <LeftSide />
               </div>
               <div className='col-lg-9 d-flex align-items-center'>
-                <form action="#!" onSubmit={this.handleSubmit} className='flex-1'>
+                <div className='flex-1'>
                   <div className="container">
                     <div className="row mb-5">
                       <div className="col-md-8 offset-md-2 col-xl-6 offset-xl-3 text-center">
@@ -123,13 +123,14 @@ export default class ForgotPassword extends Component {
                         <button
                           className="primary-button"
                           data-is-sending={this.state.isSending}
+                          onClick={()=>this.handleSubmit()}
                         >
                           Gönder
                         </button>
                       </div>
                     </div>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>

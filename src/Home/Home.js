@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
-import { scrollToTop } from "../utils/helper";
+import { formatMoney, scrollToTop } from "../utils/helper";
 import API, { headers } from "../utils/API";
 import { headerTitleSet } from "../App/appActions";
 import { authRoutes } from "../App/routes"
@@ -140,7 +140,7 @@ export class Home extends Component {
             <div className="col-md-6">
               <Link
                 className="primary-button d-inline-flex"
-                to={authRoutes.patientRegistry.links[this.props.lang]}
+                to={authRoutes.createPatient.links[this.props.lang]}
               >
                 Hasta Kaydı Oluştur
               </Link>
@@ -217,7 +217,7 @@ export class Home extends Component {
                       <p className="mb-0">Tedavi Sayısı</p>
                     </div>
                     <div className="col-6 text-center">
-                      <p className="fs-24 mb-2">{this.state.debtTotal} TL</p>
+                      <p className="fs-24 mb-2">{formatMoney(this.state.debtTotal)} TL</p>
                       <p className="mb-0">Ciro</p>
                     </div>
                   </div>
@@ -230,7 +230,7 @@ export class Home extends Component {
                   <div className="row h-100 align-items-center">
                     <div className="col-12 text-center">
                       <p className="fs-24 mb-2">
-                        {this.state.debtTotal - this.state.creditTotal} TL
+                      {formatMoney(this.state.debtTotal - this.state.creditTotal)} TL
                       </p>
                     </div>
                   </div>
