@@ -56,7 +56,7 @@ class Login extends Component {
         if (emailError === "" || passwordError === "") {
           this.props.pageLoadingSet(true);
           const data = {
-            email: email,
+            userName: email,
             password: password,
           };
           API.post("Auth", data, { headers: { ...headers } })
