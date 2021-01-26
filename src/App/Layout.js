@@ -34,6 +34,7 @@ const Layout = (props) => {
               to={authRoutes.home.links[props.lang]}
             >
               <img
+                className='mh-24'
                 src={location.pathname === "/" ? homeMenuActive : homeMenu}
                 alt={props.translate("home")}
               />
@@ -50,6 +51,7 @@ const Layout = (props) => {
               to={authRoutes.payments.links[props.lang]}
             >
               <img
+                className='mh-24'
                 src={
                   location.pathname.includes(
                     authRoutes.payments.links[props.lang]
@@ -62,7 +64,7 @@ const Layout = (props) => {
               {props.translate("payments")}
             </Link>
             <Link>
-              <img src={analysesMenu} alt={props.translate("analyses")} />
+              <img className='mh-24' src={analysesMenu} alt={props.translate("analyses")} />
               {props.translate("analyses")}
             </Link>
             <Link 
@@ -75,6 +77,7 @@ const Layout = (props) => {
               }
               to={authRoutes.expense.links[props.lang]}>
               <img 
+                className='mh-24'
                 src={
                   location.pathname.includes(
                     authRoutes.expense.links[props.lang]
@@ -87,14 +90,16 @@ const Layout = (props) => {
             </Link>
             <Link className="border-top">
               <img
+                className='mh-24'
                 src={doctor_settingsMenu}
                 alt={props.translate("doctor_settings")}
               />
               {props.translate("doctor_settings")}
             </Link>
 
-            <Link className="border-top">
+            <Link>
               <img
+                className='mh-24'
                 src={system_settingsMenu}
                 alt={props.translate("system_settings")}
               />
@@ -102,7 +107,7 @@ const Layout = (props) => {
             </Link>
             <hr />
             <Link>
-              <img src={clinicMenu} alt={props.translate("clinic")} />
+              <img className='mh-18' src={clinicMenu} alt={props.translate("clinic")} />
               {props.translate("clinic")}
             </Link>
           </div>

@@ -81,7 +81,7 @@ export class Expense extends Component {
             hasMore={this.state.hasMore}
             loader={
               <tr>
-                <td>Loading...</td>
+                <td>...</td>
               </tr>
             }
             height={600}

@@ -175,7 +175,7 @@ export class UserDetail extends Component {
               hasMore={this.state.hasMore1}
               loader={
                 <tr>
-                  <td>Loading...</td>
+                  <td>...</td>
                 </tr>
               }
               height={385}
@@ -260,7 +260,7 @@ export class UserDetail extends Component {
               hasMore={this.state.hasMore2}
               loader={
                 <tr>
-                  <td>Loading...</td>
+                  <td>...</td>
                 </tr>
               }
               height={385}

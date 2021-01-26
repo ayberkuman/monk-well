@@ -27,7 +27,7 @@ export class Payments extends Component {
   };
 
   getData = ()=>{
-    API.get(`Payment/List?searchBy=${this.state.search}&page=${this.state.currentpage}`, {
+    API.get(`Payment/ListByPassion?searchBy=${this.state.search}&page=${this.state.currentpage}`, {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
     })
       .then((res) => {
@@ -38,12 +38,10 @@ export class Payments extends Component {
           rows.push({
             id: e.user.id,
             fullName: e.user.fullName,
-            price: e.price,
-            amount: e.amount,
+            totalBalance: e.totalBalance,
+            totalCredit: e.totalCredit,
+            totalDebt: e.totalDebt,
             currency: currency(e.currency),
-            balance: '',
-            charged: '',
-            paymentType: e.paymentType,
           });
         });
         this.setState({
@@ -124,7 +122,7 @@ export class Payments extends Component {
             hasMore={this.state.hasMore}
             loader={
               <tr>
-                <td>Loading...</td>
+                <td>...</td>
               </tr>
             }
             height={600}
@@ -141,6 +139,7 @@ export class Payments extends Component {
                     <th className="react-infinite-table-col-0">Hasta Adı</th>
                     <th className="react-infinite-table-col-1">Fatura Tutarı</th>
                     <th className="react-infinite-table-col-2">Tahsil Edilmiş</th>
+                    <th className="react-infinite-table-col-3">Açık Bakiye</th>
                     <th className="react-infinite-table-col-4"></th>
                   </tr>
                 </thead>
@@ -158,14 +157,21 @@ export class Payments extends Component {
                         <Link
                           to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
                         >
-                          {i.paymentType === 0 ? formatMoney(i.price) + ' ' + i.currency : ""}
+                          {i.totalBalance}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-2">
                         <Link
                           to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
                         >
-                          {i.paymentType === 10 ? formatMoney(i.amount) + ' ' + i.currency : ""}
+                          {i.totalDebt}
+                        </Link>
+                      </td>
+                      <td className="react-infinite-table-col-3">
+                        <Link
+                          to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
+                        >
+                          {i.totalCredit}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-4 text-right">
