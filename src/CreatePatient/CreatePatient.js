@@ -9,12 +9,14 @@ export class CreatePatient extends Component {
     super(props)
     this.state={
       tckn: '',
-      nameSurname: '',
+      firstName: '',
+      lastName: '',
       eMail: '',
       phoneNumber: '',
       address: '',
       tcknError: '',
-      nameSurnameError: '',
+      firstError: '',
+      lastError: '',
       eMailError: '',
       phoneNumberError: '',
       addressError: '',
@@ -38,19 +40,20 @@ export class CreatePatient extends Component {
   handleCheck = () => {
   };
   postData = (redirect) =>{
-    const { tckn, nameSurname, eMail, phoneNumber, address} = this.state;
+    const { tckn, firstName, lastName, eMail, phoneNumber, address} = this.state;
     this.setState({
       tcknError: !validateInput('tckn', tckn) ? 'Geçerli bir TCKN numarası giriniz' : '',
-      nameSurnameError: nameSurname === '' ? 'Lütfen adınızı soyadınızı giriniz' : '',
+      firstNameError: firstName === '' ? 'Lütfen adınızı giriniz' : '',
+      lastNameError: lastName === '' ? 'Lütfen soyadınızı giriniz' : '',
       eMailError: !validateInput('email', eMail) ? 'Geçerli bir e-posta adresi giriniz' : '',
       phoneNumberError: !validateInput('tel', phoneNumber) ? 'Geçerli bir telefon numarası giriniz' : '',
       addressError: address === '' ? 'Lütfen adresinizi giriniz' : '',
     },() => {
-      const { tcknError, nameSurnameError, eMailError, phoneNumberError, addressError } = this.state;
-      console.log(tcknError, nameSurnameError, eMailError, phoneNumberError, addressError)
+      const { tcknError, firstNameError, lastNameError,  eMailError, phoneNumberError, addressError } = this.state;
       if (
         tcknError === "" &&
-        nameSurnameError === "" &&
+        firstNameError === "" &&
+        lastNameError === "" &&
         eMailError === "" &&
         phoneNumberError === "" &&
         addressError === ""
@@ -61,7 +64,8 @@ export class CreatePatient extends Component {
             identityNumber: tckn,
             email: eMail,
             phoneNumber: phoneNumber,
-            fullName: nameSurname,
+            firstName,
+            lastName,
             address: address,
           },
         };
@@ -125,15 +129,30 @@ export class CreatePatient extends Component {
             <InputWLabel
             classes='mt-3'
               type="text"
-              name="nameSurname"
-              id="nameSurname"
-              label="Ad Soyad"
-              placeholder="Ad Soyad"
-              value={this.state.nameSurname}
+              name="firstName"
+              id="firstName"
+              label="Ad"
+              placeholder="Ad"
+              value={this.state.firstName}
               setValue={this.handleChange}
-              inputRef={this.nameSurnameRef}
+              inputRef={this.firstNameRef}
               tabIndex={1}
-              errorMessage={this.state.nameSurnameError}
+              errorMessage={this.state.firstNameError}
+            />
+          </div>
+          <div className="col-md-4 mt-2">
+            <InputWLabel
+            classes='mt-3'
+              type="text"
+              name="lastName"
+              id="lastName"
+              label="Soyad"
+              placeholder="Soyad"
+              value={this.state.lastName}
+              setValue={this.handleChange}
+              inputRef={this.lastNameRef}
+              tabIndex={1}
+              errorMessage={this.state.lastNameError}
             />
           </div>
           <div className="col-md-4 mt-2">

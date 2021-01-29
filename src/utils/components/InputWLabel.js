@@ -104,16 +104,6 @@ export default class InputWLabel extends Component {
             {this.state.type === "password" ? "Göster" : "Gizle"}
           </button>
         )}
-        {this.props.type === "searchT" && (
-          <button
-            className="btn link"
-            onClick={() => {
-              this.props.searchHandle();
-            }}
-          >
-            Ara
-          </button>
-        )}
         {this.props.type === "discount" && (<div className='discount'>%</div>)
 
         }

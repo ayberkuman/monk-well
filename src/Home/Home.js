@@ -23,6 +23,7 @@ export class Home extends Component {
       processCount: 0,
       list: [],
       barFilter: 'mounth',
+      graphType: 10,
       data: {
         labels: [],
         datasets: [{
@@ -54,14 +55,14 @@ export class Home extends Component {
     const startDate = this.state.startDate !== '' ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
     const endDate = this.state.endDate !== '' ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
     const graphStartDate = this.state.graphStartDate !== '' ? moment(this.state.graphStartDate).format('YYYY-MM-DD') : ''
-    API.get(`Dashboard/Home?startDate=${startDate}&endDate=${endDate}&graphStartDate=${graphStartDate}`, { headers: { ...headers, Authorization: `Bearer ${this.props.user.token}` }})
+    API.get(`Dashboard/Home?startDate=${startDate}&endDate=${endDate}&graphStartDate=${graphStartDate}&graphType=${this.state.graphType}`, { headers: { ...headers, Authorization: `Bearer ${this.props.user.token}` }})
         .then((res) => {
           const {balanceList, creditTotal, debtTotal, list, processCount} = res.data;
             const labels= [];
             const lineData= []
             const barData= []
           balanceList.forEach((e, i) => {
-            labels.push(moment(e.date).format('DD.MM.YY'));
+            labels.push(e.date);
             lineData.push(e.amount)
             barData.push(e.amount)
           });
@@ -94,7 +95,7 @@ export class Home extends Component {
           this.props.pageLoadingSet(false);
         })
         .catch((err) => {
-          alert(err.response.data.value)
+          // alert(err.response.data.value)
           this.props.pageLoadingSet(false);
         });
   }
@@ -116,17 +117,22 @@ export class Home extends Component {
   }
   barFilter(e){
     let date = '';
+    let graphType = 0;
     if (e === 'day') {
       date = moment().subtract(7, 'day').format('YYYY-MM-DD')
+      graphType = 0;
     } else if(e === 'mounth'){
       date = moment().subtract(1, 'months').format('YYYY-MM-DD')
+      graphType = 10;
     } else if(e==='year'){
       date = moment().subtract(1, 'years').format('YYYY-MM-DD')
+      graphType = 20;
     }
     console.log(date);
     this.setState({
       barFilter: e,
-      graphStartDate: date
+      graphStartDate: date,
+      graphType
     },()=>{
       this.getData()
     })

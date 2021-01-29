@@ -52,17 +52,17 @@ class App extends Component {
   componentDidMount = async () => {
     window.cookies = new Cookies();
     setTimeout(() => this.setState({ isLoading: true }), 20);
-    pageLoadingSet(true)
     this.props.setActiveLanguage("tr");
 
     const localUser = await window.cookies.get('user');
     if (localUser && localUser.isLoggedIn) {
+      this.props.pageLoadingSet(true)
       API.get("Account/WhoAmI", {
         headers: { ...headers, Authorization: `Bearer ${localUser.token}` },
       })
         .then((res) => {
           console.log(res);
-          pageLoadingSet(false)
+          this.props.pageLoadingSet(false)
           const { data } = res;
           const user = {
             deviceId: 'localUser.deviceId',
@@ -75,11 +75,8 @@ class App extends Component {
         })
         .catch((err) => {
           alert(err.response.data.value)
-          pageLoadingSet(false)
+          this.props.pageLoadingSet(false)
         });
-    }
-    else{
-      pageLoadingSet(false)
     }
     setTimeout(() => this.setState({ isLoading: false }), 20);
   };

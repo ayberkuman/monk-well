@@ -49,15 +49,6 @@ export class Expense extends Component {
             id: e.id,
             disabled: true,
           });
-          rows.push({
-            amount: e.amount,
-            clinicId: e.clinicId,
-            createDate: e.createDate,
-            currency: e.currency,
-            description: e.description,
-            id: e.id,
-            disabled: true,
-          });
         });
         this.setState({
           currentpage: this.state.currentpage+1,
@@ -69,14 +60,24 @@ export class Expense extends Component {
         this.props.pageLoadingSet(false);
       });
   }
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({search: value }, () => {
-      setTimeout(this.handleCheck, 20);
-    });
+  handleChange = (e, index) => {
+    const arr = this.state.rows;
+    if (!_.isUndefined(e.target)) {
+      if (e.target.name.includes('gider')) {
+        arr[index].description = e.target.value
+      } else if (e.target.name.includes('tutar')) {
+        arr[index].amount = e.target.value
+      }  
+    } else{
+      arr[index].createDate = e
+    }
+    
+    this.setState({
+      rows: arr
+    })
+    
   };
   editRow = (x, i)=>{
-    console.log('rowElement'+x.id);
     const arr = this.state.rows;
     arr[i].disabled = false;
     this.setState({
@@ -84,22 +85,52 @@ export class Expense extends Component {
     })
   }
   editRowSave = (x, i)=>{
-    for (let index = 0; index < document.getElementById('rowElement'+x.id).children.length; index++) {
-      const element = document.getElementById('rowElement'+x.id).children[index].getElementsByTagName('INPUT')[0];
-      if (element) {
-        const item = {
-          amount: x.amount,
-          clinicId: this.state.rows[i].clinicId,
-          createDate: x.createDate,
-          currency: this.state.rows[i].currency,
-          description: x.description,
-          id: this.state.rows[i].id,
-          disabled: true,
-        };
-        console.log(this.state.rows[i])
-        console.log(item)
-      }
-    }
+    const data = {
+      "id": this.state.rows[i].id,
+      "clinicId": this.state.rows[i].clinicId,
+      "description": this.state.rows[i].description,
+      "createDate": moment(this.state.rows[i].createDate).format(),
+      "amount": parseFloat(this.state.rows[i].amount),
+      "currency": this.state.rows[i].currency,
+    };
+    this.props.pageLoadingSet(true);
+    API.post("Expense", data, { headers: { ...headers,Authorization: `Bearer ${this.props.user.token}`, } })
+      .then((res) => {
+        this.props.pageLoadingSet(false);
+        const oldData = this.state.rows;
+        oldData.splice(i, 1);
+        this.setState({
+          rows: oldData,
+        });
+        this.getData()
+      })
+      .catch((err) => {
+        this.props.pageLoadingSet(false);
+        this.setState({ isSending: false });
+      });
+  }
+
+  delete = (i) => {
+    const id = this.state.rows[i].clinicId
+    console.log(id)
+    this.props.pageLoadingSet(true);
+    API.delete(`Expense?expenseId=${id}`, {
+      headers: {
+        ...headers,
+        Authorization: `Bearer ${this.props.user.token}`,
+      },
+    })
+      .then((res) => {
+        this.setState({
+          rows: [],
+        },()=>{
+          this.getData();
+        })
+        this.props.pageLoadingSet(false);
+      })
+      .catch((err) => {
+        this.props.pageLoadingSet(false);
+      });
   }
   render() {
     return (
@@ -144,11 +175,10 @@ export class Expense extends Component {
                   {this.state.rows.map((i, index) => (
                     <tr key={index + "a"} id={"rowElement" + i.id}>
                       <td className="react-infinite-table-col-0 pt-3 pb-3">
-                        {console.log(Date(i.createDate))}
                         <DatePicker
                           selected={new Date(i.createDate)}
                           onChange={(date) => {
-                            console.log(date);
+                            this.handleChange(date, index)
                           }}
                           placeholderText="Başlangıç Tarihi"
                           className="w-100 min"
@@ -160,54 +190,63 @@ export class Expense extends Component {
                       </td>
                       <td className="react-infinite-table-col-1 pt-2 pb-2">
                         <InputWLabel
-                          name=""
+                          name={`gider${index}`}
                           type="text"
-                          classes="mb-0 mw-300 w-100 min disableded"
+                          classes={`mb-0 mw-300 w-100 min ${
+                            i.disabled ? "disabled" : ""
+                          }`}
                           value={i.description}
                           tabIndex={1}
                           label=""
                           disabled={i.disabled}
+                          setValue={(e)=>this.handleChange(e, index)}
                         />
                       </td>
                       <td className="react-infinite-table-col-1 pt-2 pb-2">
                         <InputWLabel
-                          name=""
+                        name={`tutar${index}`}
                           type="text"
-                          classes="mb-0 mw-300 w-100 min disableded"
+                          classes={`mb-0 mw-300 w-100 min ${
+                            i.disabled ? "disabled" : ""
+                          }`}
                           value={
-                            formatMoney(i.amount) + " " + currency(i.currency)
+                            i.disabled?formatMoney(i.amount) + " " + currency(i.currency) : i.amount
                           }
                           tabIndex={1}
                           label=""
                           disabled={i.disabled}
+                          setValue={(e)=>this.handleChange(e, index)}
                         />
                       </td>
                       <td className="react-infinite-table-col-4 text-right pt-2 pb-2">
-                          {i.disabled? (<a
+                        {i.disabled ? (
+                          <a
                             className="d-inline-flex align-items-center text-blue pl-3 pr-3 cursor-pointer"
                             onClick={(e) => {
                               this.editRow(i, index);
                             }}
                           >
                             Düzenle
-                          </a>) : (<a
+                          </a>
+                        ) : (
+                          <a
                             className="d-inline-flex align-items-center text-blue pl-3 pr-3 cursor-pointer"
                             onClick={(e) => {
                               this.editRowSave(i, index);
                             }}
                           >
                             Kaydet
-                          </a>)}
-                        
-                        <Link
-                          className="d-inline-flex align-items-center text-pink pl-3 pr-3"
-                          to={authRoutes.addTreatment.links[this.props.lang].replace(
-                            ":id",
-                            i.id
-                          )}
-                        >
-                          Sil
-                        </Link>
+                          </a>
+                        )}
+                        <a
+                            className="d-inline-flex align-items-center text-pink pl-3 pr-3 cursor-pointer"
+                            onClick={(e) => {
+                              console.log('asdasdas')
+                              this.delete(index);
+                            }}
+                          >
+                            Sil
+                          </a>
                       </td>
                     </tr>
                   ))}

@@ -52,12 +52,21 @@ export class Payments extends Component {
 
       })
       .catch((err) => {
-        alert(err.response.data.value)
+        // alert(err.response.data.value)
         this.props.pageLoadingSet(false);
       });
   }
   handleChange = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
+    this.setState(
+      {
+        rows: [],
+        currentpage: 1,
+      },
+      () => {
+        this.getData();
+      }
+    );
     this.setState({search: value }, () => {
       setTimeout(this.handleCheck, 20);
     });
@@ -79,24 +88,13 @@ export class Payments extends Component {
               <InputWLabel
                 name="search"
                 type="searchT"
-                classes="mb-0 mw-400 w-100 mt-3"
+                classes="mb-0 mw-400 w-100"
                 id="search"
                 value={this.state.search}
                 setValue={this.handleChange}
                 tabIndex={1}
                 label=""
                 placeholder="Hasta Adı"
-                searchHandle={() => {
-                  this.setState(
-                    {
-                      rows: [],
-                      currentpage: 1,
-                    },
-                    () => {
-                      this.getData();
-                    }
-                  );
-                }}
                 icon={
                   <svg
                     width="20"

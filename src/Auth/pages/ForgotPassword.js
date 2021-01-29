@@ -76,7 +76,7 @@ export default class ForgotPassword extends Component {
           <Helmet title="Şifremi Unuttum" />
           <div className="Auth login">
             <div className='row min-vh-100'>
-              <div className='col-lg-3  d-none d-lg-block'>
+              <div className='col-lg-3  d-none d-lg-block mw-340'>
                 <LeftSide />
               </div>
               <div className='col-lg-9 d-flex align-items-center'>

@@ -92,7 +92,7 @@ class Login extends Component {
           <Helmet title="Giriş Yap" />
           <div className="Auth login">
             <div className='row min-vh-100'>
-              <div className='col-lg-3  d-none d-lg-block'>
+              <div className='col-lg-3  d-none d-lg-block mw-340'>
                 <LeftSide />
               </div>
               <div className='col-lg-9 d-flex align-items-center'>

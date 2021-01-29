@@ -6,6 +6,7 @@ import SelectWLabel from "../utils/components/SelectWLabel";
 import { formatMoney, scrollToTop } from "../utils/helper";
 import API, { headers } from "../utils/API";
 import { authRoutes } from "../App/routes";
+import { alert } from "../App/appActions";
 export class CreatePaid extends Component {
   constructor(props){
     super(props)
@@ -62,7 +63,7 @@ export class CreatePaid extends Component {
     });
   };
   getData = ()=>{
-    API.get(`Process/List?length=1000`, {
+    API.get(`Process/ListPrice?length=1000`, {
       headers: {
         ...headers,
         Authorization: `Bearer ${this.props.user.token}`,
@@ -72,11 +73,12 @@ export class CreatePaid extends Component {
       res.data.data.map((e)=>{
         processList.push({
           id: e.id,
-          label: e.description,
+          label: e.process.name,
+          price: e.price,
         })
       })
       this.setState({
-        processList
+        processList,
       })
       this.props.pageLoadingSet(false);
     })
@@ -191,40 +193,71 @@ export class CreatePaid extends Component {
       },
       () => {
         const {totalError, selectedProcessError, selectedDoctorError} = this.state;
-        if (totalError !== '' || selectedProcessError !== '' || selectedDoctorError !== '') {
-        } else {
-          const data = {
-            userId: this.props.match.params.id,
-            price: q === "miktar" ? parseFloat(alinanMiktar) : parseFloat(total),
-            discountRate: discountNumber === '' ? 0 : parseFloat(discountNumber),
-            createDate: moment().format("YYYY-MM-DD"),
-            processId: parseInt(selectedProcess[0].id),
-            paymentType: q === "miktar" ? 10 : 0,
-            doctorId: selectedDoctor[0].id,
-          };
-
-          API.post("Payment", data, {
-            headers: {
-              ...headers,
-              Authorization: `Bearer ${this.props.user.token}`,
-            },
-          })
-            .then((res) => {
-              if(r === 'next'){
-                this.setState({
-                  alinanMiktarView: true,
-                })
-              }
-              else{
-                this.props.history.push(
-                  authRoutes.payments.links[this.props.lang]
-                );
-              }
+        if (totalError === '' && selectedProcessError === '' && selectedDoctorError === '') {
+          if(q !== 'miktar'){
+            const data = {
+              userId: this.props.match.params.id,
+              price: parseFloat(total),
+              discountRate: discountNumber === '' ? 0 : parseFloat(discountNumber),
+              createDate: moment().format("YYYY-MM-DD"),
+              processId:  parseInt(selectedProcess[0].id),
+              paymentType: 0,
+              doctorId: selectedDoctor[0].id,
+            };
+  
+            API.post("Payment", data, {
+              headers: {
+                ...headers,
+                Authorization: `Bearer ${this.props.user.token}`,
+              },
             })
-            .catch((err) => {
-              this.props.pageLoadingSet(false);
-              this.setState({ isSending: false });
-            });
+              .then((res) => {
+                if(r === 'next'){
+                  this.setState({
+                    alinanMiktarView: true,
+                  })
+                }
+                else{
+                  this.props.history.push(
+                    authRoutes.payments.links[this.props.lang]
+                  );
+                }
+              })
+              .catch((err) => {
+                this.props.pageLoadingSet(false);
+                this.setState({ isSending: false });
+              });
+          }
+        } else {
+          console.log(q);
+          if(q === 'miktar'){
+            const data = {
+              userId: this.props.match.params.id,
+              price: parseFloat(alinanMiktar),
+              discountRate: discountNumber === '' ? 0 : parseFloat(discountNumber),
+              createDate: moment().format("YYYY-MM-DD"),
+              processId: 2,
+              paymentType: 10,
+              doctorId: '0',
+            };
+  
+            API.post("Payment", data, {
+              headers: {
+                ...headers,
+                Authorization: `Bearer ${this.props.user.token}`,
+              },
+            })
+              .then((res) => {
+                  console.log(res)                
+                  // this.props.history.push(
+                  //   authRoutes.payments.links[this.props.lang]
+                  // );
+              })
+              .catch((err) => {
+                this.props.pageLoadingSet(false);
+                this.setState({ isSending: false });
+              });
+          }
         }
       }
     );
@@ -283,8 +316,9 @@ export class CreatePaid extends Component {
                           id="selectedProcess"
                           label="Tedavi"
                           value={this.state.selectedProcess}
-                          setValue={(selected) =>
-                            this.setState({ selectedProcess: selected })
+                          setValue={(selected) =>{
+                            this.setState({ selectedProcess: selected, total: !_.isUndefined(selected[0]) ? selected[0].price : '' })
+                          }
                           }
                           placeholder="Tedavi Adı"
                           options={this.state.processList}
