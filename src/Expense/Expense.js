@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import _ from 'lodash'
+import DatePicker, {registerLocale, setDefaultLocale} from "react-datepicker";
+import tr from 'date-fns/locale/tr';
+import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import API, { headers } from "../utils/API";
 import { scrollToTop, currency, formatMoney } from "../utils/helper";
 import InputWLabel from "../utils/components/InputWLabel";
 import { authRoutes } from "../App/routes"
 import InfiniteScroll from "react-infinite-scroll-component";
+registerLocale('tr', tr)
 
 export class Expense extends Component {
   constructor(props){
@@ -43,6 +47,16 @@ export class Expense extends Component {
             currency: e.currency,
             description: e.description,
             id: e.id,
+            disabled: true,
+          });
+          rows.push({
+            amount: e.amount,
+            clinicId: e.clinicId,
+            createDate: e.createDate,
+            currency: e.currency,
+            description: e.description,
+            id: e.id,
+            disabled: true,
           });
         });
         this.setState({
@@ -50,7 +64,6 @@ export class Expense extends Component {
           rows: rows,
           hasMore: data.totalPages >= this.state.currentpage+1
         })
-
       })
       .catch((err) => {
         this.props.pageLoadingSet(false);
@@ -62,6 +75,32 @@ export class Expense extends Component {
       setTimeout(this.handleCheck, 20);
     });
   };
+  editRow = (x, i)=>{
+    console.log('rowElement'+x.id);
+    const arr = this.state.rows;
+    arr[i].disabled = false;
+    this.setState({
+      rows: arr,
+    })
+  }
+  editRowSave = (x, i)=>{
+    for (let index = 0; index < document.getElementById('rowElement'+x.id).children.length; index++) {
+      const element = document.getElementById('rowElement'+x.id).children[index].getElementsByTagName('INPUT')[0];
+      if (element) {
+        const item = {
+          amount: x.amount,
+          clinicId: this.state.rows[i].clinicId,
+          createDate: x.createDate,
+          currency: this.state.rows[i].currency,
+          description: x.description,
+          id: this.state.rows[i].id,
+          disabled: true,
+        };
+        console.log(this.state.rows[i])
+        console.log(item)
+      }
+    }
+  }
   render() {
     return (
       <div className="Payments">
@@ -103,29 +142,66 @@ export class Expense extends Component {
                 </thead>
                 <tbody>
                   {this.state.rows.map((i, index) => (
-                    <tr key={index + "a"}>
+                    <tr key={index + "a"} id={"rowElement" + i.id}>
                       <td className="react-infinite-table-col-0 pt-3 pb-3">
-                        {moment(i.createDate).format("LLL")}
+                        {console.log(Date(i.createDate))}
+                        <DatePicker
+                          selected={new Date(i.createDate)}
+                          onChange={(date) => {
+                            console.log(date);
+                          }}
+                          placeholderText="Başlangıç Tarihi"
+                          className="w-100 min"
+                          showTimeSelect
+                          locale="tr"
+                          dateFormat="d MMMM yyyy h:mm"
+                          disabled={i.disabled}
+                        />
                       </td>
                       <td className="react-infinite-table-col-1 pt-2 pb-2">
-                        {i.description}
+                        <InputWLabel
+                          name=""
+                          type="text"
+                          classes="mb-0 mw-300 w-100 min disableded"
+                          value={i.description}
+                          tabIndex={1}
+                          label=""
+                          disabled={i.disabled}
+                        />
                       </td>
-                      <td className="react-infinite-table-col-2 pt-2 pb-2">
-                        {formatMoney(i.amount) + " " + currency(i.currency)}
+                      <td className="react-infinite-table-col-1 pt-2 pb-2">
+                        <InputWLabel
+                          name=""
+                          type="text"
+                          classes="mb-0 mw-300 w-100 min disableded"
+                          value={
+                            formatMoney(i.amount) + " " + currency(i.currency)
+                          }
+                          tabIndex={1}
+                          label=""
+                          disabled={i.disabled}
+                        />
                       </td>
                       <td className="react-infinite-table-col-4 text-right pt-2 pb-2">
-                        <Link
-                          className="d-inline-flex align-items-center text-blue pl-3 pr-3"
-                          to={authRoutes.getPaid.links[this.props.lang].replace(
-                            ":id",
-                            i.id
-                          )}
-                        >
-                          Düzenle
-                        </Link>
+                          {i.disabled? (<a
+                            className="d-inline-flex align-items-center text-blue pl-3 pr-3 cursor-pointer"
+                            onClick={(e) => {
+                              this.editRow(i, index);
+                            }}
+                          >
+                            Düzenle
+                          </a>) : (<a
+                            className="d-inline-flex align-items-center text-blue pl-3 pr-3 cursor-pointer"
+                            onClick={(e) => {
+                              this.editRowSave(i, index);
+                            }}
+                          >
+                            Kaydet
+                          </a>)}
+                        
                         <Link
                           className="d-inline-flex align-items-center text-pink pl-3 pr-3"
-                          to={authRoutes.getPaid.links[this.props.lang].replace(
+                          to={authRoutes.addTreatment.links[this.props.lang].replace(
                             ":id",
                             i.id
                           )}

@@ -30,6 +30,12 @@ export class CreatePaid extends Component {
     scrollToTop();
     this.props.headerTitleSet(this.props.translate('payments'));
     this.getData();
+    if (this.props.match.url === authRoutes.addPaid.links[this.props.lang].replace(
+      ":id",
+      this.props.match.params.id
+    )) {
+      this.setState({alinanMiktarView: true})
+    }
   }
 
   componentWillUnmount () {
@@ -144,7 +150,6 @@ export class CreatePaid extends Component {
           this.props.pageLoadingSet(false);
         });
     }
-
     if (
       this.props.match.params.paid !== "" &&
       !_.isUndefined(this.props.match.params.paid)
@@ -164,7 +169,7 @@ export class CreatePaid extends Component {
             discountResult: Number(res.data.price) - (Number(res.data.price) * Number(res.data.discountRate/100)).toFixed(2),
             alinanMiktar:res.data.amount,
             alinanMiktarView:  false,
-            selectedProcess:[{id:1, label:'a1'}],
+            selectedProcess:[{id:res.data.process.id, label: res.data.process.name}],
             selectedDoctor:[{id:res.data.doctor.id, label:res.data.doctor.fullName}],
           })
           this.props.pageLoadingSet(false);
@@ -176,7 +181,6 @@ export class CreatePaid extends Component {
   }
   postData = (q, r) =>{
     const {total, discountNumber, selectedProcess, selectedDoctor, alinanMiktar} = this.state;
-    console.log(selectedProcess)
     this.setState(
       {
         totalError: total === ''
@@ -186,8 +190,8 @@ export class CreatePaid extends Component {
         selectedDoctorError: selectedDoctor.length === 0 ? "Lütfen doktor adını giriniz" : '',
       },
       () => {
-        if (total === "" || selectedProcess === [] || selectedDoctor === []) {
-          console.log(total, discountNumber, selectedProcess, selectedDoctor);
+        const {totalError, selectedProcessError, selectedDoctorError} = this.state;
+        if (totalError !== '' || selectedProcessError !== '' || selectedDoctorError !== '') {
         } else {
           const data = {
             userId: this.props.match.params.id,
@@ -310,6 +314,7 @@ export class CreatePaid extends Component {
                   <div className="row">
                     <div className="col-md-6 mt-2">
                       <InputWLabel
+                      classes='mt-3'
                         type="text"
                         name="total"
                         id="total"
@@ -326,6 +331,7 @@ export class CreatePaid extends Component {
                   <div className="row">
                     <div className="col-md-6 mt-2">
                       <InputWLabel
+                      classes='mt-3'
                         type="discount"
                         name="discountNumber"
                         id="discountNumber"
@@ -341,6 +347,7 @@ export class CreatePaid extends Component {
                   <div className="row">
                     <div className="col-md-6 mt-2">
                       <InputWLabel
+                      classes='mt-3'
                         type="text"
                         name="discountResult"
                         id="discountResult"
@@ -377,6 +384,7 @@ export class CreatePaid extends Component {
               <div className="row">
                 <div className="col-md-6 mt-2">
                   <InputWLabel
+                  classes='mt-3'
                     type="text"
                     name="alinanMiktar"
                     id="alinanMiktar"

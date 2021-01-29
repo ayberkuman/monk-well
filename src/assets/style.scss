@@ -36,6 +36,12 @@ body{
   .mw-300{
     max-width: 300px;
   }
+  .mw-400{
+    max-width: 400px;
+  }
+  .cursor-pointer{
+    cursor: pointer;
+  }
   .link{
     font-size: 16px;
     font-weight: 700;
@@ -98,7 +104,7 @@ body{
   .react-datepicker-wrapper{
     width: 100%;
   .react-datepicker__input-container{
-    input {border-color: #f3f3f3;
+    input:enabled {border-color: #f3f3f3;
     border: 1px solid #CFCFE9;
     border-radius: 8px;
     padding-left: 20px;

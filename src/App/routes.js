@@ -60,29 +60,39 @@ export const authRoutes = {
     navExact: false,
     strict: true,
   },
-  //Kullanicidan odeme al
-  getPaid: {
+  //Tedavi olustur
+  addTreatment: {
     id: "auth-05",
     property: CreatePaid,
+    links: { en: "/payments/treatment-add/user:id", tr: "/odemeler/tedavi-ekle/user::id" },
+    name: "addTreatment",
+    exact: true,
+    onNav: false,
+    navExact: false,
+  },
+  //Kullanicidan odeme al
+  addPaid: {
+    id: "auth-07",
+    property: CreatePaid,
     links: { en: "/payments/get-paid/user:id", tr: "/odemeler/odeme-al/user::id" },
-    name: "getPaid",
+    name: "addPaid",
     exact: true,
     onNav: false,
     navExact: false,
   },
   //Kullanicidan odeme düzenle
   editPaid: {
-    id: "auth-06",
+    id: "auth-08",
     property: CreatePaid,
-    links: { en: "/payments/edit-paid/user:id", tr: "/odemeler/odeme-duzenle/user::id/paid::paid" },
-    name: "getPaid",
+    links: { en: "/payments/edit-paid/user:id/paid::paid", tr: "/odemeler/odeme-duzenle/user::id/paid::paid" },
+    name: "addTreatment",
     exact: true,
     onNav: false,
     navExact: false,
   },
   //Giderler
   expense: {
-    id: "auth-07",
+    id: "auth-09",
     property: Expense,
     links: { en: "/expense", tr: "/giderler" },
     name: "expense",

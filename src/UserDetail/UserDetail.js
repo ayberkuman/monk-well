@@ -1,14 +1,13 @@
+import _ from "lodash";
 import React, { Component } from "react";
 import { Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import _ from "lodash";
 import InfiniteScroll from "react-infinite-scroll-component";
-import API, { headers } from "../utils/API";
-import { headerTitleSet } from "../App/appActions";
-import { formatMoney, scrollToTop } from "../utils/helper";
-import editIcon from '../assets/images/edit-icon.svg';
-import deleteIcon from '../assets/images/delete-icon.svg';
+import { Link } from "react-router-dom";
 import { authRoutes } from "../App/routes";
+import deleteIcon from '../assets/images/delete-icon.svg';
+import editIcon from '../assets/images/edit-icon.svg';
+import API, { headers } from "../utils/API";
+import { formatMoney, scrollToTop } from "../utils/helper";
 
 export class UserDetail extends Component {
   constructor(props){
@@ -82,29 +81,29 @@ export class UserDetail extends Component {
             if (e.paymentType === 0) {
               islemGecmisi.push({
                 description: e.description,
-                price: e.price,
+                price: e.amount,
                 doctorId: e.doctorId,
                 userId: e.userId,
                 id: e.id,
               });
-              islemGecmisiToplam = islemGecmisiToplam + e.price;
+              islemGecmisiToplam = islemGecmisiToplam + e.amount;
             } else{
               yapilanIslemler.push({
                 description: e.description,
-                price: e.price,
+                price: e.amount,
                 doctorId: e.doctorId,
                 userId: e.userId,
                 id: e.id,
               });
-              yapilanIslemlerToplam = yapilanIslemlerToplam + e.price;
+              yapilanIslemlerToplam = yapilanIslemlerToplam + e.amount;
             }
           });
           this.setState({
             balance: debtTotal - creditTotal,
             islemGecmisi,
-            islemGecmisiToplam,
+            islemGecmisiToplam: debtTotal,
             yapilanIslemler,
-            yapilanIslemlerToplam,
+            yapilanIslemlerToplam:creditTotal,
           });
           this.props.pageLoadingSet(false);
         })
@@ -170,7 +169,7 @@ export class UserDetail extends Component {
           </div>
           <div className="col-md-4 mb-4">
             <InfiniteScroll
-              dataLength={this.state.yapilanIslemler.length}
+              dataLength={this.state.islemGecmisi.length}
               next={this.getData}
               hasMore={this.state.hasMore1}
               loader={
@@ -191,91 +190,6 @@ export class UserDetail extends Component {
                     <tr>
                       <th className="react-infinite-table-col-0">
                         Yapılan İşlemler
-                      </th>
-                      <th className="react-infinite-table-col-1 text-right">
-                        Toplam : {formatMoney(this.state.yapilanIslemlerToplam)} TL
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.yapilanIslemler.map((i, index) => (
-                      <tr key={index + "a"}>
-                        <td className="react-infinite-table-col-0">
-                          {i.description}
-                        </td>
-                        <td
-                          className="react-infinite-table-col-1"
-                          align="right"
-                        >
-                          {formatMoney(i.price)} TL
-                          <Dropdown className="float-right dropdown-min">
-                            <Dropdown.Toggle></Dropdown.Toggle>
-                            <Dropdown.Menu>
-                              <Dropdown.Item
-                                onClick={() =>
-                                  this.props.history.push(
-                                    authRoutes.editPaid.links[this.props.lang]
-                                      .replace(
-                                        ":id",
-                                        this.props.match.params.id
-                                      )
-                                      .replace(":paid", i.id)
-                                  )
-                                }
-                              >
-                                <img src={editIcon} alt="" className="mr-2" />{" "}
-                                Düzenle
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={() => {
-                                  this.payDelete(i.id);
-                                }}
-                              >
-                                <img src={deleteIcon} alt="" className="mr-2" />{" "}
-                                Sil
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </InfiniteScroll>
-            <Link
-              className="primary-button d-inline-flex mt-3"
-              to={authRoutes.getPaid.links[this.props.lang].replace(
-                ":id",
-                this.props.match.params.id
-              )}
-            >
-              Tedavi Ekle
-            </Link>
-          </div>
-          <div className="col-md-4 mb-4">
-            <InfiniteScroll
-              dataLength={this.state.islemGecmisi.length}
-              next={this.getData}
-              hasMore={this.state.hasMore2}
-              loader={
-                <tr>
-                  <td>...</td>
-                </tr>
-              }
-              height={385}
-              endMessage={
-                <p style={{ textAlign: "center" }}>
-                  {/*<b>Yay! You have seen it all</b>*/}
-                </p>
-              }
-            >
-              <div className="react-infinite-table react-infinite-table-fill example-table">
-                <table className="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th className="react-infinite-table-col-0">
-                        İşlem Geçmisi
                       </th>
                       <th className="react-infinite-table-col-1 text-right">
                         Toplam : {formatMoney(this.state.islemGecmisiToplam)} TL
@@ -330,7 +244,92 @@ export class UserDetail extends Component {
             </InfiniteScroll>
             <Link
               className="primary-button d-inline-flex mt-3"
-              to={authRoutes.getPaid.links[this.props.lang].replace(
+              to={authRoutes.addTreatment.links[this.props.lang].replace(
+                ":id",
+                this.props.match.params.id
+              )}
+            >
+              Tedavi Ekle
+            </Link>
+          </div>
+          <div className="col-md-4 mb-4">
+            <InfiniteScroll
+              dataLength={this.state.yapilanIslemler.length}
+              next={this.getData}
+              hasMore={this.state.hasMore2}
+              loader={
+                <tr>
+                  <td>...</td>
+                </tr>
+              }
+              height={385}
+              endMessage={
+                <p style={{ textAlign: "center" }}>
+                  {/*<b>Yay! You have seen it all</b>*/}
+                </p>
+              }
+            >
+              <div className="react-infinite-table react-infinite-table-fill example-table">
+                <table className="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th className="react-infinite-table-col-0">
+                        Ödeme Geçmisi
+                      </th>
+                      <th className="react-infinite-table-col-1 text-right">
+                        Toplam : {formatMoney(this.state.yapilanIslemlerToplam)} TL
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.yapilanIslemler.map((i, index) => (
+                      <tr key={index + "a"}>
+                        <td className="react-infinite-table-col-0">
+                          {i.description}
+                        </td>
+                        <td
+                          className="react-infinite-table-col-1"
+                          align="right"
+                        >
+                          {formatMoney(i.price)} TL
+                          <Dropdown className="float-right dropdown-min">
+                            <Dropdown.Toggle></Dropdown.Toggle>
+                            <Dropdown.Menu>
+                              <Dropdown.Item
+                                onClick={() =>
+                                  this.props.history.push(
+                                    authRoutes.editPaid.links[this.props.lang]
+                                      .replace(
+                                        ":id",
+                                        this.props.match.params.id
+                                      )
+                                      .replace(":paid", i.id)
+                                  )
+                                }
+                              >
+                                <img src={editIcon} alt="" className="mr-2" />{" "}
+                                Düzenle
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  this.payDelete(i.id);
+                                }}
+                              >
+                                <img src={deleteIcon} alt="" className="mr-2" />{" "}
+                                Sil
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </InfiniteScroll>
+            <Link
+              className="primary-button d-inline-flex mt-3"
+              to={authRoutes.addPaid.links[this.props.lang].replace(
                 ":id",
                 this.props.match.params.id
               )}

@@ -232,6 +232,7 @@ class ChangePassword extends Component {
                       value={this.state.newPassword}
                       setValue={this.handleChange}
                       tabIndex={1}
+                      classes='mt-3'
                       icon={
                         <svg
                           width="24"

@@ -79,7 +79,7 @@ export class Payments extends Component {
               <InputWLabel
                 name="search"
                 type="searchT"
-                classes="mb-0 mw-300 w-100"
+                classes="mb-0 mw-400 w-100 mt-3"
                 id="search"
                 value={this.state.search}
                 setValue={this.handleChange}
@@ -143,6 +143,7 @@ export class Payments extends Component {
                     <th className="react-infinite-table-col-4"></th>
                   </tr>
                 </thead>
+                {console.log(this.state.rows)}
                 <tbody>
                   {this.state.rows.map((i, index) => (
                     <tr key={index + "a"}>
@@ -157,27 +158,27 @@ export class Payments extends Component {
                         <Link
                           to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
                         >
-                          {i.totalBalance}
+                          {formatMoney(i.totalDebt)}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-2">
                         <Link
                           to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
                         >
-                          {i.totalDebt}
+                          {formatMoney(i.totalCredit)}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-3">
                         <Link
                           to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
                         >
-                          {i.totalCredit}
+                          {formatMoney(i.totalBalance)}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-4 text-right">
                         <Link
                           className="primary-button md d-inline-flex"
-                          to={authRoutes.getPaid.links[
+                          to={authRoutes.addTreatment.links[
                             this.props.lang
                           ].replace(":id", i.id)}
                         >

@@ -45,7 +45,7 @@ export default class InputWLabel extends Component {
   render() {
     return (
       <div
-        className={`InputWLabel position-relative d-flex justify-content-start align-items-center focused mt-3 ${
+        className={`InputWLabel position-relative d-flex justify-content-start align-items-center focused ${
           this.props.classes ? this.props.classes : ``
         }`}
         id={`input-${this.id}`}

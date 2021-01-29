@@ -75,7 +75,7 @@ export class CreatePatient extends Component {
           .then((res) => {
             this.props.pageLoadingSet(false);
             if (redirect === "pay") {
-              this.props.history.push(authRoutes.getPaid.links[this.props.lang].replace(":id", res.data.id));
+              this.props.history.push(authRoutes.addTreatment.links[this.props.lang].replace(":id", res.data.id));
             }
             else{
               this.props.history.push(authRoutes.payments.links[this.props.lang]);
@@ -107,6 +107,7 @@ export class CreatePatient extends Component {
         <div className="row mt-3">
           <div className="col-md-4 mt-2">
             <InputWLabel
+            classes='mt-3'
               type="text"
               name="tckn"
               id="tckn"
@@ -122,6 +123,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
+            classes='mt-3'
               type="text"
               name="nameSurname"
               id="nameSurname"
@@ -136,6 +138,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
+            classes='mt-3'
               type="email"
               name="eMail"
               id="eMail"
@@ -150,6 +153,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
+            classes='mt-3'
               type="phone"
               name="phoneNumber"
               id="phoneNumber"
@@ -164,6 +168,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-8 mt-2">
             <InputWLabel
+            classes='mt-3'
               type="text"
               name="address"
               id="address"
