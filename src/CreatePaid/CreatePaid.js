@@ -157,7 +157,7 @@ export class CreatePaid extends Component {
       !_.isUndefined(this.props.match.params.paid)
     ) {
       this.props.pageLoadingSet(true);
-
+      console.log('ssssss')
       API.get(`Payment/GetById?id=${this.props.match.params.paid}`, {
         headers: {
           ...headers,
@@ -168,7 +168,7 @@ export class CreatePaid extends Component {
           this.setState({
             total: res.data.price,
             discountNumber:res.data.discountRate,
-            discountResult: Number(res.data.price) - (Number(res.data.price) * Number(res.data.discountRate/100)).toFixed(2),
+            discountResult: res.data.amount,
             alinanMiktar:res.data.amount,
             alinanMiktarView:  false,
             selectedProcess:[{id:res.data.process.id, label: res.data.process.name}],
@@ -320,7 +320,14 @@ export class CreatePaid extends Component {
                           label="Tedavi"
                           value={this.state.selectedProcess}
                           setValue={(selected) =>{
-                            this.setState({ selectedProcess: selected, total: !_.isUndefined(selected[0]) ? selected[0].price : '' })
+                            this.setState({ 
+                              selectedProcess: selected, total: !_.isUndefined(selected[0]) ? selected[0].price : '',
+                              discountResult:
+                              !_.isUndefined(selected[0]) ?
+                              Number(selected[0].price) -
+                              Number(selected[0].price) *
+                                Number(this.state.discountNumber / 100) : '',
+                            })
                           }
                           }
                           placeholder="Tedavi Adı"
