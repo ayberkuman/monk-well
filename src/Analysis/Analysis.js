@@ -63,7 +63,7 @@ export class Expense extends Component {
                   );
                 }}
                 placeholderText="Tarih seç"
-                className="w-100"
+                className="w-100 min"
               />
             </div>
           </div>
