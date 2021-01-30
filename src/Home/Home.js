@@ -22,8 +22,8 @@ export class Home extends Component {
       debtTotal: null,
       processCount: 0,
       list: [],
-      barFilter: 'mounth',
-      graphType: 10,
+      barFilter: 'day',
+      graphType: 0,
       data: {
         labels: [],
         datasets: [{

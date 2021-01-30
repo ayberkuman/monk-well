@@ -1,12 +1,12 @@
-import React, { Component } from "react";
 import _ from 'lodash';
 import moment from "moment";
+import React, { Component } from "react";
+import { alert } from "../App/appActions";
+import { authRoutes } from "../App/routes";
+import API, { headers } from "../utils/API";
 import InputWLabel from "../utils/components/InputWLabel";
 import SelectWLabel from "../utils/components/SelectWLabel";
 import { formatMoney, scrollToTop } from "../utils/helper";
-import API, { headers } from "../utils/API";
-import { authRoutes } from "../App/routes";
-import { alert } from "../App/appActions";
 export class CreatePaid extends Component {
   constructor(props){
     super(props)
@@ -193,18 +193,23 @@ export class CreatePaid extends Component {
       },
       () => {
         const {totalError, selectedProcessError, selectedDoctorError} = this.state;
-        if (totalError === '' && selectedProcessError === '' && selectedDoctorError === '') {
-          if(q !== 'miktar'){
+        if (q !== "miktar") {
+          if (
+            totalError === "" &&
+            selectedProcessError === "" &&
+            selectedDoctorError === ""
+          ) {
             const data = {
               userId: this.props.match.params.id,
               price: parseFloat(total),
-              discountRate: discountNumber === '' ? 0 : parseFloat(discountNumber),
+              discountRate:
+                discountNumber === "" ? 0 : parseFloat(discountNumber),
               createDate: moment().format("YYYY-MM-DD"),
-              processId:  parseInt(selectedProcess[0].id),
+              processId: parseInt(selectedProcess[0].id),
               paymentType: 0,
               doctorId: selectedDoctor[0].id,
             };
-  
+
             API.post("Payment", data, {
               headers: {
                 ...headers,
@@ -212,12 +217,11 @@ export class CreatePaid extends Component {
               },
             })
               .then((res) => {
-                if(r === 'next'){
+                if (r === "next") {
                   this.setState({
                     alinanMiktarView: true,
-                  })
-                }
-                else{
+                  });
+                } else {
                   this.props.history.push(
                     authRoutes.payments.links[this.props.lang]
                   );
@@ -228,19 +232,17 @@ export class CreatePaid extends Component {
                 this.setState({ isSending: false });
               });
           }
-        } else {
-          console.log(q);
-          if(q === 'miktar'){
+         } else {
             const data = {
               userId: this.props.match.params.id,
               price: parseFloat(alinanMiktar),
-              discountRate: discountNumber === '' ? 0 : parseFloat(discountNumber),
+              discountRate: 0,
               createDate: moment().format("YYYY-MM-DD"),
-              processId: 2,
+              processId: 0,
               paymentType: 10,
-              doctorId: '0',
+              doctorId: "",
+              description: "Ödeme alındı",
             };
-  
             API.post("Payment", data, {
               headers: {
                 ...headers,
@@ -248,10 +250,12 @@ export class CreatePaid extends Component {
               },
             })
               .then((res) => {
-                  console.log(res)                
-                  // this.props.history.push(
-                  //   authRoutes.payments.links[this.props.lang]
-                  // );
+                this.props.history.push(
+                  authRoutes.userDetail.links[this.props.lang].replace(
+                    ":id",
+                    this.props.match.params.id
+                  )
+                );
               })
               .catch((err) => {
                 this.props.pageLoadingSet(false);
@@ -259,7 +263,6 @@ export class CreatePaid extends Component {
               });
           }
         }
-      }
     );
   }
   save = (redirect)=>{
@@ -359,6 +362,7 @@ export class CreatePaid extends Component {
                         inputRef={this.totalRef}
                         tabIndex={1}
                         errorMessage={this.state.totalError}
+                        disabled
                       />
                     </div>
                   </div>

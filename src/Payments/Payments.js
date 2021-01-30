@@ -27,6 +27,9 @@ export class Payments extends Component {
   };
 
   getData = ()=>{
+    if (this.state.search === '') {
+      this.props.pageLoadingSet(true)
+    }
     API.get(`Payment/ListByPassion?searchBy=${this.state.search}&page=${this.state.currentpage}`, {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
     })
@@ -141,7 +144,6 @@ export class Payments extends Component {
                     <th className="react-infinite-table-col-4"></th>
                   </tr>
                 </thead>
-                {console.log(this.state.rows)}
                 <tbody>
                   {this.state.rows.map((i, index) => (
                     <tr key={index + "a"}>
