@@ -157,7 +157,7 @@ export class CreatePaid extends Component {
       !_.isUndefined(this.props.match.params.paid)
     ) {
       this.props.pageLoadingSet(true);
-      console.log('ssssss')
+      console.log('duzenle')
       API.get(`Payment/GetById?id=${this.props.match.params.paid}`, {
         headers: {
           ...headers,
@@ -167,8 +167,8 @@ export class CreatePaid extends Component {
         .then((res) => {
           this.setState({
             total: res.data.price,
-            discountNumber:res.data.discountRate,
-            discountResult: res.data.amount,
+            discountNumber:res.data.discountRate === 0 ? '' : res.data.discountRate,
+            discountResult: res.data.discountRate === 0 ? '' : res.data.amount,
             alinanMiktar:res.data.amount,
             alinanMiktarView:  false,
             selectedProcess:[{id:res.data.process.id, label: res.data.process.name}],
@@ -210,6 +210,10 @@ export class CreatePaid extends Component {
               doctorId: selectedDoctor[0].id,
             };
 
+            if (this.props.match.params.paid !== "" && !_.isUndefined(this.props.match.params.paid)) {
+              data.id = parseInt(this.props.match.params.paid)
+            }
+            
             API.post("Payment", data, {
               headers: {
                 ...headers,
@@ -398,7 +402,7 @@ export class CreatePaid extends Component {
                         id="discountResult"
                         label="İndirimli Fatura Tutarı"
                         placeholder="İndirimli Fatura Tutarı"
-                        value={this.state.discountResult}
+                        value={this.state.discountNumber=== '' ? '' : this.state.discountResult}
                         setValue={this.handleChange}
                         inputRef={this.discountResultRef}
                         tabIndex={1}
