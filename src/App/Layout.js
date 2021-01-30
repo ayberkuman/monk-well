@@ -63,8 +63,25 @@ const Layout = (props) => {
               />
               {props.translate("payments")}
             </Link>
-            <Link>
-              <img className='mh-24' src={analysesMenu} alt={props.translate("analyses")} />
+            <Link 
+              className={
+                location.pathname.includes(
+                  authRoutes.analysis.links[props.lang]
+                )
+                  ? "active"
+                  : ""
+              }
+              to={authRoutes.analysis.links[props.lang]}>
+              <img 
+                className='mh-24'
+                src={
+                  location.pathname.includes(
+                    authRoutes.analysis.links[props.lang]
+                  )
+                    ? analysesMenuActive
+                    : analysesMenu
+                }
+                alt={props.translate("analyses")} />
               {props.translate("analyses")}
             </Link>
             <Link 

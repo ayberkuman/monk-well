@@ -7,6 +7,8 @@ import ForgotPassword from "../Auth/pages/ForgotPassword";
 import CreatePaid from "../CreatePaid/CreatePaid";
 import UserDetail from "../UserDetail/UserDetail";
 import Expense from "../Expense/Expense";
+import Analysis from "../Analysis/Analysis";
+
 
 export const globalRoutes = {
   notFound: {
@@ -96,6 +98,16 @@ export const authRoutes = {
     property: Expense,
     links: { en: "/expense", tr: "/giderler" },
     name: "expense",
+    exact: true,
+    onNav: false,
+    navExact: false,
+  },
+  //Analizler
+  analysis: {
+    id: "auth-10",
+    property: Analysis,
+    links: { en: "/analysis", tr: "/analizler" },
+    name: "analysis",
     exact: true,
     onNav: false,
     navExact: false,
