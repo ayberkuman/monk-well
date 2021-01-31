@@ -83,7 +83,7 @@ export class CreatePaid extends Component {
       this.props.pageLoadingSet(false);
     })
     .catch((err) => {
-      alert(err.response.data.value)
+      // alert(err.response.data.value)
       this.props.pageLoadingSet(false);
     });
     API.get(`Account/ListAllDoctors?length=1000`, {
@@ -105,7 +105,7 @@ export class CreatePaid extends Component {
       this.props.pageLoadingSet(false);
     })
     .catch((err) => {
-      alert(err.response.data.value)
+      // alert(err.response.data.value)
       this.props.pageLoadingSet(false);
     });
     if (
@@ -132,7 +132,7 @@ export class CreatePaid extends Component {
           this.props.pageLoadingSet(false);
         })
         .catch((err) => {
-          alert(err.response.data.value)
+          // alert(err.response.data.value)
           this.props.pageLoadingSet(false);
         });
       API.get(`Dashboard/Home?passionId=${this.props.match.params.id}`, {

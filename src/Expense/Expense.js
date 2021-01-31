@@ -32,6 +32,7 @@ export class Expense extends Component {
   };
 
   getData = ()=>{
+    this.props.pageLoadingSet(true);
     API.get(`Expense/List?searchBy=${this.state.search}&page=${this.state.currentpage}`, {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
     })

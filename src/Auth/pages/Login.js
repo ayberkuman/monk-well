@@ -76,7 +76,7 @@ class Login extends Component {
               }
             })
             .catch((err) => {
-              alert(err.response.data.title);
+              // alert(err.response.data.title);
               this.props.pageLoadingSet(false);
               this.setState({ isSending: false });
             });

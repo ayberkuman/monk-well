@@ -52,6 +52,7 @@ export class Home extends Component {
   };
 
   getData = () => {
+    this.props.pageLoadingSet(true);
     const startDate = this.state.startDate !== '' ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
     const endDate = this.state.endDate !== '' ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
     const graphStartDate = this.state.graphStartDate !== '' ? moment(this.state.graphStartDate).format('YYYY-MM-DD') : ''

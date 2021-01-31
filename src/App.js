@@ -74,7 +74,7 @@ class App extends Component {
           this.props.login(user);
         })
         .catch((err) => {
-          alert(err.response.data.value)
+          // alert(err.response.data.value)
           this.props.pageLoadingSet(false)
         });
     }

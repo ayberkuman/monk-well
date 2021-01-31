@@ -61,7 +61,7 @@ export class UserDetail extends Component {
           this.props.pageLoadingSet(false);
         })
         .catch((err) => {
-          alert(err.response.data.value)
+          // alert(err.response.data.value)
           this.props.pageLoadingSet(false);
         });
 
@@ -108,7 +108,7 @@ export class UserDetail extends Component {
           this.props.pageLoadingSet(false);
         })
         .catch((err) => {
-          alert(err.response.data.value)
+          // alert(err.response.data.value)
           this.props.pageLoadingSet(false);
         });
     }

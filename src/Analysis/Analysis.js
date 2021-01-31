@@ -26,6 +26,7 @@ export class Expense extends Component {
   };
 
   getData = ()=>{
+    this.props.pageLoadingSet(true);
     const date = this.state.date !== '' ? moment(this.state.date).format('YYYY-MM-DD') : ''
     API.get(`/Dashboard/Analysis?date=${date}`, {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`},

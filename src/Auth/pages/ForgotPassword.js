@@ -64,7 +64,7 @@ export default class ForgotPassword extends Component {
           );
         })
         .catch((err) => {
-          alert(err.response.data.value)
+          // alert(err.response.data.value)
         });
     });
   };
