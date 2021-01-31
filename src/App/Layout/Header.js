@@ -2,7 +2,6 @@ import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import avatar from '../../assets/images/avatar.svg'
-// import Logo from "../../assets/images/logo.png";
 import { logout, update } from "../../Auth/authActions";
 import {
   authRoutes,

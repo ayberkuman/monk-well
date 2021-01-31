@@ -8,6 +8,7 @@ export const LeftSide = () => {
         <img
           src={logo}
           alt="Monk Medical"
+          width='52'
         />
         <p className='head'>Zamandan Tasaruf Artık Beklemek Yok</p>
         <p>Tüm hasta ve tedavi bilgilerine ve verilere telefonundan kolayca ulaş aradığın bilgiyi hemen bul.</p>
