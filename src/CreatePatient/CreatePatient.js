@@ -42,7 +42,7 @@ export class CreatePatient extends Component {
   postData = (redirect) =>{
     const { tckn, firstName, lastName, eMail, phoneNumber, address} = this.state;
     this.setState({
-      tcknError: !validateInput('tckn', tckn) ? 'Geçerli bir TCKN numarası giriniz' : '',
+      tcknError: tckn === '' ? 'Geçerli bir TCKN numarası giriniz' : '',
       firstNameError: firstName === '' ? 'Lütfen adınızı giriniz' : '',
       lastNameError: lastName === '' ? 'Lütfen soyadınızı giriniz' : '',
       eMailError: !validateInput('email', eMail) ? 'Geçerli bir e-posta adresi giriniz' : '',
@@ -115,14 +115,13 @@ export class CreatePatient extends Component {
               type="text"
               name="tckn"
               id="tckn"
-              label="T.C. Kimlik Numarası"
-              placeholder="T.C. Kimlik Numarası"
+              label="Kimlik Numarası"
+              placeholder="Kimlik Numarası"
               value={this.state.tckn}
               setValue={this.handleChange}
               inputRef={this.tcknRef}
               tabIndex={1}
               errorMessage={this.state.tcknError}
-              maxLength={11}
             />
           </div>
           <div className="col-md-4 mt-2">

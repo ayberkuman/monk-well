@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from '../assets/images/payment-logo.svg'
+import logo from '../assets/images/payment-logo.png'
 import homeMenu from '../assets/images/home-menu.svg'
 import homeMenuActive from '../assets/images/home-menu-active.svg'
 import paymentsMenu from '../assets/images/payments-menu.svg'
@@ -27,7 +27,7 @@ const Layout = (props) => {
         {props.user.isLoggedIn && (
           <div className="left-side-menu min-vh-100" id="sidebar-wrapper">
             <Link to={authRoutes.home.links[props.lang]}>
-              <img src={logo} alt={props.translate("payments")} />
+              <img src={logo} width={46} alt={props.translate("payments")} />
             </Link>
             <Link
               className={location.pathname === "/" ? "active" : ""}

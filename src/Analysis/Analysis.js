@@ -14,7 +14,8 @@ export class Expense extends Component {
     this.state={
       processRows: [],
       doctorRows: [],
-      date: '',
+      startDate: '',
+      endDate: '',
     }
   }
 
@@ -27,8 +28,9 @@ export class Expense extends Component {
 
   getData = ()=>{
     this.props.pageLoadingSet(true);
-    const date = this.state.date !== '' ? moment(this.state.date).format('YYYY-MM-DD') : ''
-    API.get(`/Dashboard/Analysis?date=${date}`, {
+    const startDate = this.state.startDate !== '' ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+    const endDate = this.state.endDate !== '' ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+    API.get(`/Dashboard/Analysis?startDate=${startDate}&endDate=${endDate}`, {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`},
     })
       .then((res) => {
@@ -49,21 +51,37 @@ export class Expense extends Component {
       <div className="Payments">
         <div className="align-items-center justify-content-between mt-4 mb-4">
           <div className="row">
-            <div className="col-md-6 ml-auto">
+            <div className="col-md-6">
               <DatePicker
-                selected={this.state.date}
-                onChange={(date) => {
-                  console.log(date)
+                selected={this.state.startDate}
+                onChange={(startDate) => {
                   this.setState(
                     {
-                      date: _.isNull(date) ? '' : date,
+                      startDate: _.isNull(startDate) ? '' : startDate,
                     },
                     () => {
                       this.getData();
                     }
                   );
                 }}
-                placeholderText="Tarih seç"
+                placeholderText="Başlangıç Tarihi"
+                className="w-100 min"
+              />
+            </div>
+            <div className="col-md-6">
+              <DatePicker
+                selected={this.state.endDate}
+                onChange={(endDate) => {
+                  this.setState(
+                    {
+                      endDate: _.isNull(endDate) ? '' : endDate,
+                    },
+                    () => {
+                      this.getData();
+                    }
+                  );
+                }}
+                placeholderText="Bitiş Tarihi"
                 className="w-100 min"
               />
             </div>

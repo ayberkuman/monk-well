@@ -182,7 +182,7 @@ export class Payments extends Component {
                             this.props.lang
                           ].replace(":id", i.id)}
                         >
-                          Ödeme Al
+                          Miktar Al
                         </Link>
                       </td>
                     </tr>

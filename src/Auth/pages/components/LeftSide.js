@@ -10,8 +10,8 @@ export const LeftSide = () => {
           alt="Monk Medical"
           width='52'
         />
-        <p className='head'>Zamandan Tasaruf Artık Beklemek Yok</p>
-        <p>Tüm hasta ve tedavi bilgilerine ve verilere telefonundan kolayca ulaş aradığın bilgiyi hemen bul.</p>
+        <p className='head'>Sağlık kuruluşları için bulut tabanlı hasta etkileşim platformu</p>
+        <p>Monk Medikal uygulamasını kullanarak hastalarınızın tedavi ve randevu durumlarını takip edebilir, laboratuvar ve radyoloji raporları görüntüleyebilir, hastalarınıza tedavileri ve randevuları hakkında gerekli bildirimleri gönderebilir ve anlık mesajlaşma servisini kullanarak hastalarınızın soru ve ihtiyaçlarıyla hızlıca ilgilenebilirsiniz.</p>
       </div>
       <img
           className='img-fluid'
