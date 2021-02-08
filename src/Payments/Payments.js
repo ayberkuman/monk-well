@@ -30,7 +30,7 @@ export class Payments extends Component {
     if (this.state.search === '') {
       this.props.pageLoadingSet(true)
     }
-    API.get(`Payment/ListByPassion?searchBy=${this.state.search}&page=${this.state.currentpage}`, {
+    API.get(`Payment/ListByPassion?searchBy=${this.state.search}&currentpage=${this.state.currentpage}`, {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
     })
       .then((res) => {

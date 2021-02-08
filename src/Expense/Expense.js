@@ -49,6 +49,7 @@ export class Expense extends Component {
             description: e.description,
             id: e.id,
             disabled: true,
+            type: ''
           });
         });
         this.setState({
@@ -78,6 +79,20 @@ export class Expense extends Component {
     })
     
   };
+  addRow = () =>{
+    const arr = this.state.rows;
+    arr.unshift({
+      amount: "",
+      createDate: new Date(),
+      description: "",
+      disabled: false,
+      type: 'new',
+    });
+    this.setState({
+      rows: arr
+    })
+    console.log(this.state.rows);
+  }
   editRow = (x, i)=>{
     const arr = this.state.rows;
     arr[i].disabled = false;
@@ -95,6 +110,9 @@ export class Expense extends Component {
       "currency": this.state.rows[i].currency,
     };
     this.props.pageLoadingSet(true);
+    this.setState({
+      rows: []
+    }, ()=>{
     API.post("Expense", data, { headers: { ...headers,Authorization: `Bearer ${this.props.user.token}`, } })
       .then((res) => {
         this.props.pageLoadingSet(false);
@@ -109,11 +127,20 @@ export class Expense extends Component {
         this.props.pageLoadingSet(false);
         this.setState({ isSending: false });
       });
+    })
   }
 
   delete = (i) => {
-    const id = this.state.rows[i].clinicId
-    console.log(id)
+    console.log(this.state.rows);
+    const id = this.state.rows[i].id
+    const arr = this.state.rows;
+    if (this.state.rows[i].type === 'new') {
+      arr.splice(i, 1);
+      this.setState({
+        rows: arr
+      })
+    }
+    else{
     this.props.pageLoadingSet(true);
     API.delete(`Expense?expenseId=${id}`, {
       headers: {
@@ -132,6 +159,7 @@ export class Expense extends Component {
       .catch((err) => {
         this.props.pageLoadingSet(false);
       });
+    }
   }
   render() {
     return (
@@ -139,9 +167,9 @@ export class Expense extends Component {
         <div className="align-items-center justify-content-between mt-4 mb-4">
           <div className="row">
             <div className="col-md-6">
-              <Link className="primary-button d-inline-flex">
+              <a className="primary-button d-inline-flex" onClick={()=>{this.addRow()}}>
                 Yeni Gider Ekle
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -242,7 +270,6 @@ export class Expense extends Component {
                         <a
                             className="d-inline-flex align-items-center text-pink pl-3 pr-3 cursor-pointer"
                             onClick={(e) => {
-                              console.log('asdasdas')
                               this.delete(index);
                             }}
                           >
