@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Helmet } from "react-helmet-async";
-import logoBig from '../../assets/images/big-logo.svg'
+import logoBig from '../../assets/images/big-logo.png'
 import InputWLabel from "../../utils/components/InputWLabel";
 import { scrollToTop } from "../../utils/helper";
 import API, { headers } from "../../utils/API";
@@ -87,6 +87,7 @@ export default class ForgotPassword extends Component {
                         <img
                         src={logoBig}
                         alt="Monk Medical"
+                        width={148}
                       />
                       </div>
                     </div>

@@ -28,13 +28,13 @@ export class Payments extends Component {
 
   getData = ()=>{
     if (this.state.search === '') {
-      this.props.pageLoadingSet(true)
+      // this.props.pageLoadingSet(true)
     }
     API.get(`Payment/ListByPassion?searchBy=${this.state.search}&currentpage=${this.state.currentpage}`, {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
     })
       .then((res) => {
-        this.props.pageLoadingSet(false);
+        // this.props.pageLoadingSet(false);
         const { data } = res;
         const rows = this.state.rows;
         data.data.map(e => {
@@ -56,7 +56,7 @@ export class Payments extends Component {
       })
       .catch((err) => {
         // alert(err.response.data.value)
-        this.props.pageLoadingSet(false);
+        // this.props.pageLoadingSet(false);
       });
   }
   handleChange = (e) => {

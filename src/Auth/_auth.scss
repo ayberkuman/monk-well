@@ -22,7 +22,7 @@ html,body, #root, .App {
 
   .primary-button {
     width: 100%;
-    margin-bottom: 43px;
+    font-size: 18px;
   }
 
   .empty-button {
@@ -42,8 +42,8 @@ html,body, #root, .App {
   }
 
   .forgot-pass-link {
-    font-size: 12px;
-    font-weight: $font-weight-bold;
+    font-size: 16px;
+    font-weight: 600;
     color: $sec;
     margin-bottom: 40px;
   }

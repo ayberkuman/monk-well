@@ -189,7 +189,36 @@ export class Home extends Component {
                   </a>
                 </div>
               </div>
-              <Bar data={this.state.data} />
+              <Bar 
+                data={this.state.data} 
+                options={{
+                  cornerRadius: 10,
+                  legend: { display: false },
+                  scales: {
+                    xAxes: [
+                      {
+                        barThickness: 7,
+                        display: true,
+                        gridLines: {
+                          display: false,
+                        },
+                        ticks: {
+                          autoSkip: false,
+                        },
+                        stacked: true,
+                      },
+                    ],
+                    yAxes: [{
+                      stacked: true,
+                      ticks:{
+                        min: 0,
+                      }
+                    },
+                    ],
+                  },
+                }}
+    
+              />
             </div>
           </div>
           <div className="col-md-6 mb-4">

@@ -32,12 +32,12 @@ export class Expense extends Component {
   };
 
   getData = ()=>{
-    this.props.pageLoadingSet(true);
+    // this.props.pageLoadingSet(true);
     API.get(`Expense/List?searchBy=${this.state.search}&page=${this.state.currentpage}`, {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
     })
       .then((res) => {
-        this.props.pageLoadingSet(false);
+        // this.props.pageLoadingSet(false);
         const { data } = res;
         const rows = this.state.rows;
         data.data.map(e => {
@@ -59,7 +59,7 @@ export class Expense extends Component {
         })
       })
       .catch((err) => {
-        this.props.pageLoadingSet(false);
+        // this.props.pageLoadingSet(false);
       });
   }
   handleChange = (e, index) => {

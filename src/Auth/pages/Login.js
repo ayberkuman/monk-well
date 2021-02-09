@@ -2,7 +2,7 @@ import React, { Component, createRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import _ from 'lodash';
-import logoBig from '../../assets/images/big-logo.svg'
+import logoBig from '../../assets/images/big-logo.png'
 import InputWLabel from "../../utils/components/InputWLabel";
 import CutomCheckbox from "../../utils/components/CutomCheckbox";
 import { guestRoutes } from "../../App/routes";
@@ -89,21 +89,18 @@ class Login extends Component {
   render() {
     return (
       <>
-          <Helmet title="Giriş Yap" />
-          <div className="Auth login">
-            <div className='row min-vh-100'>
-              <div className='col-lg-3  d-none d-lg-block mw-340'>
-                <LeftSide />
-              </div>
-              <div className='col-lg-9 d-flex align-items-center'>
-                <div className='flex-1'>
+        <Helmet title="Giriş Yap" />
+        <div className="Auth login">
+          <div className="row min-vh-100">
+            <div className="col-lg-3  d-none d-lg-block mw-340">
+              <LeftSide />
+            </div>
+            <div className="col-lg-9 d-flex align-items-center">
+              <div className="flex-1">
                 <div className="container">
                   <div className="row mb-5">
                     <div className="col-md-8 offset-md-2 col-xl-6 offset-xl-3 text-center">
-                      <img
-                      src={logoBig}
-                      alt="Monk Medical"
-                    />
+                      <img src={logoBig} alt="Monk Medical" width={148}/>
                     </div>
                   </div>
                   <div className="row">
@@ -119,31 +116,50 @@ class Login extends Component {
                         inputRef={this.emailRef}
                         tabIndex={1}
                         errorMessage={this.state.emailError}
-                        classes='mt-3'
+                        classes="mt-3"
                       />
                     </div>
                   </div>
                   <div className="row">
-                      <div className="col-md-8 offset-md-2 col-xl-6 offset-xl-3">
-                        <InputWLabel
-                          name="password"
-                          type="password"
-                          id="password"
-                          label="Şifre"
-                          value={this.state.password}
-                          setValue={this.handleChange}
-                          tabIndex={2}
-                          errorMessage={this.state.passwordError}
-                          classes='mt-3'
-                        />
+                    <div className="col-md-8 offset-md-2 col-xl-6 offset-xl-3">
+                      <InputWLabel
+                        name="password"
+                        type="password"
+                        id="password"
+                        label="Şifre"
+                        value={this.state.password}
+                        setValue={this.handleChange}
+                        tabIndex={2}
+                        errorMessage={this.state.passwordError}
+                        classes="mt-3"
+                      />
+                    </div>
+                  </div>
+                  <div className="row mb-2">
+                    <div className="col-md-8 offset-md-2 col-xl-6 offset-xl-3">
+                      <div className="row">
+                        <div className="col-6">
+                          <CutomCheckbox labelText="Beni Hatırla" />
+                        </div>
+                        <div className="col-6 text-right">
+                          <Link
+                            className="forgot-pass-link"
+                            to={
+                              guestRoutes.changePassword.links[this.props.lang]
+                            }
+                          >
+                            Şifremi unuttum
+                          </Link>
+                        </div>
                       </div>
                     </div>
+                  </div>
                   <div className="row">
                     <div className="col-md-8 offset-md-2 col-xl-6 offset-xl-3">
                       <button
                         className="primary-button"
                         data-is-sending={this.state.isSending}
-                        onClick={()=>this.handleLogin()}
+                        onClick={() => this.handleLogin()}
                       >
                         {this.state.isSending
                           ? "Giriş yapılıyor..."
@@ -151,28 +167,12 @@ class Login extends Component {
                       </button>
                     </div>
                   </div>
-                  <div className="row">
-                  <div className="col-md-8 offset-md-2 col-xl-6 offset-xl-3">
-                  <div className='row'>
-                    <div className="col-6">
-                        <CutomCheckbox labelText='Beni Hatırla'/>
-                    </div>
-                    <div className="col-6 text-right">
-                      <Link
-                        className="forgot-pass-link"
-                        to={guestRoutes.changePassword.links[this.props.lang]}
-                      >
-                        Şifremi unuttum
-                      </Link>
-                    </div>
-                    </div>
-                    </div>
-                  </div>
+                  
                 </div>
-              </div>
               </div>
             </div>
           </div>
+        </div>
       </>
     );
   }

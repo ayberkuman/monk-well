@@ -27,14 +27,14 @@ export class Expense extends Component {
   };
 
   getData = ()=>{
-    this.props.pageLoadingSet(true);
+    // this.props.pageLoadingSet(true);
     const startDate = this.state.startDate !== '' ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
     const endDate = this.state.endDate !== '' ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
     API.get(`/Dashboard/Analysis?startDate=${startDate}&endDate=${endDate}`, {
       headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`},
     })
       .then((res) => {
-        this.props.pageLoadingSet(false);
+        // this.props.pageLoadingSet(false);
         const { data } = res;
         this.setState({
           processRows: data.processAnalyses,
@@ -42,7 +42,7 @@ export class Expense extends Component {
         })
       })
       .catch((err) => {
-        this.props.pageLoadingSet(false);
+        // this.props.pageLoadingSet(false);
       });
   }
 
