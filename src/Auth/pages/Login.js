@@ -109,7 +109,7 @@ class Login extends Component {
                         name="email"
                         type={"email"}
                         id="email"
-                        label="E-Posta Adresi"
+                        placeholder="E-Posta Adresi"
                         value={this.state.email}
                         setValue={this.handleChange}
                         validate={true}
@@ -126,7 +126,7 @@ class Login extends Component {
                         name="password"
                         type="password"
                         id="password"
-                        label="Şifre"
+                        placeholder="Şifre"
                         value={this.state.password}
                         setValue={this.handleChange}
                         tabIndex={2}
