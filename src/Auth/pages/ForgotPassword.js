@@ -5,6 +5,7 @@ import InputWLabel from "../../utils/components/InputWLabel";
 import { scrollToTop } from "../../utils/helper";
 import API, { headers } from "../../utils/API";
 import { LeftSide } from "./components/LeftSide";
+import { alert } from "../../App/appActions";
 
 export default class ForgotPassword extends Component {
   state = {
@@ -26,45 +27,24 @@ export default class ForgotPassword extends Component {
   };
 
   handleSubmit = (e) => {
-    e.preventDefault();
     if (this.state.email === "") return false;
 
     this.setState({ isSending: true }, async () => {
-      let data = { email: this.state.email };
-      API.post("Account/ForgetPassword", data, {
+      API.get(`Account/ResetPassword?email=${this.state.email}`, {
         headers: { ...headers },
       })
         .then((r) => {
-          const { status, info } = r.data;
+          const { status } = r;
 
           this.setState({ isSending: false });
-
+          alert(status)
           if (!status) {
-            this.props.showAlert(
-              "warning",
-              "Bir hata oluştu",
-              info.friendlyMessage,
-              5500
-            );
+            alert("Bir hata oluştu");
             return false;
           }
-
-          const registeredUser = {
-            username: this.state.email,
-            codeSentAt: new Date(),
-          };
-
-          window.cookies.set('user', JSON.stringify(registeredUser), { path: '/' });
-
-          this.props.showAlert(
-            "success",
-            "Son bir adım!",
-            info.friendlyMessage,
-            5500
-          );
         })
         .catch((err) => {
-          // alert(err.response.data.value)
+          alert('Bir hata oluştu');
         });
     });
   };

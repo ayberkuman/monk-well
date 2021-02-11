@@ -1,6 +1,9 @@
 const initState = {
   user: {
     isLoggedIn: false,
+    email: '',
+    fullName: '',
+    token: '',
   },
 };
 
@@ -21,8 +24,7 @@ const authReducer = (state = initState, action) => {
     }
     case "LOGOUT": {
       const user = initState.user;
-
-      window.cookies.set('user', JSON.stringify(user), { domain: '.monkmedical.com' });
+      window.cookies.remove('user', { path: '.monkmedical.com' });
 
       return { user };
     }
