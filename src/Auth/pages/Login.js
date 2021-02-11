@@ -64,7 +64,7 @@ class Login extends Component {
               const { email, fullName, id, token } = res.data;
               this.setState({ isSending: false });
               this.props.pageLoadingSet(false);
-
+              console.log(res.data);
               if (!_.isUndefined(token)) {
                 const user = {
                   email,
@@ -76,9 +76,9 @@ class Login extends Component {
               }
             })
             .catch((err) => {
-              // alert(err.response.data.title);
               this.props.pageLoadingSet(false);
               this.setState({ isSending: false });
+              alert(err.response.data.value);
             });
         }
       }
