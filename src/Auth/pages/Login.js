@@ -116,7 +116,7 @@ class Login extends Component {
                         inputRef={this.emailRef}
                         tabIndex={1}
                         errorMessage={this.state.emailError}
-                        classes="mt-3"
+                        classes="mb-1"
                       />
                     </div>
                   </div>
