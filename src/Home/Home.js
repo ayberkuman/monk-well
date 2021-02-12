@@ -46,7 +46,9 @@ export class Home extends Component {
     }
   }
   componentDidMount = () => {
-    this.props.headerTitleSet(this.props.translate('home'));
+    setTimeout(() => {
+      this.props.headerTitleSet(this.props.translate('home'));
+    }, 400);
     this.getData()
     scrollToTop();
   };

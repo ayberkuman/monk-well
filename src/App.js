@@ -51,7 +51,6 @@ class App extends Component {
 
   componentDidMount = async () => {
     window.cookies = new Cookies();
-    setTimeout(() => this.setState({ isLoading: true }), 20);
     this.props.setActiveLanguage("tr");
 
     const localUser = await window.cookies.get('user');
@@ -70,7 +69,7 @@ class App extends Component {
             email: data.user.email,
             token: localUser.token,
           };
-
+          setTimeout(() => this.setState({ isLoading: false }), 20);
           this.props.login(user);
         })
         .catch((err) => {
@@ -78,7 +77,8 @@ class App extends Component {
           this.props.pageLoadingSet(false)
         });
     }
-    setTimeout(() => this.setState({ isLoading: false }), 20);
+    setTimeout(() => this.setState({ isLoading: false }), 400);
+
   };
 
   componentDidUpdate = (prevProps) => {
@@ -122,12 +122,12 @@ class App extends Component {
           <body is-touch-screen={is.touchDevice()} is-ie={is.ie()} />
         </Helmet>
         <Layout
-          lang={lang}
-          user={this.props.user}
-          translate={this.props.translate}
-          headerTitle={this.props.headerTitle}
+        lang={lang}
+        user={this.props.user}
+        translate={this.props.translate}
+        headerTitle={this.props.headerTitle}
         >
-          {!this.state.isLoading && (
+        {!this.state.isLoading && (
             <Router
               lang={lang}
               url={this.url}
@@ -141,8 +141,8 @@ class App extends Component {
               headerTitleSet={this.props.headerTitleSet}
               pageLoadingSet={this.props.pageLoadingSet}
             />
-          )}
-        </Layout>
+            )}
+            </Layout>
         {this.state.isAlertActive && (
           <Alert
             type={this.props.alert.type}

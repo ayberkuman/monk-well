@@ -25,7 +25,9 @@ export class CreatePatient extends Component {
 
   componentDidMount = () => {
     scrollToTop();
-    this.props.headerTitleSet(this.props.translate('payments'));
+    setTimeout(() => {
+      this.props.headerTitleSet(this.props.translate('payments'));
+    }, 400);
   }
 
   componentWillUnmount () {

@@ -22,7 +22,9 @@ export class Expense extends Component {
   
   componentDidMount = () => {
     scrollToTop();
-    this.props.headerTitleSet(this.props.translate('analyses'));
+    setTimeout(() => {
+      this.props.headerTitleSet(this.props.translate('analyses'));
+    }, 400);
     this.getData()
   };
 

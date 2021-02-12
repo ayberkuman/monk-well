@@ -19,19 +19,19 @@ const authReducer = (state = initState, action) => {
         token: user.token,
         isLoggedIn: true,
       };
-      window.cookies.set('user', JSON.stringify(localUser), { path: '/', domain: '.monkmedical.com' });
+      window.cookies.set('user', JSON.stringify(localUser), { path: '/', domain: process.env.ROUTE_URL });
       return { user };
     }
     case "LOGOUT": {
       const user = initState.user;
-      window.cookies.remove('user', { path: '/', domain: '.monkmedical.com' });
+      window.cookies.remove('user', { path: '/', domain: process.env.ROUTE_URL });
 
       return { user };
     }
     case "UPDATE": {
       const user = action.user;
 
-      window.cookies.set('user', JSON.stringify(user), { path: '/', domain: '.monkmedical.com' });
+      window.cookies.set('user', JSON.stringify(user), { path: '/', domain: process.env.ROUTE_URL });
 
       return { user };
     }

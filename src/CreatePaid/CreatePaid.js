@@ -29,7 +29,9 @@ export class CreatePaid extends Component {
 
   componentDidMount = () => {
     scrollToTop();
-    this.props.headerTitleSet(this.props.translate('payments'));
+    setTimeout(() => {
+      this.props.headerTitleSet(this.props.translate('payments'));
+    }, 400);
     this.getData();
     if (this.props.match.url === authRoutes.addPaid.links[this.props.lang].replace(
       ":id",
