@@ -105,28 +105,28 @@ const Layout = (props) => {
                 alt={props.translate("expenses")} />
               {props.translate("expenses")}
             </Link>
-            <Link className="border-top" to={{ pathname: "http://app.monkmedical.com/doktor-ayarlari" }} target='_blank'>
+            <a className="border-top" href="http://app.monkmedical.com/doktor-ayarlari">
               <img
                 className='mh-24'
                 src={doctor_settingsMenu}
                 alt={props.translate("doctor_settings")}
               />
               {props.translate("doctor_settings")}
-            </Link>
+            </a>
 
-            <Link to={{ pathname: 'http://app.monkmedical.com/sistem-ayarlari' }} target='_blank'>
+            <a href='http://app.monkmedical.com/sistem-ayarlari'>
               <img
                 className='mh-24'
                 src={system_settingsMenu}
                 alt={props.translate("system_settings")}
               />
               {props.translate("system_settings")}
-            </Link>
+            </a>
             <hr />
-            <Link to={{ pathname: 'http://app.monkmedical.com/' }} target='_blank'>
+            <a href='http://app.monkmedical.com/'>
               <img className='mh-18' src={clinicMenu} alt={props.translate("clinic")} />
               {props.translate("clinic")}
-            </Link>
+            </a>
           </div>
         )}
         <div className="container-fluid">
