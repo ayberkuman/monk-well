@@ -117,6 +117,7 @@ class Login extends Component {
                         tabIndex={1}
                         errorMessage={this.state.emailError}
                         classes="mb-1"
+                        autocomplete='on'
                       />
                     </div>
                   </div>

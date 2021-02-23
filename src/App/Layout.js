@@ -105,7 +105,7 @@ const Layout = (props) => {
                 alt={props.translate("expenses")} />
               {props.translate("expenses")}
             </Link>
-            <a className="border-top" href="http://app.monkmedical.com/doktor-ayarlari">
+            <a className="border-top" href="https://app.monkmedical.com/doktor-ayarlari">
               <img
                 className='mh-24'
                 src={doctor_settingsMenu}
@@ -114,7 +114,7 @@ const Layout = (props) => {
               {props.translate("doctor_settings")}
             </a>
 
-            <a href='http://app.monkmedical.com/sistem-ayarlari'>
+            <a href='https://app.monkmedical.com/sistem-ayarlari'>
               <img
                 className='mh-24'
                 src={system_settingsMenu}
@@ -123,7 +123,7 @@ const Layout = (props) => {
               {props.translate("system_settings")}
             </a>
             <hr />
-            <a href='http://app.monkmedical.com/'>
+            <a href='https://app.monkmedical.com/'>
               <img className='mh-18' src={clinicMenu} alt={props.translate("clinic")} />
               {props.translate("clinic")}
             </a>

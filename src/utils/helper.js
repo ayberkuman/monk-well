@@ -21,6 +21,8 @@ export const validateInput = (type, value) => {
 
   if (type === "numberFormat") regexp = /^([0-9 .,])+$/;
 
+  if (type === "phoneFormat") regexp = /^([0-9 .,])+$/;
+
   if (type === "creditCard") {
     return is.creditCard(value.trim());
   }

@@ -169,7 +169,7 @@ export class Expense extends Component {
         <div className="align-items-center justify-content-between mt-4 mb-4">
           <div className="row">
             <div className="col-md-6">
-              <a className="primary-button d-inline-flex" onClick={()=>{this.addRow()}}>
+              <a className="primary-button d-inline-flex cursor-pointer" onClick={()=>{this.addRow()}}>
                 Yeni Gider Ekle
               </a>
             </div>

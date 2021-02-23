@@ -82,6 +82,7 @@ export default class InputWLabel extends Component {
           readOnly={this.props.readOnly || this.props.editable ? true : false}
           autoComplete="off"
           placeholder={this.props.placeholder}
+          autocomplete={this.props.autocomplete}
           maxLength={this.props.maxLength}
           disabled={this.props.disabled}
           inputMode={
@@ -127,4 +128,5 @@ InputWLabel.propTypes = {
   icon: PropTypes.object,
   validate: PropTypes.bool,
   placeholder: PropTypes.string,
+  autocomplete: PropTypes.string,
 };

@@ -33,12 +33,25 @@ export class CreatePatient extends Component {
   componentWillUnmount () {
     clearTimeout(this._loadRowsTimeout)
   }
+
+
   handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value }, () => {
-      setTimeout(this.handleCheck, 20);
-    });
+    if (name === 'phoneNumber') {
+      var val = value.replace(/^[\d\(\)\+]+$/m,"");
+      if (val === '') {
+        this.setState({ [name]: value }, () => {
+          setTimeout(this.handleCheck, 20);
+        }); 
+      }
+    } else{
+      this.setState({ [name]: value }, () => {
+        setTimeout(this.handleCheck, 20);
+      });
+    }
   };
+
+
   handleCheck = () => {
   };
   postData = (redirect) =>{
@@ -128,7 +141,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
-            classes='mt-3'
+              classes='mt-3'
               type="text"
               name="firstName"
               id="firstName"
@@ -143,7 +156,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
-            classes='mt-3'
+              classes='mt-3'
               type="text"
               name="lastName"
               id="lastName"
@@ -158,7 +171,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
-            classes='mt-3'
+              classes='mt-3'
               type="email"
               name="eMail"
               id="eMail"
@@ -173,7 +186,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
-            classes='mt-3'
+              classes='mt-3'
               type="phone"
               name="phoneNumber"
               id="phoneNumber"
@@ -188,7 +201,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-8 mt-2">
             <InputWLabel
-            classes='mt-3'
+              classes='mt-3'
               type="text"
               name="address"
               id="address"
