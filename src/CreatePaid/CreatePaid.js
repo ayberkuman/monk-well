@@ -65,23 +65,32 @@ export class CreatePaid extends Component {
     });
   };
   getData = ()=>{
-    API.get(`Process/ListPrice?length=1000`, {
+    API.get(`Diagnose/ListPrice?length=1000`, {
       headers: {
         ...headers,
         Authorization: `Bearer ${this.props.user.token}`,
       },
     }).then((res) => {
+      console.log(res.data.data)
       const processList = [];
       res.data.data.map((e)=>{
         processList.push({
-          id: e.id,
-          label: e.process.name,
+          id: e.diagnose.id,
+          label: e.diagnose.name,
           price: e.price,
         })
       })
       this.setState({
         processList,
-      })
+      },()=>{
+        if (
+          this.props.match.params.paid !== "" &&
+          !_.isUndefined(this.props.match.params.paid)
+        ) {
+          this.editOnly()
+        }
+      });
+      
       this.props.pageLoadingSet(false);
     })
     .catch((err) => {
@@ -110,6 +119,7 @@ export class CreatePaid extends Component {
       // alert(err.response.data.value)
       this.props.pageLoadingSet(false);
     });
+
     if (
       this.props.match.params.id !== "" &&
       !_.isUndefined(this.props.match.params.id)
@@ -154,11 +164,18 @@ export class CreatePaid extends Component {
           this.props.pageLoadingSet(false);
         });
     }
-    if (
-      this.props.match.params.paid !== "" &&
-      !_.isUndefined(this.props.match.params.paid)
-    ) {
-      this.props.pageLoadingSet(true);
+    
+  }
+  search = (nameKey, myArray) => {
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === nameKey) {
+            return myArray[i];
+        }
+    }
+}
+
+  editOnly = () => {
+    this.props.pageLoadingSet(true);
       console.log('duzenle')
       API.get(`Payment/GetById?id=${this.props.match.params.paid}`, {
         headers: {
@@ -167,13 +184,18 @@ export class CreatePaid extends Component {
         },
       })
         .then((res) => {
+          console.log(res.data);
+          console.log(res.data.doctorId);
+
+          const process = this.search(res.data.processId, this.state.processList);
+
           this.setState({
             total: res.data.price,
             discountNumber:res.data.discountRate === 0 ? '' : res.data.discountRate,
             discountResult: res.data.discountRate === 0 ? '' : res.data.amount,
             alinanMiktar:res.data.amount,
             alinanMiktarView:  false,
-            selectedProcess:[{id:res.data.process.id, label: res.data.process.name}],
+            selectedProcess:[process],
             selectedDoctor:[{id:res.data.doctor.id, label:res.data.doctor.fullName}],
           })
           this.props.pageLoadingSet(false);
@@ -181,8 +203,8 @@ export class CreatePaid extends Component {
         .catch((err) => {
           this.props.pageLoadingSet(false);
         });
-    }
   }
+
   postData = (q, r) =>{
     const {total, discountNumber, selectedProcess, selectedDoctor, alinanMiktar} = this.state;
     this.setState(
