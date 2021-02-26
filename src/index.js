@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import { HelmetProvider } from "react-helmet-async";
+import HttpsRedirect from 'react-https-redirect';
 import { LocalizeProvider } from "react-localize-redux";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
@@ -20,7 +21,9 @@ ReactDOM.render(
         <BrowserRouter>
           <ErrorBoundary>
             <Suspense fallback={""}>
-              <App />
+              <HttpsRedirect>
+                <App />
+              </HttpsRedirect>
             </Suspense>
           </ErrorBoundary>
         </BrowserRouter>
