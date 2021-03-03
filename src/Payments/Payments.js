@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import _ from 'lodash'
-import API, { headers } from "../utils/API";
-import { scrollToTop, currency, formatMoney } from "../utils/helper";
-import InputWLabel from "../utils/components/InputWLabel";
-import { authRoutes } from "../App/routes"
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Link } from "react-router-dom";
+import { authRoutes } from "../App/routes";
+import API, { headers } from "../utils/API";
+import InputWLabel from "../utils/components/InputWLabel";
+import { currency, formatMoney, scrollToTop } from "../utils/helper";
 
 export class Payments extends Component {
   constructor(props){
@@ -61,20 +60,25 @@ export class Payments extends Component {
         // this.props.pageLoadingSet(false);
       });
   }
+
+  timeout = '';
   handleChange = (e) => {
     const { value } = e.target;
-    this.setState(
-      {
-        rows: [],
-        currentpage: 1,
-      },
-      () => {
-        this.getData();
-      }
-    );
-    this.setState({search: value }, () => {
-      setTimeout(this.handleCheck, 20);
-    });
+    clearTimeout(this.timeout);
+    
+      this.setState(
+        {
+          rows: [],
+          search: value,
+          currentpage: 1,
+        },
+        () => {
+          this.timeout = setTimeout(() => {
+            this.getData();
+          }, 500);
+        }
+      );
+    
   };
   render() {
     return (
@@ -140,8 +144,12 @@ export class Payments extends Component {
                 <thead>
                   <tr>
                     <th className="react-infinite-table-col-0">Hasta Adı</th>
-                    <th className="react-infinite-table-col-1">Fatura Tutarı</th>
-                    <th className="react-infinite-table-col-2">Tahsil Edilmiş</th>
+                    <th className="react-infinite-table-col-1">
+                      Fatura Tutarı
+                    </th>
+                    <th className="react-infinite-table-col-2">
+                      Tahsil Edilmiş
+                    </th>
                     <th className="react-infinite-table-col-3">Açık Bakiye</th>
                     <th className="react-infinite-table-col-4"></th>
                   </tr>
@@ -151,41 +159,63 @@ export class Payments extends Component {
                     <tr key={index + "a"}>
                       <td className="react-infinite-table-col-0">
                         <Link
-                          to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
+                          className='d-block'
+                          to={authRoutes.userDetail.links[
+                            this.props.lang
+                          ].replace(":id", i.id)}
                         >
                           {i.fullName}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-1">
                         <Link
-                          to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
+                          className='d-block'
+                          to={authRoutes.userDetail.links[
+                            this.props.lang
+                          ].replace(":id", i.id)}
                         >
                           {formatMoney(i.totalDebt)}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-2">
                         <Link
-                          to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
+                          className='d-block'
+                          to={authRoutes.userDetail.links[
+                            this.props.lang
+                          ].replace(":id", i.id)}
                         >
                           {formatMoney(i.totalCredit)}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-3">
                         <Link
-                          to={authRoutes.userDetail.links[this.props.lang].replace(":id", i.id)}
+                          className='d-block'
+                          to={authRoutes.userDetail.links[
+                            this.props.lang
+                          ].replace(":id", i.id)}
                         >
                           {formatMoney(i.totalBalance)}
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-4 text-right">
-                        <Link
-                          className="primary-button md d-inline-flex"
-                          to={authRoutes.addTreatment.links[
-                            this.props.lang
-                          ].replace(":id", i.id)}
-                        >
-                          Miktar Al
-                        </Link>
+                        <div className='d-flex justify-content-end'>
+                          <Link
+                            className="primary-button md d-inline-flex min-110 mr-2"
+                            to={authRoutes.addTreatment.links[
+                              this.props.lang
+                            ].replace(":id", i.id)}
+                          >
+                            Tedavi Ekle
+                          </Link>
+                          <Link
+                            className="primary-button md d-inline-flex min-110"
+                            to={authRoutes.addPaid.links[
+                              this.props.lang
+                            ].replace(":id", i.id)}
+                          >
+                            Ödeme Al
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   ))}
