@@ -237,7 +237,7 @@ export class CreatePaid extends Component {
             if (this.props.match.params.paid !== "" && !_.isUndefined(this.props.match.params.paid)) {
               data.id = parseInt(this.props.match.params.paid)
             }
-            
+            this.props.pageLoadingSet(true);
             API.post("Payment", data, {
               headers: {
                 ...headers,
@@ -245,6 +245,7 @@ export class CreatePaid extends Component {
               },
             })
               .then((res) => {
+                this.props.pageLoadingSet(false);
                 if (r === "next") {
                   this.setState({
                     alinanMiktarView: true,
@@ -271,6 +272,7 @@ export class CreatePaid extends Component {
               doctorId: "",
               description: "Ödeme alındı",
             };
+            this.props.pageLoadingSet(true);
             API.post("Payment", data, {
               headers: {
                 ...headers,
@@ -278,6 +280,7 @@ export class CreatePaid extends Component {
               },
             })
               .then((res) => {
+                this.props.pageLoadingSet(false);
                 this.props.history.push(
                   authRoutes.userDetail.links[this.props.lang].replace(
                     ":id",
