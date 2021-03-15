@@ -160,7 +160,7 @@ export class Home extends Component {
           <div className="col-md-6 mb-4">
             <div className="border p-3 rounded h-100">
               <div className="d-flex justify-content-between align-items-center">
-                <h3>Ciro</h3>
+                <h3>Tahsil Edilen</h3>
                 <div className="bar-filter">
                   <a
                     className={this.state.barFilter === 'day' ? 'active' : ''}
@@ -256,7 +256,7 @@ export class Home extends Component {
                     </div>
                     <div className="col-6 text-center">
                       <p className="fs-24 mb-2">{formatMoney(this.state.debtTotal)} TL</p>
-                      <p className="mb-0">Ciro</p>
+                      <p className="mb-0">Toplam Alacak</p>
                     </div>
                   </div>
                 </div>
