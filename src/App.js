@@ -186,3 +186,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(withLocalize(withRouter(App)));
+//npm run-script build

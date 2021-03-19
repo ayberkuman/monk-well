@@ -252,7 +252,10 @@ export class CreatePaid extends Component {
                   });
                 } else {
                   this.props.history.push(
-                    authRoutes.payments.links[this.props.lang]
+                    authRoutes.userDetail.links[this.props.lang].replace(
+                      ":id",
+                      this.props.match.params.id
+                    )
                   );
                 }
               })
@@ -280,6 +283,7 @@ export class CreatePaid extends Component {
               },
             })
               .then((res) => {
+                alert(12312);
                 this.props.pageLoadingSet(false);
                 this.props.history.push(
                   authRoutes.userDetail.links[this.props.lang].replace(
