@@ -10,8 +10,8 @@ export const LeftSide = () => {
           alt="Monk Medical"
           width='52'
         />
-        <p className='head'>Sağlık kuruluşları için bulut tabanlı hasta etkileşim platformu</p>
-        <p>Monk Medikal uygulamasını kullanarak hastalarınızın tedavi ve randevu durumlarını takip edebilir, laboratuvar ve radyoloji raporları görüntüleyebilir, hastalarınıza tedavileri ve randevuları hakkında gerekli bildirimleri gönderebilir ve anlık mesajlaşma servisini kullanarak hastalarınızın soru ve ihtiyaçlarıyla hızlıca ilgilenebilirsiniz.</p>
+        <p className='head'>Kliniğinizin ihtiyaçları için özel olarak oluşturulmuş ön muhasebe takip sistemi</p>
+        <p>Monk Pay’i kullanarak hastalarınızın ödemelerini tamamlamalarını, ödeme geçmişini kolayca görüntüleyerek ve gerekli bildirimleri göndererek sağlayabilir, istediğiniz tarihler için genel veya doktor ve tedavi bazlı ciro analizlerini görüntüleyebilir, giderlerinizin günlük takibini yapabilirsiniz.</p>
       </div>
       <img
           className='img-fluid'
