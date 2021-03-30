@@ -105,9 +105,6 @@ export default class InputWLabel extends Component {
             {this.state.type === "password" ? "Göster" : "Gizle"}
           </button>
         )}
-        {this.props.type === "discount" && (<div className='discount'>%</div>)
-
-        }
         <label htmlFor={this.props.id} className="position-absolute">
           {this.props.label}
         </label>

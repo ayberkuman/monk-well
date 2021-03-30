@@ -178,17 +178,34 @@ body{
 }
 .discount{
   background: #F1F1FA;
-  padding: 13px 50px 13px 23px;
+  padding: 13px 20px 13px;
   color: #7273CD;
   font-size: 16px;
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-  margin-right: -20px;
+  cursor: pointer;
+  &:last-child{
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+  &:first-child{
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+  &.active{
+    color: #F1F1FA;
+    background: #7273CD;
+  }
 }
 @media only screen and (max-width: 960px){
   .discount{
     display: none;
   }
+}
+.discount-or-amount{
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  right: 16px;
+  bottom: 35px;
 }
 .card-title{
   background: #F1F1FA;
