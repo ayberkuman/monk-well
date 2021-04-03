@@ -36,7 +36,7 @@ export class Expense extends Component {
     this.getData()
   };
 
-  getData = ()=>{
+  getData = (type='empty')=>{
     // this.props.pageLoadingSet(true);
     const startDate = this.state.startDate !== '' ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
     const endDate = this.state.endDate !== '' ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
@@ -46,7 +46,13 @@ export class Expense extends Component {
       .then((res) => {
         // this.props.pageLoadingSet(false);
         const { data } = res;
-        const rows = this.state.rows;
+        const rows = type !== "add" ? [] : this.state.rows;
+        if (type !== "add") {
+          this.setState({
+            currentpage: 1
+          })
+        }
+        console.log(data.totalPages , this.state.currentpage + 1);
         data.data.map(e => {
           rows.push({
             amount: e.amount,
@@ -171,7 +177,7 @@ export class Expense extends Component {
   }
 
   timeout = '';
-  handleChange = (e) => {
+  search = (e) => {
     const { value } = e.target;
     clearTimeout(this.timeout);
     
@@ -247,7 +253,7 @@ export class Expense extends Component {
                     classes="mb-0 w-100"
                     id="search"
                     value={this.state.search}
-                    setValue={this.handleChange}
+                    setValue={this.search}
                     tabIndex={1}
                     label=""
                     placeholder="Ara"
@@ -274,7 +280,7 @@ export class Expense extends Component {
         <div>
           <InfiniteScroll
             dataLength={this.state.rows.length}
-            next={this.getData}
+            next={() => this.getData("add")}
             hasMore={this.state.hasMore}
             loader={
               <tr>
@@ -385,7 +391,9 @@ export class Expense extends Component {
             </div>
           </InfiniteScroll>
         </div>
-        <p className='mt-3 text-right'><b>Toplam Gider: {this.state.totalExpense}</b></p>
+        <p className="mt-3 text-right">
+          <b>Toplam Gider: {this.state.totalExpense}</b>
+        </p>
       </div>
     );
   }
