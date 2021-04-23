@@ -13,7 +13,6 @@ import "react-app-polyfill/ie11";
 import "react-app-polyfill/stable";
 
 const App = React.lazy(() => import("./App"));
-
 ReactDOM.render(
   <Provider store={store}>
     <LocalizeProvider store={store}>
@@ -22,7 +21,7 @@ ReactDOM.render(
           <ErrorBoundary>
             <Suspense fallback={""}>
               <HttpsRedirect>
-                <App />
+                  <App />
               </HttpsRedirect>
             </Suspense>
           </ErrorBoundary>

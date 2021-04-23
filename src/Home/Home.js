@@ -49,12 +49,14 @@ export class Home extends Component {
     setTimeout(() => {
       this.props.headerTitleSet(this.props.translate('home'));
     }, 400);
-    this.getData()
+    this.getData(false)
     scrollToTop();
   };
 
-  getData = () => {
-    this.props.pageLoadingSet(true);
+  getData = (loading = true) => {
+    if(loading === true) {
+      this.props.pageLoadingSet(true);
+    }
     const startDate = this.state.startDate !== '' ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
     const endDate = this.state.endDate !== '' ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
     const graphStartDate = this.state.graphStartDate !== '' ? moment(this.state.graphStartDate).format('YYYY-MM-DD') : ''

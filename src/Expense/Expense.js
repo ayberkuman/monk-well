@@ -120,28 +120,41 @@ export class Expense extends Component {
       "clinicId": this.state.rows[i].clinicId,
       "description": this.state.rows[i].description,
       "createDate": moment(this.state.rows[i].createDate).format(),
-      "amount": parseFloat(this.state.rows[i].amount),
+      "amount": _.isNaN(parseFloat(this.state.rows[i].amount)) ? "" : parseFloat(this.state.rows[i].amount),
       "currency": this.state.rows[i].currency,
     };
-    this.props.pageLoadingSet(true);
-    this.setState({
-      rows: []
-    }, ()=>{
-    API.post("Expense", data, { headers: { ...headers,Authorization: `Bearer ${this.props.user.token}`, } })
-      .then((res) => {
-        this.props.pageLoadingSet(false);
-        const oldData = this.state.rows;
-        oldData.splice(i, 1);
-        this.setState({
-          rows: oldData,
-        });
-        this.getData()
-      })
-      .catch((err) => {
-        this.props.pageLoadingSet(false);
-        this.setState({ isSending: false });
-      });
-    })
+    
+    if (data.createDate !== '' && data.description !== '' && data.amount !== '' ) {
+      this.props.pageLoadingSet(true);
+      this.setState(
+        {
+          rows: [],
+        },
+        () => {
+          API.post("Expense", data, {
+            headers: {
+              ...headers,
+              Authorization: `Bearer ${this.props.user.token}`,
+            },
+          })
+            .then((res) => {
+              this.props.pageLoadingSet(false);
+              const oldData = this.state.rows;
+              oldData.splice(i, 1);
+              this.setState({
+                rows: oldData,
+              });
+              this.getData();
+            })
+            .catch((err) => {
+              this.props.pageLoadingSet(false);
+              this.setState({ isSending: false });
+            });
+        }
+      );
+    } else{
+      alert("Lütfen gerekli alanları doldurunuz.");
+    }
   }
 
   delete = (i) => {
