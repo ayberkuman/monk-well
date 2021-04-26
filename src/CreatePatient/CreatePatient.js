@@ -102,6 +102,15 @@ export class CreatePatient extends Component {
           })
           .catch((err) => {
             this.props.pageLoadingSet(false);
+            if (err.response.data.errors.Email) {
+              alert(err.response.data.errors.Email[0]);
+            }
+            if (err.response.data.errors.IdentityNumber) {
+              alert(err.response.data.errors.IdentityNumber[0]);
+            }
+            if (err.response.data.errors.PhoneNumber) {
+              alert(err.response.data.errors.PhoneNumber[0]);
+            }
           });
       }
     })
