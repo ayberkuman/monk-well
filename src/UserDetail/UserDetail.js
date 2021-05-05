@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Dropdown } from "react-bootstrap";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
+import moment from "moment";
 import { authRoutes } from "../App/routes";
 import deleteIcon from '../assets/images/delete-icon.svg';
 import editIcon from '../assets/images/edit-icon.svg';
@@ -85,6 +86,7 @@ export class UserDetail extends Component {
                 doctorId: e.doctorId,
                 userId: e.userId,
                 id: e.id,
+                date: moment(e.date).format('YYYY-MM-DD'),
               });
               islemGecmisiToplam = islemGecmisiToplam + e.amount;
             } else{
@@ -94,6 +96,7 @@ export class UserDetail extends Component {
                 doctorId: e.doctorId,
                 userId: e.userId,
                 id: e.id,
+                date: moment(e.date).format('YYYY-MM-DD'),
               });
               yapilanIslemlerToplam = yapilanIslemlerToplam + e.amount;
             }
@@ -191,7 +194,10 @@ export class UserDetail extends Component {
                       <th className="react-infinite-table-col-0">
                         Yapılan İşlemler
                       </th>
-                      <th className="react-infinite-table-col-1 text-right">
+                      <th className="react-infinite-table-col-1">
+                        Tarih
+                      </th>
+                      <th className="react-infinite-table-col-2 text-right">
                         Toplam : {formatMoney(this.state.islemGecmisiToplam)} TL
                       </th>
                     </tr>
@@ -199,11 +205,15 @@ export class UserDetail extends Component {
                   <tbody>
                     {this.state.islemGecmisi.map((i, index) => (
                       <tr key={index + "a"}>
+                      {console.log(i)}
                         <td className="react-infinite-table-col-0">
                           {i.description}
                         </td>
+                        <td className="react-infinite-table-col-1">
+                          {i.date}
+                        </td>
                         <td
-                          className="react-infinite-table-col-1"
+                          className="react-infinite-table-col-2"
                           align="right"
                         >
                           {formatMoney(i.price)} TL
@@ -276,7 +286,10 @@ export class UserDetail extends Component {
                       <th className="react-infinite-table-col-0">
                         Ödeme Geçmisi
                       </th>
-                      <th className="react-infinite-table-col-1 text-right">
+                      <th className="react-infinite-table-col-1">
+                        Tarih
+                      </th>
+                      <th className="react-infinite-table-col-2 text-right">
                         Toplam : {formatMoney(this.state.yapilanIslemlerToplam)} TL
                       </th>
                     </tr>
@@ -287,8 +300,11 @@ export class UserDetail extends Component {
                         <td className="react-infinite-table-col-0">
                           {i.description}
                         </td>
+                        <td className="react-infinite-table-col-1">
+                          {i.date}
+                        </td>
                         <td
-                          className="react-infinite-table-col-1"
+                          className="react-infinite-table-col-2"
                           align="right"
                         >
                           {formatMoney(i.price)} TL

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import moment from "moment";
+import DatePicker from "react-datepicker";
 import React, { Component } from "react";
 import { alert } from "../App/appActions";
 import { authRoutes } from "../App/routes";
@@ -26,6 +27,8 @@ export class CreatePaid extends Component {
       balance: 0,
       discountType: 'rate',
       editable: true,
+      date: '',
+      date2: ''
     }
   }
 
@@ -230,7 +233,7 @@ export class CreatePaid extends Component {
   }
 
   postData = (q, r) =>{
-    const {total, discountNumber, selectedProcess, selectedDoctor, alinanMiktar, discountType} = this.state;
+    const {total, discountNumber, selectedProcess, selectedDoctor, alinanMiktar, discountType, date, date2} = this.state;
     this.setState(
       {
         totalError: total === ''
@@ -253,7 +256,7 @@ export class CreatePaid extends Component {
               discountRate:
                 discountNumber === "" || discountType !== 'rate' ? 0 : parseFloat(discountNumber),
               amount: discountNumber === "" || discountType === 'rate' ? 0 : parseFloat(discountNumber),
-              createDate: moment().format("YYYY-MM-DD"),
+              createDate: this.state.date !== '' ? moment(date).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
               processId: parseInt(selectedProcess[0].id),
               paymentType: 0,
               doctorId: selectedDoctor[0].id,
@@ -294,7 +297,7 @@ export class CreatePaid extends Component {
               userId: this.props.match.params.id,
               price: parseFloat(alinanMiktar),
               discountRate: 0,
-              createDate: moment().format("YYYY-MM-DD"),
+              createDate: this.state.date2 !== '' ? moment(date2).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
               processId: 0,
               paymentType: 10,
               doctorId: "",
@@ -374,6 +377,16 @@ export class CreatePaid extends Component {
         });
       }
     });
+  }
+  setDate(date){
+      this.setState({
+        date: date,
+      });
+  }
+  setDate2(date){
+    this.setState({
+      date2: date
+    })
   }
   render() {
     return (
@@ -499,6 +512,15 @@ export class CreatePaid extends Component {
                         </div>
                       </div>
                     </div>
+                    <div className="col-6">
+                      <label for="total" className='fs-16'>Tarih</label>
+                      <DatePicker
+                        placeholderText='Tarih'
+                        selected={this.state.date}
+                        onChange={(date) => this.setDate(date, "date")}
+                        className="w-100"
+                      />
+                    </div>
                   </div>
                   <div className="row">
                     <div className="col-md-6 mt-2">
@@ -599,6 +621,15 @@ export class CreatePaid extends Component {
                     errorMessage={this.state.errorMessage}
                   />
                 </div>
+                <div className="col-6">
+                      <label for="total" className='fs-16'>Tarih</label>
+                      <DatePicker
+                        placeholderText='Tarih'
+                        selected={this.state.date2}
+                        onChange={(date) => this.setDate2(date, "date")}
+                        className="w-100"
+                      />
+                    </div>
                 <div className="col-md-12">
                   <button
                     className="primary-button d-inline-flex"
