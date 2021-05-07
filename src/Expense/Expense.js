@@ -57,7 +57,7 @@ export class Expense extends Component {
           rows.push({
             amount: e.amount,
             clinicId: e.clinicId,
-            createDate: e.createDate,
+            createDate: e.date,
             currency: e.currency,
             description: e.description,
             id: e.id,
@@ -119,7 +119,7 @@ export class Expense extends Component {
       "id": this.state.rows[i].id,
       "clinicId": this.state.rows[i].clinicId,
       "description": this.state.rows[i].description,
-      "createDate": moment(this.state.rows[i].createDate).format(),
+      "date": moment(this.state.rows[i].createDate).format(),
       "amount": _.isNaN(parseFloat(this.state.rows[i].amount)) ? "" : parseFloat(this.state.rows[i].amount),
       "currency": this.state.rows[i].currency,
     };
