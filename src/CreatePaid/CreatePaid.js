@@ -216,14 +216,14 @@ export class CreatePaid extends Component {
           const process = this.search(res.data.processId, this.state.processList);
 
           this.setState({
+            alinanMiktarView: res.data.paymentType === 10,
             total: res.data.price,
             discountNumber:res.data.discountRate === 0 ? res.data.price - res.data.amount > 0 ? res.data.price - res.data.amount : '' : res.data.discountRate,
             discountResult: res.data.price === res.data.amount ? '' : res.data.amount,
             alinanMiktar:res.data.amount,
-            alinanMiktarView:  false,
             selectedProcess:[process],
-            selectedDoctor:[{id:res.data.doctor.id, label:res.data.doctor.fullName}],
-            discountType: res.data.discountRate>0 ? 'rate' : 'amount'
+            selectedDoctor:res.data.doctor !== null ? [{id:res.data.doctor.id, label:res.data.doctor.fullName}] : [],
+            discountType: res.data.discountRate > 0 ? 'rate' : 'amount',
           })
           this.props.pageLoadingSet(false);
         })
