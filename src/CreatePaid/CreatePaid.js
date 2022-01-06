@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from "lodash";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import React, { Component } from "react";
@@ -9,53 +9,56 @@ import InputWLabel from "../utils/components/InputWLabel";
 import SelectWLabel from "../utils/components/SelectWLabel";
 import { formatMoney, scrollToTop } from "../utils/helper";
 export class CreatePaid extends Component {
-  constructor(props){
-    super(props)
-    this.state={
+  constructor(props) {
+    super(props);
+    this.state = {
       processList: [],
       doctorList: [],
-      selectedProcess:[],
-      selectedDoctor:[],
-      total: '',
-      totalError: '',
-      selectedProcessError: '',
-      selectedDoctorError: '',
-      discountNumber:'',
-      discountResult: '',
-      alinanMiktar:'',
+      selectedProcess: [],
+      selectedDoctor: [],
+      total: "",
+      totalError: "",
+      selectedProcessError: "",
+      selectedDoctorError: "",
+      discountNumber: "",
+      discountResult: "",
+      alinanMiktar: "",
       alinanMiktarView: false,
       balance: 0,
-      discountType: 'rate',
+      discountType: "rate",
       editable: true,
-      date: '',
-      date2: ''
-    }
+      date: "",
+      date2: "",
+    };
   }
 
   componentDidMount = () => {
     scrollToTop();
     setTimeout(() => {
-      this.props.headerTitleSet(this.props.translate('payments'));
+      this.props.headerTitleSet(this.props.translate("payments"));
     }, 400);
     this.getData();
-    if (this.props.match.url === authRoutes.addPaid.links[this.props.lang].replace(
-      ":id",
-      this.props.match.params.id
-    )) {
-      this.setState({alinanMiktarView: true})
+    if (
+      this.props.match.url ===
+      authRoutes.addPaid.links[this.props.lang].replace(
+        ":id",
+        this.props.match.params.id
+      )
+    ) {
+      this.setState({ alinanMiktarView: true });
     }
-  }
+  };
 
-  componentWillUnmount () {
-    clearTimeout(this._loadRowsTimeout)
+  componentWillUnmount() {
+    clearTimeout(this._loadRowsTimeout);
   }
   handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     this.setState({ [name]: value }, () => {
-      if (name === 'discountNumber' || name === 'total') {
+      if (name === "discountNumber" || name === "total") {
         if (this.state.total !== "" || this.state.discountNumber !== "") {
-          if (this.state.discountType === 'rate') {
+          if (this.state.discountType === "rate") {
             if (
               Number(this.state.total) >=
               Number(this.state.total) * Number(this.state.discountNumber / 100)
@@ -71,8 +74,10 @@ export class CreatePaid extends Component {
                 discountNumber: "",
               });
             }
-          } else{
-            console.log(Number(this.state.total) - Number(this.state.discountNumber))
+          } else {
+            console.log(
+              Number(this.state.total) - Number(this.state.discountNumber)
+            );
             if (
               Number(this.state.total) - Number(this.state.discountNumber) >=
               0
@@ -95,60 +100,65 @@ export class CreatePaid extends Component {
       }
     });
   };
-  getData = ()=>{
+  getData = () => {
     API.get(`Diagnose/ListPrice?length=1000`, {
       headers: {
         ...headers,
         Authorization: `Bearer ${this.props.user.token}`,
       },
-    }).then((res) => {
-      const processList = [];
-      res.data.data.map((e)=>{
-        processList.push({
-          id: e.diagnose.id,
-          label: e.diagnose.name,
-          price: e.price,
-        })
-      })
-      this.setState({
-        processList,
-      },()=>{
-        if (
-          this.props.match.params.paid !== "" &&
-          !_.isUndefined(this.props.match.params.paid)
-        ) {
-          this.editOnly()
-        }
-      });
-      
-      this.props.pageLoadingSet(false);
     })
-    .catch((err) => {
-      // alert(err.response.data.value)
-      this.props.pageLoadingSet(false);
-    });
+      .then((res) => {
+        const processList = [];
+        res.data.data.map((e) => {
+          processList.push({
+            id: e.diagnose.id,
+            label: e.diagnose.name,
+            price: e.price,
+          });
+        });
+        this.setState(
+          {
+            processList,
+          },
+          () => {
+            if (
+              this.props.match.params.paid !== "" &&
+              !_.isUndefined(this.props.match.params.paid)
+            ) {
+              this.editOnly();
+            }
+          }
+        );
+
+        this.props.pageLoadingSet(false);
+      })
+      .catch((err) => {
+        // alert(err.response.data.value)
+        this.props.pageLoadingSet(false);
+      });
     API.get(`Account/ListAllDoctors?length=1000`, {
       headers: {
         ...headers,
         Authorization: `Bearer ${this.props.user.token}`,
       },
-    }).then((res) => {
-      const doctorList = [];
-      res.data.data.map((e)=>{
-        doctorList.push({
-          id: e.user.id,
-          label: e.user.fullName,
-        })
-      })
-      this.setState({
-        doctorList
-      })
-      this.props.pageLoadingSet(false);
     })
-    .catch((err) => {
-      // alert(err.response.data.value)
-      this.props.pageLoadingSet(false);
-    });
+      .then((res) => {
+        const doctorList = [];
+        res.data.data.map((e) => {
+          doctorList.push({
+            id: e.user.id,
+            label: e.user.fullName,
+          });
+        });
+        this.setState({
+          doctorList,
+        });
+        this.props.pageLoadingSet(false);
+      })
+      .catch((err) => {
+        // alert(err.response.data.value)
+        this.props.pageLoadingSet(false);
+      });
 
     if (
       this.props.match.params.id !== "" &&
@@ -194,56 +204,74 @@ export class CreatePaid extends Component {
           this.props.pageLoadingSet(false);
         });
     }
-    
-  }
+  };
   search = (nameKey, myArray) => {
-    for (var i=0; i < myArray.length; i++) {
-        if (myArray[i].id === nameKey) {
-            return myArray[i];
-        }
+    for (var i = 0; i < myArray.length; i++) {
+      if (myArray[i].id === nameKey) {
+        return myArray[i];
+      }
     }
-}
+  };
 
   editOnly = () => {
     this.props.pageLoadingSet(true);
-      API.get(`Payment/GetById?id=${this.props.match.params.paid}`, {
-        headers: {
-          ...headers,
-          Authorization: `Bearer ${this.props.user.token}`,
-        },
-      })
-        .then((res) => {
-          const process = this.search(res.data.processId, this.state.processList);
+    API.get(`Payment/GetById?id=${this.props.match.params.paid}`, {
+      headers: {
+        ...headers,
+        Authorization: `Bearer ${this.props.user.token}`,
+      },
+    })
+      .then((res) => {
+        const process = this.search(res.data.processId, this.state.processList);
 
-          this.setState({
-            alinanMiktarView: res.data.paymentType === 10,
-            total: res.data.price,
-            discountNumber:res.data.discountRate === 0 ? res.data.price - res.data.amount > 0 ? res.data.price - res.data.amount : '' : res.data.discountRate,
-            discountResult: res.data.price === res.data.amount ? '' : res.data.amount,
-            alinanMiktar:res.data.amount,
-            selectedProcess:[process],
-            selectedDoctor:res.data.doctor !== null ? [{id:res.data.doctor.id, label:res.data.doctor.fullName}] : [],
-            discountType: res.data.discountRate > 0 ? 'rate' : 'amount',
-          })
-          this.props.pageLoadingSet(false);
-        })
-        .catch((err) => {
-          this.props.pageLoadingSet(false);
+        this.setState({
+          alinanMiktarView: res.data.paymentType === 10,
+          total: res.data.price,
+          discountNumber:
+            res.data.discountRate === 0
+              ? res.data.price - res.data.amount > 0
+                ? res.data.price - res.data.amount
+                : ""
+              : res.data.discountRate,
+          discountResult:
+            res.data.price === res.data.amount ? "" : res.data.amount,
+          alinanMiktar: res.data.amount,
+          selectedProcess: [process],
+          selectedDoctor:
+            res.data.doctor !== null
+              ? [{ id: res.data.doctor.id, label: res.data.doctor.fullName }]
+              : [],
+          discountType: res.data.discountRate > 0 ? "rate" : "amount",
         });
-  }
+        this.props.pageLoadingSet(false);
+      })
+      .catch((err) => {
+        this.props.pageLoadingSet(false);
+      });
+  };
 
-  postData = (q, r) =>{
-    const {total, discountNumber, selectedProcess, selectedDoctor, alinanMiktar, discountType, date, date2} = this.state;
+  postData = (q, r) => {
+    const {
+      total,
+      discountNumber,
+      selectedProcess,
+      selectedDoctor,
+      alinanMiktar,
+      discountType,
+      date,
+      date2,
+    } = this.state;
     this.setState(
       {
-        totalError: total === ''
-          ? "Toplam fatura tutarını giriniz"
-          : "",
-        selectedProcessError: selectedProcess.length === 0 ? "Lütfen tedavi adını giriniz" : '',
-        selectedDoctorError: selectedDoctor.length === 0 ? "Lütfen doktor adını giriniz" : '',
+        totalError: total === "" ? "Toplam fatura tutarını giriniz" : "",
+        selectedProcessError:
+          selectedProcess.length === 0 ? "Lütfen tedavi adını giriniz" : "",
+        selectedDoctorError:
+          selectedDoctor.length === 0 ? "Lütfen doktor adını giriniz" : "",
       },
       () => {
-        const {totalError, selectedProcessError, selectedDoctorError} = this.state;
+        const { totalError, selectedProcessError, selectedDoctorError } =
+          this.state;
         if (q !== "miktar") {
           if (
             totalError === "" &&
@@ -254,16 +282,27 @@ export class CreatePaid extends Component {
               userId: this.props.match.params.id,
               price: parseFloat(total),
               discountRate:
-                discountNumber === "" || discountType !== 'rate' ? 0 : parseFloat(discountNumber),
-              amount: discountNumber === "" || discountType === 'rate' ? 0 : parseFloat(discountNumber),
-              createDate: this.state.date !== '' ? moment(date).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
+                discountNumber === "" || discountType !== "rate"
+                  ? 0
+                  : parseFloat(discountNumber),
+              amount:
+                discountNumber === "" || discountType === "rate"
+                  ? 0
+                  : parseFloat(discountNumber),
+              createDate:
+                this.state.date !== ""
+                  ? moment(date).format("YYYY-MM-DD")
+                  : moment().format("YYYY-MM-DD"),
               processId: parseInt(selectedProcess[0].id),
               paymentType: 0,
               doctorId: selectedDoctor[0].id,
             };
 
-            if (this.props.match.params.paid !== "" && !_.isUndefined(this.props.match.params.paid)) {
-              data.id = parseInt(this.props.match.params.paid)
+            if (
+              this.props.match.params.paid !== "" &&
+              !_.isUndefined(this.props.match.params.paid)
+            ) {
+              data.id = parseInt(this.props.match.params.paid);
             }
             this.props.pageLoadingSet(true);
             API.post("Payment", data, {
@@ -292,101 +331,109 @@ export class CreatePaid extends Component {
                 this.setState({ isSending: false });
               });
           }
-         } else {
-            const data = {
-              userId: this.props.match.params.id,
-              price: parseFloat(alinanMiktar),
-              discountRate: 0,
-              createDate: this.state.date2 !== '' ? moment(date2).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
-              processId: 0,
-              paymentType: 10,
-              doctorId: "",
-              description: "Ödeme alındı",
-            };
-            this.props.pageLoadingSet(true);
-            API.post("Payment", data, {
-              headers: {
-                ...headers,
-                Authorization: `Bearer ${this.props.user.token}`,
-              },
+        } else {
+          const data = {
+            userId: this.props.match.params.id,
+            price: parseFloat(alinanMiktar),
+            discountRate: 0,
+            createDate:
+              this.state.date2 !== ""
+                ? moment(date2).format("YYYY-MM-DD")
+                : moment().format("YYYY-MM-DD"),
+            processId: 0,
+            paymentType: 10,
+            doctorId: "",
+            description: "Ödeme alındı",
+          };
+          this.props.pageLoadingSet(true);
+          API.post("Payment", data, {
+            headers: {
+              ...headers,
+              Authorization: `Bearer ${this.props.user.token}`,
+            },
+          })
+            .then((res) => {
+              alert(12312);
+              this.props.pageLoadingSet(false);
+              this.props.history.push(
+                authRoutes.userDetail.links[this.props.lang].replace(
+                  ":id",
+                  this.props.match.params.id
+                )
+              );
             })
-              .then((res) => {
-                alert(12312);
-                this.props.pageLoadingSet(false);
-                this.props.history.push(
-                  authRoutes.userDetail.links[this.props.lang].replace(
-                    ":id",
-                    this.props.match.params.id
-                  )
-                );
-              })
-              .catch((err) => {
-                this.props.pageLoadingSet(false);
-                this.setState({ isSending: false });
-              });
-          }
+            .catch((err) => {
+              this.props.pageLoadingSet(false);
+              this.setState({ isSending: false });
+            });
         }
-    );
-  }
-  save = (redirect)=>{
-    this.postData('save', redirect);
-  }
-  saveAndFatura = ()=>{
-    this.postData('miktar', '');
-  }
-  discountTypeChange = (discountType)=>{
-    this.setState({
-      discountType 
-    },()=>{
-      if (this.state.total !== "" || this.state.discountNumber !== "") {
-        if (this.state.discountType === 'rate') {
-          if (
-            Number(this.state.total) >=
-            Number(this.state.total) * Number(this.state.discountNumber / 100)
-          ) {
-            this.setState({
-              discountResult:
-                Number(this.state.total) -
-                Number(this.state.total) *
-                  Number(this.state.discountNumber / 100),
-            });
-          } else {
-            this.setState({
-              discountNumber: "",
-            });
-          }
-        } else{
-          console.log(Number(this.state.total) - Number(this.state.discountNumber))
-          if (
-            Number(this.state.total) - Number(this.state.discountNumber) >=
-            0
-          ) {
-            this.setState({
-              discountResult:
-                Number(this.state.total) - Number(this.state.discountNumber),
-            });
-          } else {
-            this.setState({
-              discountNumber: "",
-            });
-          }
-        }
-      } else {
-        this.setState({
-          discountResult: "",
-        });
       }
+    );
+  };
+  save = (redirect) => {
+    this.postData("save", redirect);
+  };
+  saveAndFatura = () => {
+    this.postData("miktar", "");
+  };
+  discountTypeChange = (discountType) => {
+    this.setState(
+      {
+        discountType,
+      },
+      () => {
+        if (this.state.total !== "" || this.state.discountNumber !== "") {
+          if (this.state.discountType === "rate") {
+            if (
+              Number(this.state.total) >=
+              Number(this.state.total) * Number(this.state.discountNumber / 100)
+            ) {
+              this.setState({
+                discountResult:
+                  Number(this.state.total) -
+                  Number(this.state.total) *
+                    Number(this.state.discountNumber / 100),
+              });
+            } else {
+              this.setState({
+                discountNumber: "",
+              });
+            }
+          } else {
+            console.log(
+              Number(this.state.total) - Number(this.state.discountNumber)
+            );
+            if (
+              Number(this.state.total) - Number(this.state.discountNumber) >=
+              0
+            ) {
+              this.setState({
+                discountResult:
+                  Number(this.state.total) - Number(this.state.discountNumber),
+              });
+            } else {
+              this.setState({
+                discountNumber: "",
+              });
+            }
+          }
+        } else {
+          this.setState({
+            discountResult: "",
+          });
+        }
+      }
+    );
+  };
+  setDate(date) {
+    this.setState({
+      date: date,
     });
   }
-  setDate(date){
-      this.setState({
-        date: date,
-      });
-  }
-  setDate2(date){
+  setDate2(date) {
     this.setState({
-      date2: date
-    })
+      date2: date,
+    });
   }
   render() {
     return (
@@ -503,7 +550,7 @@ export class CreatePaid extends Component {
                         >
                           <svg
                             width={20}
-                            fill={this.state.editable ? "#7273CD":"#fff"}
+                            fill={this.state.editable ? "#7273CD" : "#fff"}
                             viewBox="-15 -15 484.00019 484"
                             xmlns="http://www.w3.org/2000/svg"
                           >
@@ -513,9 +560,11 @@ export class CreatePaid extends Component {
                       </div>
                     </div>
                     <div className="col-6">
-                      <label for="total" className='fs-16'>Tarih</label>
+                      <label for="total" className="fs-16">
+                        Tarih
+                      </label>
                       <DatePicker
-                        placeholderText='Tarih'
+                        placeholderText="Tarih"
                         selected={this.state.date}
                         onChange={(date) => this.setDate(date, "date")}
                         className="w-100"
@@ -622,14 +671,16 @@ export class CreatePaid extends Component {
                   />
                 </div>
                 <div className="col-6">
-                      <label for="total" className='fs-16'>Tarih</label>
-                      <DatePicker
-                        placeholderText='Tarih'
-                        selected={this.state.date2}
-                        onChange={(date) => this.setDate2(date, "date")}
-                        className="w-100"
-                      />
-                    </div>
+                  <label for="total" className="fs-16">
+                    Tarih
+                  </label>
+                  <DatePicker
+                    placeholderText="Tarih"
+                    selected={this.state.date2}
+                    onChange={(date) => this.setDate2(date, "date")}
+                    className="w-100"
+                  />
+                </div>
                 <div className="col-md-12">
                   <button
                     className="primary-button d-inline-flex"
@@ -647,4 +698,4 @@ export class CreatePaid extends Component {
   }
 }
 
-export default CreatePaid
+export default CreatePaid;

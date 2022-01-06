@@ -7,38 +7,44 @@ import InputWLabel from "../utils/components/InputWLabel";
 import { currency, formatMoney, scrollToTop } from "../utils/helper";
 
 export class Payments extends Component {
-  constructor(props){
-    super(props)
-    this.state={
+  constructor(props) {
+    super(props);
+    this.state = {
       rows: [],
-      hasMore: false, 
+      hasMore: false,
       length: 10,
       currentpage: 1,
-      search: ''
-    }
+      search: "",
+    };
   }
 
-  
   componentDidMount = () => {
     scrollToTop();
     setTimeout(() => {
-      this.props.headerTitleSet(this.props.translate('payments'));
+      this.props.headerTitleSet(this.props.translate("payments"));
     }, 400);
-    this.getData()
+    this.getData();
   };
 
-  getData = ()=>{
-    if (this.state.search === '') {
+  getData = () => {
+    if (this.state.search === "") {
       // this.props.pageLoadingSet(true)
     }
-    API.get(`Payment/ListByPassion?searchBy=${this.state.search}&currentpage=${this.state.currentpage}`, {
-      headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
-    })
+    API.get(
+      `Payment/ListByPassion?searchBy=${this.state.search}&currentpage=${this.state.currentpage}`,
+      {
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${this.props.user.token}`,
+          page: this.state.currentpage,
+        },
+      }
+    )
       .then((res) => {
         // this.props.pageLoadingSet(false);
         const { data } = res;
         const rows = this.state.rows;
-        data.data.map(e => {
+        data.data.map((e) => {
           rows.push({
             id: e.user.id,
             fullName: e.user.fullName,
@@ -49,36 +55,34 @@ export class Payments extends Component {
           });
         });
         this.setState({
-          currentpage: this.state.currentpage+1,
+          currentpage: this.state.currentpage + 1,
           rows: rows,
-          hasMore: data.totalPages >= this.state.currentpage+1
-        })
-
+          hasMore: data.totalPages >= this.state.currentpage + 1,
+        });
       })
       .catch((err) => {
         // alert(err.response.data.value)
         // this.props.pageLoadingSet(false);
       });
-  }
+  };
 
-  timeout = '';
+  timeout = "";
   handleChange = (e) => {
     const { value } = e.target;
     clearTimeout(this.timeout);
-    
-      this.setState(
-        {
-          rows: [],
-          search: value,
-          currentpage: 1,
-        },
-        () => {
-          this.timeout = setTimeout(() => {
-            this.getData();
-          }, 500);
-        }
-      );
-    
+
+    this.setState(
+      {
+        rows: [],
+        search: value,
+        currentpage: 1,
+      },
+      () => {
+        this.timeout = setTimeout(() => {
+          this.getData();
+        }, 500);
+      }
+    );
   };
   render() {
     return (
@@ -159,7 +163,7 @@ export class Payments extends Component {
                     <tr key={index + "a"}>
                       <td className="react-infinite-table-col-0">
                         <Link
-                          className='d-block'
+                          className="d-block"
                           to={authRoutes.userDetail.links[
                             this.props.lang
                           ].replace(":id", i.id)}
@@ -169,7 +173,7 @@ export class Payments extends Component {
                       </td>
                       <td className="react-infinite-table-col-1">
                         <Link
-                          className='d-block'
+                          className="d-block"
                           to={authRoutes.userDetail.links[
                             this.props.lang
                           ].replace(":id", i.id)}
@@ -179,7 +183,7 @@ export class Payments extends Component {
                       </td>
                       <td className="react-infinite-table-col-2">
                         <Link
-                          className='d-block'
+                          className="d-block"
                           to={authRoutes.userDetail.links[
                             this.props.lang
                           ].replace(":id", i.id)}
@@ -189,7 +193,7 @@ export class Payments extends Component {
                       </td>
                       <td className="react-infinite-table-col-3">
                         <Link
-                          className='d-block'
+                          className="d-block"
                           to={authRoutes.userDetail.links[
                             this.props.lang
                           ].replace(":id", i.id)}
@@ -198,7 +202,7 @@ export class Payments extends Component {
                         </Link>
                       </td>
                       <td className="react-infinite-table-col-4 text-right">
-                        <div className='d-flex justify-content-end'>
+                        <div className="d-flex justify-content-end">
                           <Link
                             className="primary-button md d-inline-flex min-110 mr-2"
                             to={authRoutes.addTreatment.links[
@@ -229,4 +233,4 @@ export class Payments extends Component {
   }
 }
 
-export default Payments
+export default Payments;

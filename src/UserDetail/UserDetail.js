@@ -5,39 +5,39 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { authRoutes } from "../App/routes";
-import deleteIcon from '../assets/images/delete-icon.svg';
-import editIcon from '../assets/images/edit-icon.svg';
+import deleteIcon from "../assets/images/delete-icon.svg";
+import editIcon from "../assets/images/edit-icon.svg";
 import API, { headers } from "../utils/API";
 import { formatMoney, scrollToTop } from "../utils/helper";
 
 export class UserDetail extends Component {
-  constructor(props){
-    super(props)
-    this.state={
-      name: '',
-      tckn: '',
-      passionNo: '',
-      phone: '',
-      email: '',
-      balance: '',
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      tckn: "",
+      passionNo: "",
+      phone: "",
+      email: "",
+      balance: "",
       yapilanIslemler: [],
       yapilanIslemlerToplam: 0,
-      islemGecmisi:[],
+      islemGecmisi: [],
       islemGecmisiToplam: 0,
       hasMore1: false,
-      hasMore2: false, 
+      hasMore2: false,
       length1: 10,
       length2: 10,
       currentpage1: 1,
       currentpage2: 1,
-    }
+    };
   }
   componentDidMount = () => {
     scrollToTop();
 
-    this.getData()
-  }
-  getData = ()=>{
+    this.getData();
+  };
+  getData = () => {
     if (
       this.props.match.params.id !== "" &&
       !_.isUndefined(this.props.match.params.id)
@@ -86,17 +86,17 @@ export class UserDetail extends Component {
                 doctorId: e.doctorId,
                 userId: e.userId,
                 id: e.id,
-                date: moment(e.date).format('YYYY-MM-DD'),
+                date: moment(e.date).format("YYYY-MM-DD"),
               });
               islemGecmisiToplam = islemGecmisiToplam + e.amount;
-            } else{
+            } else {
               yapilanIslemler.push({
                 description: e.description,
                 price: e.amount,
                 doctorId: e.doctorId,
                 userId: e.userId,
                 id: e.id,
-                date: moment(e.date).format('YYYY-MM-DD'),
+                date: moment(e.date).format("YYYY-MM-DD"),
               });
               yapilanIslemlerToplam = yapilanIslemlerToplam + e.amount;
             }
@@ -106,7 +106,7 @@ export class UserDetail extends Component {
             islemGecmisi,
             islemGecmisiToplam: debtTotal,
             yapilanIslemler,
-            yapilanIslemlerToplam:creditTotal,
+            yapilanIslemlerToplam: creditTotal,
           });
           this.props.pageLoadingSet(false);
         })
@@ -115,7 +115,7 @@ export class UserDetail extends Component {
           this.props.pageLoadingSet(false);
         });
     }
-  }
+  };
 
   payDelete = (id) => {
     this.props.pageLoadingSet(true);
@@ -126,14 +126,14 @@ export class UserDetail extends Component {
       },
     })
       .then((res) => {
-        this.getData()
+        this.getData();
         this.props.pageLoadingSet(false);
       })
       .catch((err) => {
         this.props.pageLoadingSet(false);
       });
-  }
-    
+  };
+
   render() {
     return (
       <div className="Payments">
@@ -163,7 +163,7 @@ export class UserDetail extends Component {
                 </p>
                 <div className="card-balance">
                   <p className="text-white p-0 m-0 font-weight-bold fs-16">
-                    {formatMoney(this.state.balance) + ' TL'}
+                    {formatMoney(this.state.balance) + " TL"}
                   </p>
                   <span className="text-white fs-12">Bakiye</span>
                 </div>
@@ -194,9 +194,7 @@ export class UserDetail extends Component {
                       <th className="react-infinite-table-col-0">
                         Yapılan İşlemler
                       </th>
-                      <th className="react-infinite-table-col-1">
-                        Tarih
-                      </th>
+                      <th className="react-infinite-table-col-1">Tarih</th>
                       <th className="react-infinite-table-col-2 text-right">
                         Toplam : {formatMoney(this.state.islemGecmisiToplam)} TL
                       </th>
@@ -205,13 +203,11 @@ export class UserDetail extends Component {
                   <tbody>
                     {this.state.islemGecmisi.map((i, index) => (
                       <tr key={index + "a"}>
-                      {console.log(i)}
+                        {console.log(i)}
                         <td className="react-infinite-table-col-0">
                           {i.description}
                         </td>
-                        <td className="react-infinite-table-col-1">
-                          {i.date}
-                        </td>
+                        <td className="react-infinite-table-col-1">{i.date}</td>
                         <td
                           className="react-infinite-table-col-2"
                           align="right"
@@ -286,11 +282,10 @@ export class UserDetail extends Component {
                       <th className="react-infinite-table-col-0">
                         Ödeme Geçmisi
                       </th>
-                      <th className="react-infinite-table-col-1">
-                        Tarih
-                      </th>
+                      <th className="react-infinite-table-col-1">Tarih</th>
                       <th className="react-infinite-table-col-2 text-right">
-                        Toplam : {formatMoney(this.state.yapilanIslemlerToplam)} TL
+                        Toplam : {formatMoney(this.state.yapilanIslemlerToplam)}{" "}
+                        TL
                       </th>
                     </tr>
                   </thead>
@@ -300,9 +295,7 @@ export class UserDetail extends Component {
                         <td className="react-infinite-table-col-0">
                           {i.description}
                         </td>
-                        <td className="react-infinite-table-col-1">
-                          {i.date}
-                        </td>
+                        <td className="react-infinite-table-col-1">{i.date}</td>
                         <td
                           className="react-infinite-table-col-2"
                           align="right"
@@ -359,4 +352,4 @@ export class UserDetail extends Component {
   }
 }
 
-export default UserDetail
+export default UserDetail;

@@ -1,59 +1,71 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import _ from 'lodash'
-import DatePicker, {registerLocale, setDefaultLocale} from "react-datepicker";
-import tr from 'date-fns/locale/tr';
+import _ from "lodash";
+import DatePicker, { registerLocale, setDefaultLocale } from "react-datepicker";
+import tr from "date-fns/locale/tr";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import API, { headers } from "../utils/API";
 import { scrollToTop, currency, formatMoney } from "../utils/helper";
 import InputWLabel from "../utils/components/InputWLabel";
-import { authRoutes } from "../App/routes"
+import { authRoutes } from "../App/routes";
 import InfiniteScroll from "react-infinite-scroll-component";
-registerLocale('tr', tr)
+registerLocale("tr", tr);
 
 export class Expense extends Component {
-  constructor(props){
-    super(props)
-    this.state={
+  constructor(props) {
+    super(props);
+    this.state = {
       rows: [],
-      hasMore: false, 
+      hasMore: false,
       length: 10,
       currentpage: 1,
-      search: '',
-      startDate: '',
-      endDate: '',
-      totalExpense: '0',
-    }
+      search: "",
+      startDate: "",
+      endDate: "",
+      totalExpense: "0",
+    };
   }
 
-  
   componentDidMount = () => {
     scrollToTop();
     setTimeout(() => {
-      this.props.headerTitleSet(this.props.translate('expenses'));
+      this.props.headerTitleSet(this.props.translate("expenses"));
     }, 400);
-    this.getData()
+    this.getData();
   };
 
-  getData = (type='empty')=>{
+  getData = (type = "empty") => {
     // this.props.pageLoadingSet(true);
-    const startDate = this.state.startDate !== '' ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-    const endDate = this.state.endDate !== '' ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-    API.get(`Expense/List?searchBy=${this.state.search}&startDate=${startDate}&endDate=${endDate}&page=${this.state.currentpage}`, {
-      headers: { ...headers, Authorization: `Bearer ${this.props.user.token}`, page: this.state.currentpage},
-    })
+    const startDate =
+      this.state.startDate !== ""
+        ? moment(this.state.startDate).format("YYYY-MM-DD")
+        : "";
+    const endDate =
+      this.state.endDate !== ""
+        ? moment(this.state.endDate).format("YYYY-MM-DD")
+        : "";
+    API.get(
+      `Expense/List?searchBy=${this.state.search}&startDate=${startDate}&endDate=${endDate}&page=${this.state.currentpage}`,
+      {
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${this.props.user.token}`,
+          page: this.state.currentpage,
+        },
+      }
+    )
       .then((res) => {
         // this.props.pageLoadingSet(false);
         const { data } = res;
         const rows = type !== "add" ? [] : this.state.rows;
         if (type !== "add") {
           this.setState({
-            currentpage: 1
-          })
+            currentpage: 1,
+          });
         }
-        console.log(data.totalPages , this.state.currentpage + 1);
-        data.data.map(e => {
+        console.log(data.totalPages, this.state.currentpage + 1);
+        data.data.map((e) => {
           rows.push({
             amount: e.amount,
             clinicId: e.clinicId,
@@ -62,7 +74,7 @@ export class Expense extends Component {
             description: e.description,
             id: e.id,
             disabled: true,
-            type: ''
+            type: "",
           });
         });
         this.setState({
@@ -75,56 +87,61 @@ export class Expense extends Component {
       .catch((err) => {
         // this.props.pageLoadingSet(false);
       });
-  }
+  };
   handleChange = (e, index) => {
     const arr = this.state.rows;
     if (!_.isUndefined(e.target)) {
-      if (e.target.name.includes('gider')) {
-        arr[index].description = e.target.value
-      } else if (e.target.name.includes('tutar')) {
-        arr[index].amount = e.target.value
-      }  
-    } else{
-      arr[index].createDate = e
+      if (e.target.name.includes("gider")) {
+        arr[index].description = e.target.value;
+      } else if (e.target.name.includes("tutar")) {
+        arr[index].amount = e.target.value;
+      }
+    } else {
+      arr[index].createDate = e;
     }
-    
+
     this.setState({
-      rows: arr
-    })
-    
+      rows: arr,
+    });
   };
-  addRow = () =>{
+  addRow = () => {
     const arr = this.state.rows;
     arr.unshift({
       amount: "",
       createDate: new Date(),
       description: "",
       disabled: false,
-      type: 'new',
+      type: "new",
     });
     this.setState({
-      rows: arr
-    })
+      rows: arr,
+    });
     console.log(this.state.rows);
-  }
-  editRow = (x, i)=>{
+  };
+  editRow = (x, i) => {
     const arr = this.state.rows;
     arr[i].disabled = false;
     this.setState({
       rows: arr,
-    })
-  }
-  editRowSave = (x, i)=>{
+    });
+  };
+  editRowSave = (x, i) => {
     const data = {
-      "id": this.state.rows[i].id,
-      "clinicId": this.state.rows[i].clinicId,
-      "description": this.state.rows[i].description,
-      "date": moment(this.state.rows[i].createDate).format(),
-      "amount": _.isNaN(parseFloat(this.state.rows[i].amount)) ? "" : parseFloat(this.state.rows[i].amount),
-      "currency": this.state.rows[i].currency,
+      id: this.state.rows[i].id,
+      clinicId: this.state.rows[i].clinicId,
+      description: this.state.rows[i].description,
+      date: moment(this.state.rows[i].createDate).format(),
+      amount: _.isNaN(parseFloat(this.state.rows[i].amount))
+        ? ""
+        : parseFloat(this.state.rows[i].amount),
+      currency: this.state.rows[i].currency,
     };
-    
-    if (data.createDate !== '' && data.description !== '' && data.amount !== '' ) {
+
+    if (
+      data.createDate !== "" &&
+      data.description !== "" &&
+      data.amount !== ""
+    ) {
       this.props.pageLoadingSet(true);
       this.setState(
         {
@@ -152,61 +169,62 @@ export class Expense extends Component {
             });
         }
       );
-    } else{
+    } else {
       alert("Lütfen gerekli alanları doldurunuz.");
     }
-  }
+  };
 
   delete = (i) => {
     console.log(this.state.rows);
-    const id = this.state.rows[i].id
+    const id = this.state.rows[i].id;
     const arr = this.state.rows;
-    if (this.state.rows[i].type === 'new') {
+    if (this.state.rows[i].type === "new") {
       arr.splice(i, 1);
       this.setState({
-        rows: arr
-      })
-    }
-    else{
-    this.props.pageLoadingSet(true);
-    API.delete(`Expense?expenseId=${id}`, {
-      headers: {
-        ...headers,
-        Authorization: `Bearer ${this.props.user.token}`,
-      },
-    })
-      .then((res) => {
-        this.setState({
-          rows: [],
-        },()=>{
-          this.getData();
-        })
-        this.props.pageLoadingSet(false);
-      })
-      .catch((err) => {
-        this.props.pageLoadingSet(false);
+        rows: arr,
       });
+    } else {
+      this.props.pageLoadingSet(true);
+      API.delete(`Expense?expenseId=${id}`, {
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${this.props.user.token}`,
+        },
+      })
+        .then((res) => {
+          this.setState(
+            {
+              rows: [],
+            },
+            () => {
+              this.getData();
+            }
+          );
+          this.props.pageLoadingSet(false);
+        })
+        .catch((err) => {
+          this.props.pageLoadingSet(false);
+        });
     }
-  }
+  };
 
-  timeout = '';
+  timeout = "";
   search = (e) => {
     const { value } = e.target;
     clearTimeout(this.timeout);
-    
-      this.setState(
-        {
-          rows: [],
-          search: value,
-          currentpage: 1,
-        },
-        () => {
-          this.timeout = setTimeout(() => {
-            this.getData();
-          }, 500);
-        }
-      );
-    
+
+    this.setState(
+      {
+        rows: [],
+        search: value,
+        currentpage: 1,
+      },
+      () => {
+        this.timeout = setTimeout(() => {
+          this.getData();
+        }, 500);
+      }
+    );
   };
   render() {
     return (
@@ -412,4 +430,4 @@ export class Expense extends Component {
   }
 }
 
-export default Expense
+export default Expense;

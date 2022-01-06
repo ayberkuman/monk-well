@@ -5,123 +5,140 @@ import API, { headers } from "../utils/API";
 import { authRoutes } from "../App/routes";
 import { validateInput } from "../utils/helper";
 export class CreatePatient extends Component {
-  constructor(props){
-    super(props)
-    this.state={
-      tckn: '',
-      firstName: '',
-      lastName: '',
-      eMail: '',
-      phoneNumber: '',
-      address: '',
-      tcknError: '',
-      firstError: '',
-      lastError: '',
-      eMailError: '',
-      phoneNumberError: '',
-      addressError: '',
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      tckn: "",
+      firstName: "",
+      lastName: "",
+      eMail: "",
+      phoneNumber: "",
+      address: "",
+      tcknError: "",
+      firstError: "",
+      lastError: "",
+      eMailError: "",
+      phoneNumberError: "",
+      addressError: "",
+    };
   }
 
   componentDidMount = () => {
     scrollToTop();
     setTimeout(() => {
-      this.props.headerTitleSet(this.props.translate('payments'));
+      this.props.headerTitleSet(this.props.translate("payments"));
     }, 400);
-  }
+  };
 
-  componentWillUnmount () {
-    clearTimeout(this._loadRowsTimeout)
+  componentWillUnmount() {
+    clearTimeout(this._loadRowsTimeout);
   }
-
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'phoneNumber') {
-      var val = value.replace(/^[\d\(\)\+]+$/m,"");
-      if (val === '') {
+    if (name === "phoneNumber") {
+      var val = value.replace(/^[\d\(\)\+]+$/m, "");
+      if (val === "") {
         this.setState({ [name]: value }, () => {
           setTimeout(this.handleCheck, 20);
-        }); 
+        });
       }
-    } else{
+    } else {
       this.setState({ [name]: value }, () => {
         setTimeout(this.handleCheck, 20);
       });
     }
   };
 
+  handleCheck = () => {};
+  postData = (redirect) => {
+    const { tckn, firstName, lastName, eMail, phoneNumber, address } =
+      this.state;
+    this.setState(
+      {
+        tcknError: tckn === "" ? "Geçerli bir TCKN numarası giriniz" : "",
+        firstNameError: firstName === "" ? "Lütfen adınızı giriniz" : "",
+        lastNameError: lastName === "" ? "Lütfen soyadınızı giriniz" : "",
+        eMailError: !validateInput("email", eMail)
+          ? "Geçerli bir e-posta adresi giriniz"
+          : "",
+        phoneNumberError: !validateInput("tel", phoneNumber)
+          ? "Geçerli bir telefon numarası giriniz"
+          : "",
+        addressError: address === "" ? "Lütfen adresinizi giriniz" : "",
+      },
+      () => {
+        const {
+          tcknError,
+          firstNameError,
+          lastNameError,
+          eMailError,
+          phoneNumberError,
+          addressError,
+        } = this.state;
+        if (
+          tcknError === "" &&
+          firstNameError === "" &&
+          lastNameError === "" &&
+          eMailError === "" &&
+          phoneNumberError === "" &&
+          addressError === ""
+        ) {
+          this.props.pageLoadingSet(true);
+          const data = {
+            user: {
+              identityNumber: tckn,
+              email: eMail,
+              phoneNumber: phoneNumber,
+              firstName,
+              lastName,
+              address: address,
+            },
+          };
 
-  handleCheck = () => {
-  };
-  postData = (redirect) =>{
-    const { tckn, firstName, lastName, eMail, phoneNumber, address} = this.state;
-    this.setState({
-      tcknError: tckn === '' ? 'Geçerli bir TCKN numarası giriniz' : '',
-      firstNameError: firstName === '' ? 'Lütfen adınızı giriniz' : '',
-      lastNameError: lastName === '' ? 'Lütfen soyadınızı giriniz' : '',
-      eMailError: !validateInput('email', eMail) ? 'Geçerli bir e-posta adresi giriniz' : '',
-      phoneNumberError: !validateInput('tel', phoneNumber) ? 'Geçerli bir telefon numarası giriniz' : '',
-      addressError: address === '' ? 'Lütfen adresinizi giriniz' : '',
-    },() => {
-      const { tcknError, firstNameError, lastNameError,  eMailError, phoneNumberError, addressError } = this.state;
-      if (
-        tcknError === "" &&
-        firstNameError === "" &&
-        lastNameError === "" &&
-        eMailError === "" &&
-        phoneNumberError === "" &&
-        addressError === ""
-      ) {
-        this.props.pageLoadingSet(true);
-        const data = {
-          user: {
-            identityNumber: tckn,
-            email: eMail,
-            phoneNumber: phoneNumber,
-            firstName,
-            lastName,
-            address: address,
-          },
-        };
-  
-        API.post("/Account/Addpassion", data, {
-          headers: {
-            ...headers,
-            Authorization: `Bearer ${this.props.user.token}`,
-          },
-        })
-          .then((res) => {
-            this.props.pageLoadingSet(false);
-            if (redirect === "pay") {
-              this.props.history.push(authRoutes.addTreatment.links[this.props.lang].replace(":id", res.data.id));
-            }
-            else{
-              this.props.history.push(authRoutes.payments.links[this.props.lang]);
-            }
+          API.post("/Account/Addpassion", data, {
+            headers: {
+              ...headers,
+              Authorization: `Bearer ${this.props.user.token}`,
+            },
           })
-          .catch((err) => {
-            this.props.pageLoadingSet(false);
-            if (err.response.data.errors.Email) {
-              alert(err.response.data.errors.Email[0]);
-            }
-            if (err.response.data.errors.IdentityNumber) {
-              alert(err.response.data.errors.IdentityNumber[0]);
-            }
-            if (err.response.data.errors.PhoneNumber) {
-              alert(err.response.data.errors.PhoneNumber[0]);
-            }
-          });
+            .then((res) => {
+              this.props.pageLoadingSet(false);
+              if (redirect === "pay") {
+                this.props.history.push(
+                  authRoutes.addTreatment.links[this.props.lang].replace(
+                    ":id",
+                    res.data.id
+                  )
+                );
+              } else {
+                this.props.history.push(
+                  authRoutes.payments.links[this.props.lang]
+                );
+              }
+            })
+            .catch((err) => {
+              this.props.pageLoadingSet(false);
+              if (err.response.data.errors.Email) {
+                alert(err.response.data.errors.Email[0]);
+              }
+              if (err.response.data.errors.IdentityNumber) {
+                alert(err.response.data.errors.IdentityNumber[0]);
+              }
+              if (err.response.data.errors.PhoneNumber) {
+                alert(err.response.data.errors.PhoneNumber[0]);
+              }
+            });
+        }
       }
-    })
-   
-  }
-  save = ()=>{
+    );
+  };
+  save = () => {
     this.postData();
-  }
-  saveAndPay = ()=>{
-    this.postData('pay');
-  }
+  };
+  saveAndPay = () => {
+    this.postData("pay");
+  };
   render() {
     return (
       <div className="Payments">
@@ -135,7 +152,7 @@ export class CreatePatient extends Component {
         <div className="row mt-3">
           <div className="col-md-4 mt-2">
             <InputWLabel
-            classes='mt-3'
+              classes="mt-3"
               type="text"
               name="tckn"
               id="tckn"
@@ -150,7 +167,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
-              classes='mt-3'
+              classes="mt-3"
               type="text"
               name="firstName"
               id="firstName"
@@ -165,7 +182,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
-              classes='mt-3'
+              classes="mt-3"
               type="text"
               name="lastName"
               id="lastName"
@@ -180,7 +197,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
-              classes='mt-3'
+              classes="mt-3"
               type="email"
               name="eMail"
               id="eMail"
@@ -195,7 +212,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-4 mt-2">
             <InputWLabel
-              classes='mt-3'
+              classes="mt-3"
               type="phone"
               name="phoneNumber"
               id="phoneNumber"
@@ -210,7 +227,7 @@ export class CreatePatient extends Component {
           </div>
           <div className="col-md-8 mt-2">
             <InputWLabel
-              classes='mt-3'
+              classes="mt-3"
               type="text"
               name="address"
               id="address"
@@ -224,14 +241,18 @@ export class CreatePatient extends Component {
             />
           </div>
         </div>
-        <div className='row'>
-          <div className='col-md-12'>
-            <button className="primary-button d-inline-flex"
-            onClick={()=>this.save()}>
+        <div className="row">
+          <div className="col-md-12">
+            <button
+              className="primary-button d-inline-flex"
+              onClick={() => this.save()}
+            >
               Kayıt Al
             </button>
-            <button className="primary-white-button d-inline-flex ml-4"
-            onClick={()=>this.saveAndPay()}>
+            <button
+              className="primary-white-button d-inline-flex ml-4"
+              onClick={() => this.saveAndPay()}
+            >
               Kayıt Al ve Ödeme Al
             </button>
           </div>
@@ -241,4 +262,4 @@ export class CreatePatient extends Component {
   }
 }
 
-export default CreatePatient
+export default CreatePatient;

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Bar } from '@reactchartjs/react-chart.js'
+import { Bar } from "@reactchartjs/react-chart.js";
 import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import moment from "moment";
@@ -8,139 +8,174 @@ import "react-datepicker/dist/react-datepicker.css";
 import { formatMoney, scrollToTop } from "../utils/helper";
 import API, { headers } from "../utils/API";
 import { headerTitleSet } from "../App/appActions";
-import { authRoutes } from "../App/routes"
+import { authRoutes } from "../App/routes";
 
 export class Home extends Component {
-  constructor(props){
-    super(props)
-    this.state={
-      startDate: '',
-      endDate:'',
-      graphStartDate:moment().subtract(1, 'months').format('YYYY-MM-DD'),
-      balanceList:[],
-      creditTotal:null,
+  constructor(props) {
+    super(props);
+    this.state = {
+      startDate: "",
+      endDate: "",
+      graphStartDate: moment().subtract(1, "months").format("YYYY-MM-DD"),
+      balanceList: [],
+      creditTotal: null,
       debtTotal: null,
       processCount: 0,
       list: [],
-      barFilter: 'day',
+      barFilter: "day",
       graphType: 0,
       data: {
         labels: [],
-        datasets: [{
-          type: 'line',
-          label: ' ',
-          borderColor: '#FDC132',
-          borderWidth: 2,
-          fill: false,
-          data: [],
-        },
-        {
-          type: 'bar',
-          label: ' ',
-          backgroundColor: '#38C976',
-          data: [],
-          borderColor: 'white',
-          borderWidth: 0,
-        }],
+        datasets: [
+          {
+            type: "line",
+            label: " ",
+            borderColor: "#FDC132",
+            borderWidth: 2,
+            fill: false,
+            data: [],
+          },
+          {
+            type: "bar",
+            label: " ",
+            backgroundColor: "#38C976",
+            data: [],
+            borderColor: "white",
+            borderWidth: 0,
+          },
+        ],
       },
-    }
+    };
   }
   componentDidMount = () => {
     setTimeout(() => {
-      this.props.headerTitleSet(this.props.translate('home'));
+      this.props.headerTitleSet(this.props.translate("home"));
     }, 400);
-    this.getData(false)
+    this.getData(false);
     scrollToTop();
   };
 
   getData = (loading = true) => {
-    if(loading === true) {
+    if (loading === true) {
       this.props.pageLoadingSet(true);
     }
-    const startDate = this.state.startDate !== '' ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-    const endDate = this.state.endDate !== '' ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-    const graphStartDate = this.state.graphStartDate !== '' ? moment(this.state.graphStartDate).format('YYYY-MM-DD') : ''
-    API.get(`Dashboard/Home?startDate=${startDate}&endDate=${endDate}&graphStartDate=${graphStartDate}&graphType=${this.state.graphType}`, { headers: { ...headers, Authorization: `Bearer ${this.props.user.token}` }})
-        .then((res) => {
-          const {balanceList, creditTotal, debtTotal, list, processCount} = res.data;
-            const labels= [];
-            const lineData= []
-            const barData= []
-          balanceList.forEach((e, i) => {
-            labels.push(e.date);
-            lineData.push(e.amount)
-            barData.push(e.amount)
-          });
-          this.setState({
-            balanceList, 
-            creditTotal, 
-            debtTotal, 
-            list,
-            processCount,
-            data: {
-              labels,
-              datasets: [{
-                type: 'line',
-                label: ' ',
-                borderColor: '#FDC132',
+    const startDate =
+      this.state.startDate !== ""
+        ? moment(this.state.startDate).format("YYYY-MM-DD")
+        : "";
+    const endDate =
+      this.state.endDate !== ""
+        ? moment(this.state.endDate).format("YYYY-MM-DD")
+        : "";
+    const graphStartDate =
+      this.state.graphStartDate !== ""
+        ? moment(this.state.graphStartDate).format("YYYY-MM-DD")
+        : "";
+    API.get(
+      `Dashboard/Home?startDate=${startDate}&endDate=${endDate}&graphStartDate=${graphStartDate}&graphType=${this.state.graphType}`,
+      {
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${this.props.user.token}`,
+        },
+      }
+    )
+      .then((res) => {
+        const { balanceList, creditTotal, debtTotal, list, processCount } =
+          res.data;
+        const labels = [];
+        const lineData = [];
+        const barData = [];
+        balanceList.forEach((e, i) => {
+          labels.push(e.date);
+          lineData.push(e.amount);
+          barData.push(e.amount);
+        });
+        this.setState({
+          balanceList,
+          creditTotal,
+          debtTotal,
+          list,
+          processCount,
+          data: {
+            labels,
+            datasets: [
+              {
+                type: "line",
+                label: " ",
+                borderColor: "#FDC132",
                 borderWidth: 2,
                 fill: false,
                 data: lineData,
               },
               {
-                type: 'bar',
-                label: ' ',
-                backgroundColor: '#38C976',
+                type: "bar",
+                label: " ",
+                backgroundColor: "#38C976",
                 data: barData,
-                borderColor: 'white',
+                borderColor: "white",
                 borderWidth: 0,
-              }],
-            }
-          });
-          this.props.pageLoadingSet(false);
-        })
-        .catch((err) => {
-          // alert(err.response.data.value)
-          this.props.pageLoadingSet(false);
+              },
+            ],
+          },
         });
-  }
+        this.props.pageLoadingSet(false);
+      })
+      .catch((err) => {
+        // alert(err.response.data.value)
+        this.props.pageLoadingSet(false);
+      });
+  };
 
-  setDate(date, type){
-    if(type === 'start'){
-      this.setState({
-        startDate: date
-      }, ()=>{
-        this.state.endDate !== '' && this.state.startDate !== '' && this.getData()
-      })
-    } else{
-      this.setState({
-        endDate: date
-      },()=>{
-        this.state.endDate !== '' && this.state.startDate !== '' && this.getData()
-      })
+  setDate(date, type) {
+    if (type === "start") {
+      this.setState(
+        {
+          startDate: date,
+        },
+        () => {
+          this.state.endDate !== "" &&
+            this.state.startDate !== "" &&
+            this.getData();
+        }
+      );
+    } else {
+      this.setState(
+        {
+          endDate: date,
+        },
+        () => {
+          this.state.endDate !== "" &&
+            this.state.startDate !== "" &&
+            this.getData();
+        }
+      );
     }
   }
-  barFilter(e){
-    let date = '';
+  barFilter(e) {
+    let date = "";
     let graphType = 0;
-    if (e === 'day') {
-      date = moment().subtract(7, 'day').format('YYYY-MM-DD')
+    if (e === "day") {
+      date = moment().subtract(7, "day").format("YYYY-MM-DD");
       graphType = 0;
-    } else if(e === 'mounth'){
-      date = moment().subtract(1, 'months').format('YYYY-MM-DD')
+    } else if (e === "mounth") {
+      date = moment().subtract(1, "months").format("YYYY-MM-DD");
       graphType = 10;
-    } else if(e==='year'){
-      date = moment().subtract(1, 'years').format('YYYY-MM-DD')
+    } else if (e === "year") {
+      date = moment().subtract(1, "years").format("YYYY-MM-DD");
       graphType = 20;
     }
     console.log(date);
-    this.setState({
-      barFilter: e,
-      graphStartDate: date,
-      graphType
-    },()=>{
-      this.getData()
-    })
+    this.setState(
+      {
+        barFilter: e,
+        graphStartDate: date,
+        graphType,
+      },
+      () => {
+        this.getData();
+      }
+    );
   }
 
   render() {
@@ -164,37 +199,39 @@ export class Home extends Component {
               <div className="d-flex justify-content-between align-items-center">
                 <h3>Tahsil Edilen</h3>
                 <div className="bar-filter">
-                  <a
-                    className={this.state.barFilter === 'day' ? 'active' : ''}
+                  <button
+                    className={this.state.barFilter === "day" ? "active" : ""}
                     alt="D"
                     onClick={() => {
-                      this.barFilter('day')
+                      this.barFilter("day");
                     }}
                   >
                     D
-                  </a>
-                  <a
-                    className={this.state.barFilter === 'mounth' ? 'active' : ''}
+                  </button>
+                  <button
+                    className={
+                      this.state.barFilter === "mounth" ? "active" : ""
+                    }
                     alt="M"
                     onClick={() => {
-                      this.barFilter('mounth')
+                      this.barFilter("mounth");
                     }}
                   >
                     M
-                  </a>
-                  <a
-                    className={this.state.barFilter === 'year' ? 'active' : ''}
+                  </button>
+                  <button
+                    className={this.state.barFilter === "year" ? "active" : ""}
                     alt="Y"
                     onClick={() => {
-                      this.barFilter('year')
+                      this.barFilter("year");
                     }}
                   >
                     Y
-                  </a>
+                  </button>
                 </div>
               </div>
-              <Bar 
-                data={this.state.data} 
+              <Bar
+                data={this.state.data}
                 options={{
                   cornerRadius: 10,
                   legend: { display: false },
@@ -212,16 +249,16 @@ export class Home extends Component {
                         stacked: true,
                       },
                     ],
-                    yAxes: [{
-                      stacked: true,
-                      ticks:{
-                        min: 0,
-                      }
-                    },
+                    yAxes: [
+                      {
+                        stacked: true,
+                        ticks: {
+                          min: 0,
+                        },
+                      },
                     ],
                   },
                 }}
-    
               />
             </div>
           </div>
@@ -257,7 +294,9 @@ export class Home extends Component {
                       <p className="mb-0">Tedavi Sayısı</p>
                     </div>
                     <div className="col-6 text-center">
-                      <p className="fs-24 mb-2">{formatMoney(this.state.debtTotal)} TL</p>
+                      <p className="fs-24 mb-2">
+                        {formatMoney(this.state.debtTotal)} TL
+                      </p>
                       <p className="mb-0">Toplam Alacak</p>
                     </div>
                   </div>
@@ -270,7 +309,10 @@ export class Home extends Component {
                   <div className="row h-100 align-items-center">
                     <div className="col-12 text-center">
                       <p className="fs-24 mb-2">
-                      {formatMoney(this.state.debtTotal - this.state.creditTotal)} TL
+                        {formatMoney(
+                          this.state.debtTotal - this.state.creditTotal
+                        )}{" "}
+                        TL
                       </p>
                     </div>
                   </div>

@@ -1,20 +1,22 @@
 .Home {
-  .bar-filter{
-    a{
+  .bar-filter {
+    button {
       float: left;
-      color: #A0CAB2;
+      color: #a0cab2;
       width: 30px;
       height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      &:hover{
-        color: #A0CAB2;
+      background: transparent;
+      border: none;
+      &:hover {
+        color: #a0cab2;
       }
-      &.active{
+      &.active {
         color: #fff;
-        background-color: #A0CAB2;
+        background-color: #a0cab2;
         border-radius: 4px;
       }
     }
@@ -22,5 +24,4 @@
 }
 
 body[is-touch-screen="true"] {
-  
 }
