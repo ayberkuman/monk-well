@@ -1,26 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from '../assets/images/payment-logo.png'
-import homeMenu from '../assets/images/home-menu.svg'
-import homeMenuActive from '../assets/images/home-menu-active.svg'
-import paymentsMenu from '../assets/images/payments-menu.svg'
-import paymentsMenuActive from '../assets/images/payments-menu-active.svg'
-import analysesMenu from '../assets/images/analyses-menu.svg'
-import analysesMenuActive from '../assets/images/analyses-menu-active.svg'
-import expensesMenu from '../assets/images/expenses-menu.svg'
-import expensesMenuActive from '../assets/images/expenses-menu-active.svg'
-import doctor_settingsMenu from '../assets/images/doctor_settings-menu.svg'
-import doctor_settingsMenuActive from '../assets/images/doctor_settings-menu-active.svg'
-import system_settingsMenu from '../assets/images/system_settings-menu.svg'
-import system_settingsMenuActive from '../assets/images/system_settings-menu-active.svg'
-import clinicMenu from '../assets/images/clinic-menu.svg'
-import clinicMenuActive from '../assets/images/clinic-menu-active.svg'
+import logo from "../assets/images/payment-logo.png";
+import homeMenu from "../assets/images/home-menu.svg";
+import homeMenuActive from "../assets/images/home-menu-active.svg";
+import paymentsMenu from "../assets/images/payments-menu.svg";
+import paymentsMenuActive from "../assets/images/payments-menu-active.svg";
+import analysesMenu from "../assets/images/analyses-menu.svg";
+import analysesMenuActive from "../assets/images/analyses-menu-active.svg";
+import expensesMenu from "../assets/images/expenses-menu.svg";
+import expensesMenuActive from "../assets/images/expenses-menu-active.svg";
+import doctor_settingsMenu from "../assets/images/doctor_settings-menu.svg";
+import doctor_settingsMenuActive from "../assets/images/doctor_settings-menu-active.svg";
+import system_settingsMenu from "../assets/images/system_settings-menu.svg";
+import system_settingsMenuActive from "../assets/images/system_settings-menu-active.svg";
+import clinicMenu from "../assets/images/clinic-menu.svg";
+import clinicMenuActive from "../assets/images/clinic-menu-active.svg";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { authRoutes } from "../App/routes"
+import { authRoutes } from "../App/routes";
 const Header = React.lazy(() => import("./Layout/Header"));
 const Layout = (props) => {
-  const {location} = props;
+  const { location } = props;
   return (
     <>
       <div className="d-flex">
@@ -34,7 +34,7 @@ const Layout = (props) => {
               to={authRoutes.home.links[props.lang]}
             >
               <img
-                className='mh-24'
+                className="mh-24"
                 src={location.pathname === "/" ? homeMenuActive : homeMenu}
                 alt={props.translate("home")}
               />
@@ -51,7 +51,7 @@ const Layout = (props) => {
               to={authRoutes.payments.links[props.lang]}
             >
               <img
-                className='mh-24'
+                className="mh-24"
                 src={
                   location.pathname.includes(
                     authRoutes.payments.links[props.lang]
@@ -63,7 +63,7 @@ const Layout = (props) => {
               />
               {props.translate("payments")}
             </Link>
-            <Link 
+            <Link
               className={
                 location.pathname.includes(
                   authRoutes.analysis.links[props.lang]
@@ -71,9 +71,10 @@ const Layout = (props) => {
                   ? "active"
                   : ""
               }
-              to={authRoutes.analysis.links[props.lang]}>
-              <img 
-                className='mh-24'
+              to={authRoutes.analysis.links[props.lang]}
+            >
+              <img
+                className="mh-24"
                 src={
                   location.pathname.includes(
                     authRoutes.analysis.links[props.lang]
@@ -81,20 +82,20 @@ const Layout = (props) => {
                     ? analysesMenuActive
                     : analysesMenu
                 }
-                alt={props.translate("analyses")} />
+                alt={props.translate("analyses")}
+              />
               {props.translate("analyses")}
             </Link>
-            <Link 
+            <Link
               className={
-                location.pathname.includes(
-                  authRoutes.expense.links[props.lang]
-                )
+                location.pathname.includes(authRoutes.expense.links[props.lang])
                   ? "active"
                   : ""
               }
-              to={authRoutes.expense.links[props.lang]}>
-              <img 
-                className='mh-24'
+              to={authRoutes.expense.links[props.lang]}
+            >
+              <img
+                className="mh-24"
                 src={
                   location.pathname.includes(
                     authRoutes.expense.links[props.lang]
@@ -102,29 +103,37 @@ const Layout = (props) => {
                     ? expensesMenuActive
                     : expensesMenu
                 }
-                alt={props.translate("expenses")} />
+                alt={props.translate("expenses")}
+              />
               {props.translate("expenses")}
             </Link>
-            <a className="border-top" href="https://app.monkmedical.com/doktor-ayarlari">
+            <a
+              className="border-top"
+              href="https://app.monkmedical.com/doktor-ayarlari"
+            >
               <img
-                className='mh-24'
+                className="mh-24"
                 src={doctor_settingsMenu}
                 alt={props.translate("doctor_settings")}
               />
               {props.translate("doctor_settings")}
             </a>
 
-            <a href='https://app.monkmedical.com/sistem-ayarlari'>
+            <a href="https://app.monkmedical.com/sistem-ayarlari">
               <img
-                className='mh-24'
+                className="mh-24"
                 src={system_settingsMenu}
                 alt={props.translate("system_settings")}
               />
               {props.translate("system_settings")}
             </a>
             <hr />
-            <a href='https://app.monkmedical.com/'>
-              <img className='mh-18' src={clinicMenu} alt={props.translate("clinic")} />
+            <a href="https://app.monkmedical.com/">
+              <img
+                className="mh-18"
+                src={clinicMenu}
+                alt={props.translate("clinic")}
+              />
               {props.translate("clinic")}
             </a>
           </div>

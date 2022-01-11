@@ -19,10 +19,14 @@ export const pageLoadingSet = (pageLoading) => {
     type: "PAGE_LOADING",
     pageLoading,
   };
-}
+};
 export const headerTitleSet = (text) => {
   return {
     type: "HEADER_TITLE",
-    headerTitle: text
+    headerTitle: text,
   };
-}
+};
+export const toggleModal = (status = null) => ({
+  type: "TOGGLE_MODAL",
+  status,
+});

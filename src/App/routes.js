@@ -8,6 +8,7 @@ import CreatePaid from "../CreatePaid/CreatePaid";
 import UserDetail from "../UserDetail/UserDetail";
 import Expense from "../Expense/Expense";
 import Analysis from "../Analysis/Analysis";
+import Calendar from "../Calendar/Calendar";
 
 export const globalRoutes = {
   notFound: {
@@ -119,6 +120,16 @@ export const authRoutes = {
     property: Analysis,
     links: { en: "/analysis", tr: "/analizler" },
     name: "analysis",
+    exact: true,
+    onNav: false,
+    navExact: false,
+  },
+
+  calendar: {
+    id: "auth-11",
+    property: Calendar,
+    links: { en: "/calendar", tr: "/takvim" },
+    name: "calendar",
     exact: true,
     onNav: false,
     navExact: false,

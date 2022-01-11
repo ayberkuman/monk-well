@@ -5,5 +5,17 @@
   "expenses": "Giderler",
   "doctor_settings": "Doktor Ayarları",
   "system_settings": "Sistem Ayarları",
-  "clinic": "Clinic"
+  "clinic": "Clinic",
+  "calendar": {
+    "new_appointment": "Yeni Randevu",
+    "no_appointment": "Randevunuz bulunmamaktadır.",
+    "doc": "Doktorlar",
+    "page_title": "Takvim",
+    "list_title": "Doktorlar",
+    "today": "bugün",
+    "month": "A",
+    "week": "H",
+    "day": "G",
+    "error": "Bütün boşlukları doldurun."
+  }
 }

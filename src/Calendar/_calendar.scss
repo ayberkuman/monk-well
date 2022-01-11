@@ -1,0 +1,102 @@
+.Calendar {
+  #doctors-list {
+    .list-holder {
+      .list-item {
+        padding: 10px 15px 10px 0;
+        margin: 5px 0;
+        border: none;
+
+        .inner {
+          width: 100%;
+
+          .doctor-holder {
+            padding: 10px 15px;
+            top: 0;
+            left: 0;
+            cursor: default;
+
+            p {
+              color: #ffffff;
+              margin: 0;
+            }
+            .background {
+              top: 0;
+              left: 0;
+              z-index: -1;
+              border-radius: 8px;
+              width: calc(100% + 9 + 15px);
+            }
+          }
+        }
+
+        svg {
+          path {
+            fill: #ffffff;
+          }
+        }
+      }
+    }
+  }
+
+  .add-appointment-link {
+    margin-bottom: 30px;
+  }
+
+  .fc {
+    .fc-button-primary {
+      border-color: $sec;
+      background: $sec;
+      box-shadow: none !important;
+
+      &:hover {
+        border-color: darken($sec, 15%);
+        background: darken($sec, 15%);
+        box-shadow: none !important;
+      }
+
+      &:active {
+        box-shadow: none !important;
+      }
+
+      &.fc-button-active {
+        border-color: $pri;
+        background: $pri;
+      }
+    }
+  }
+
+  .event-popup {
+    opacity: 0;
+    z-index: -1;
+    padding: 10px 15px;
+    background: rgba($color: $sec, $alpha: 0.92);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: $font-weight-regular;
+    color: #ffffff;
+    line-height: 18px;
+    transform: translateY(32px);
+    transition: all 200ms ease 0ms, opacity 200ms ease 0ms,
+      z-index 0ms ease 210ms;
+
+    &[data-is-active="true"] {
+      opacity: 1;
+      z-index: 999;
+      transition: all 200ms ease 0ms, opacity 200ms ease 10ms,
+        z-index 0ms ease 0ms;
+    }
+
+    &:before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-right: 4px solid transparent;
+      border-left: 4px solid transparent;
+      border-bottom: 7px solid $sec;
+      position: absolute;
+      top: 0;
+      left: 8px;
+      transform: translate(-50%, calc(-100% + 2px));
+    }
+  }
+}
