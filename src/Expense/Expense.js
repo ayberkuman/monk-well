@@ -64,7 +64,6 @@ export class Expense extends Component {
             currentpage: 1,
           });
         }
-        console.log(data.totalPages, this.state.currentpage + 1);
         data.data.map((e) => {
           rows.push({
             amount: e.amount,
@@ -116,7 +115,6 @@ export class Expense extends Component {
     this.setState({
       rows: arr,
     });
-    console.log(this.state.rows);
   };
   editRow = (x, i) => {
     const arr = this.state.rows;
@@ -175,7 +173,6 @@ export class Expense extends Component {
   };
 
   delete = (i) => {
-    console.log(this.state.rows);
     const id = this.state.rows[i].id;
     const arr = this.state.rows;
     if (this.state.rows[i].type === "new") {

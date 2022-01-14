@@ -165,7 +165,6 @@ export class Home extends Component {
       date = moment().subtract(1, "years").format("YYYY-MM-DD");
       graphType = 20;
     }
-    console.log(date);
     this.setState(
       {
         barFilter: e,

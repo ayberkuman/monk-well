@@ -4,10 +4,10 @@ import { Helmet } from "react-helmet-async";
 import { withLocalize } from "react-localize-redux";
 import { locale } from "moment";
 import "moment/locale/tr";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 import { connect } from "react-redux";
 
-import { Spinner } from 'react-bootstrap';
+import { Spinner } from "react-bootstrap";
 import global from "./utils/i18n/global.json";
 
 import Layout from "./App/Layout";
@@ -18,10 +18,14 @@ import LanguageFiles from "./utils/LanguageFiles";
 import is from "is_js";
 import { withRouter } from "react-router";
 import { login, logout } from "./Auth/authActions";
-import { alert, resetAlert, headerTitleSet, pageLoadingSet } from "./App/appActions";
+import {
+  alert,
+  resetAlert,
+  headerTitleSet,
+  pageLoadingSet,
+} from "./App/appActions";
 import Alert from "./App/components/Alert";
 import API, { headers } from "./utils/API";
-
 
 class App extends Component {
   state = {
@@ -53,18 +57,18 @@ class App extends Component {
     window.cookies = new Cookies();
     this.props.setActiveLanguage("tr");
 
-    const localUser = await window.cookies.get('user');
+    const localUser = await window.cookies.get("user");
     if (localUser && localUser.isLoggedIn) {
-      this.props.pageLoadingSet(true)
+      this.props.pageLoadingSet(true);
       API.get("Account/WhoAmI", {
         headers: { ...headers, Authorization: `Bearer ${localUser.token}` },
       })
         .then((res) => {
           console.log(res);
-          this.props.pageLoadingSet(false)
+          this.props.pageLoadingSet(false);
           const { data } = res;
           const user = {
-            deviceId: 'localUser.deviceId',
+            deviceId: "localUser.deviceId",
             fullName: data.user.fullName,
             email: data.user.email,
             token: localUser.token,
@@ -74,11 +78,10 @@ class App extends Component {
         })
         .catch((err) => {
           // alert(err.response.data.value)
-          this.props.pageLoadingSet(false)
+          this.props.pageLoadingSet(false);
         });
     }
     setTimeout(() => this.setState({ isLoading: false }), 400);
-
   };
 
   componentDidUpdate = (prevProps) => {
@@ -122,12 +125,12 @@ class App extends Component {
           <body is-touch-screen={is.touchDevice()} is-ie={is.ie()} />
         </Helmet>
         <Layout
-        lang={lang}
-        user={this.props.user}
-        translate={this.props.translate}
-        headerTitle={this.props.headerTitle}
+          lang={lang}
+          user={this.props.user}
+          translate={this.props.translate}
+          headerTitle={this.props.headerTitle}
         >
-        {!this.state.isLoading && (
+          {!this.state.isLoading && (
             <Router
               lang={lang}
               url={this.url}
@@ -141,8 +144,8 @@ class App extends Component {
               headerTitleSet={this.props.headerTitleSet}
               pageLoadingSet={this.props.pageLoadingSet}
             />
-            )}
-            </Layout>
+          )}
+        </Layout>
         {this.state.isAlertActive && (
           <Alert
             type={this.props.alert.type}
@@ -178,7 +181,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(alert(alertType, title, content, timeout)),
     resetAlert: () => dispatch(resetAlert()),
     headerTitleSet: (title) => dispatch(headerTitleSet(title)),
-    pageLoadingSet: (type) => dispatch(pageLoadingSet(type))
+    pageLoadingSet: (type) => dispatch(pageLoadingSet(type)),
   };
 };
 
