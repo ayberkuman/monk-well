@@ -1,28 +1,24 @@
 import React, { Component, createRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import _ from 'lodash';
-import logoBig from '../../assets/images/big-logo.png'
+import _ from "lodash";
+import logoBig from "../../assets/images/big-logo.png";
 import InputWLabel from "../../utils/components/InputWLabel";
 import CutomCheckbox from "../../utils/components/CutomCheckbox";
 import { guestRoutes } from "../../App/routes";
 import API, { headers } from "../../utils/API";
 import { login } from "../authActions";
 import { connect } from "react-redux";
-import {
-  scrollToTop, validateInput,
-} from "../../utils/helper";
+import { scrollToTop, validateInput } from "../../utils/helper";
 import { LeftSide } from "./components/LeftSide";
-
-
 
 class Login extends Component {
   //finance@monk.com Secret1+
   state = {
     email: "",
-    emailError:'',
+    emailError: "",
     password: "",
-    passwordError:'',
+    passwordError: "",
     isSending: false,
   };
 
@@ -40,9 +36,8 @@ class Login extends Component {
     });
   };
 
-
   handleLogin = (e) => {
-    const {email, password} = this.state;
+    const { email, password } = this.state;
 
     this.setState(
       {
@@ -64,7 +59,6 @@ class Login extends Component {
               const { email, fullName, id, token } = res.data;
               this.setState({ isSending: false });
               this.props.pageLoadingSet(false);
-              console.log(res.data);
               if (!_.isUndefined(token)) {
                 const user = {
                   email,
@@ -83,7 +77,6 @@ class Login extends Component {
         }
       }
     );
-
   };
 
   render() {
@@ -100,7 +93,7 @@ class Login extends Component {
                 <div className="container">
                   <div className="row mb-5">
                     <div className="col-md-8 offset-md-2 col-xl-6 offset-xl-3 text-center">
-                      <img src={logoBig} alt="Monk Medical" width={148}/>
+                      <img src={logoBig} alt="Monk Medical" width={148} />
                     </div>
                   </div>
                   <div className="row">
@@ -117,7 +110,7 @@ class Login extends Component {
                         tabIndex={1}
                         errorMessage={this.state.emailError}
                         classes="mb-1"
-                        autocomplete='on'
+                        autocomplete="on"
                       />
                     </div>
                   </div>
@@ -168,7 +161,6 @@ class Login extends Component {
                       </button>
                     </div>
                   </div>
-                  
                 </div>
               </div>
             </div>
