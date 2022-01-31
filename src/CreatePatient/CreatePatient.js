@@ -225,7 +225,7 @@ export class CreatePatient extends Component {
               errorMessage={this.state.phoneNumberError}
             />
           </div>
-          <div className="col-md-8 mt-2">
+          {/* <div className="col-md-8 mt-2">
             <InputWLabel
               classes="mt-3"
               type="text"
@@ -239,7 +239,7 @@ export class CreatePatient extends Component {
               tabIndex={1}
               errorMessage={this.state.addressError}
             />
-          </div>
+          </div> */}
         </div>
         <div className="row">
           <div className="col-md-12">
